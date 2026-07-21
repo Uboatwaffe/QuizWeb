@@ -7,3 +7,16 @@ services:
       - 'MONGO_INITDB_ROOT_USERNAME=root'
     ports:
       - '27017:27017'
+
+  myapp:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongodb
+    environment:
+      SPRING_MONGODB_HOST: mongodb
+      SPRING_MONGODB_PORT: 27017
+      SPRING_MONGODB_USERNAME: root
+      SPRING_MONGODB_PASSWORD: secret
+      SPRING_MONGODB_DATABASE: quiz
