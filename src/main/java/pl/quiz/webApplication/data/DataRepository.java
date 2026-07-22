@@ -1,9 +1,10 @@
-package pl.quiz.webApplication;
+package pl.quiz.webApplication.data;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
+import pl.quiz.webApplication.Test;
 
 import java.util.List;
 
