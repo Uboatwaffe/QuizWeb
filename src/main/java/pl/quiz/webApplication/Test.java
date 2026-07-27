@@ -3,6 +3,7 @@ package pl.quiz.webApplication;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
 
 /**
  * This class is only a temporary solution to extract data
@@ -16,6 +17,7 @@ import lombok.NoArgsConstructor;
 public class Test {
 
     /// This field stores the id of record
+    @Id
     private Integer id;
 
     /// This filed stores the name of record

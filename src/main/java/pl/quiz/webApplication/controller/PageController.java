@@ -3,6 +3,12 @@ package pl.quiz.webApplication.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+/**
+ * This class is responsible for loading correct pages
+ * <p>
+ *     Uses Thymeleaf
+ * </p>
+ */
 @Controller
 public class PageController {
 
