@@ -47,3 +47,7 @@ h1 {
 #response {
     padding: 12px 20px;
 }
+
+input {
+    margin: 10px;
+}

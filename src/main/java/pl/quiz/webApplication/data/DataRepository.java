@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
-import pl.quiz.webApplication.Test;
+
 
 import java.util.List;
 
@@ -23,11 +23,5 @@ public class DataRepository {
     @Autowired
     MongoTemplate mongoTemplate;
 
-    /**
-     * This method shows whether data extraction is possible
-     * @return contents of test collection
-     */
-    public List<Test> test(){
-        return mongoTemplate.find(new Query(), Test.class, "test");
-    }
+
 }

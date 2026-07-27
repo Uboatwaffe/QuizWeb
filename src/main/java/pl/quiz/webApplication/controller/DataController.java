@@ -1,17 +1,17 @@
 package pl.quiz.webApplication.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-import pl.quiz.webApplication.Test;
+import org.springframework.web.bind.annotation.*;
 import pl.quiz.webApplication.data.DataRepository;
 
-import java.util.List;
+
+
 
 /**
  * This class is responsible for sending data to user
  */
 @RestController
+@RequestMapping("/api")
 public class DataController {
 
     /**
@@ -20,12 +20,10 @@ public class DataController {
     @Autowired
     DataRepository dataRepository;
 
-    /**
-     * This method returns test data
-     * @return test data
-     */
-    @GetMapping("/api/test")
-    public List<Test> test() {
-        return dataRepository.test();
+
+    @PostMapping("/login/login")
+    public int loginUser(@RequestBody String body){
+        System.out.println(body);
+        return 200;
     }
 }

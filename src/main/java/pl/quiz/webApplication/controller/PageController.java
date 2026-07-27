@@ -4,10 +4,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /**
- * This class is responsible for loading correct pages
- * <p>
- *     Uses Thymeleaf
- * </p>
+ * This class is responsible for loading correct pages <br>
+ * Uses Thymeleaf
+ *
  */
 @Controller
 public class PageController {
@@ -17,8 +16,9 @@ public class PageController {
         return "index";
     }
 
-    @GetMapping("/test")
-    public String testPage() {
-        return "test";
+
+    @GetMapping("/login")
+    public String loginPage() {
+        return "login";
     }
 }

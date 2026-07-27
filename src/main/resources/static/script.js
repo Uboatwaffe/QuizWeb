@@ -1,24 +1,43 @@
 const button = document.getElementById("getDataBtn");
 const response = document.getElementById("response");
 
-button.addEventListener("click", async () => {
-    try {
-        const result = await fetch("/api/test");
 
-        const data = await result.json();
+function submitData(){
 
-        response.innerHTML = "";
-
-        data.forEach(item => {
-            response.innerHTML += `
-                <div class="item">
-                    <h3>ID: ${item.id}</h3>
-                    <p>Name: ${item.name}</p>
-                </div>
-            `;
-        });
-
-    } catch (error) {
-        response.textContent = "Error: " + error.message;
+    const data = {
+        login: document.getElementById("loginInput").value,
+        password: document.getElementById("passwordInput").value
     }
-});
+
+    fetch("api/login/login", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    })
+        .then(response => response.json())
+        .then(result => {
+            console.log(result);
+        });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
