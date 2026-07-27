@@ -1,3 +1,6 @@
+console.log("script loaded");
+
+
 const button = document.getElementById("getDataBtn");
 const responseElement = document.getElementById("response");
 
@@ -5,7 +8,7 @@ button.addEventListener("click", async () => {
     responseElement.textContent = "Loading...";
 
     try {
-        const response = await fetch("https://localhost:8080/", {
+        const response = await fetch("http://localhost:8080/test", {
             method: "GET"
         });
 

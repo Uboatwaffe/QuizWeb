@@ -27,7 +27,7 @@ public class Controller {
      * This is a test method. It shows whether data extraction from database is possible
      * @return contents of test collection
      */
-    @GetMapping("")
+    @GetMapping("/test")
     public List<Test> test(){
         return dataRepository.test();
     }
