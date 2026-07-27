@@ -1,6 +1,3 @@
-console.log("script loaded");
-
-
 const button = document.getElementById("getDataBtn");
 const responseElement = document.getElementById("response");
 
@@ -8,25 +5,30 @@ button.addEventListener("click", async () => {
     responseElement.textContent = "Loading...";
 
     try {
-        const response = await fetch("http://localhost:8080/test", {
-            method: "GET"
-        });
+        const response = await fetch("/test");
 
         if (!response.ok) {
-            throw new Error(`HTTP Error: ${response.status}`);
+            throw new Error(`HTTP error: ${response.status}`);
         }
 
-        // If your API returns JSON
         const data = await response.json();
 
-        // Display formatted JSON
-        responseElement.textContent = JSON.stringify(data, null, 2);
+        responseElement.innerHTML = "";
 
-        // If your API returns plain text instead, use:
-        // const data = await response.text();
-        // responseElement.textContent = data;
+        data.forEach(item => {
+            const element = document.createElement("div");
+
+            element.className = "item";
+
+            element.innerHTML = `
+                <h3>ID: ${item.id}</h3>
+                <p>Name: ${item.name}</p>
+            `;
+
+            responseElement.appendChild(element);
+        });
 
     } catch (error) {
-        responseElement.textContent = `Error: ${error.message}`;
+        responseElement.textContent = "Error: " + error.message;
     }
 });
