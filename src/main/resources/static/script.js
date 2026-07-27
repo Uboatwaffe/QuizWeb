@@ -1,34 +1,24 @@
 const button = document.getElementById("getDataBtn");
-const responseElement = document.getElementById("response");
+const response = document.getElementById("response");
 
 button.addEventListener("click", async () => {
-    responseElement.textContent = "Loading...";
-
     try {
-        const response = await fetch("/test");
+        const result = await fetch("/api/test");
 
-        if (!response.ok) {
-            throw new Error(`HTTP error: ${response.status}`);
-        }
+        const data = await result.json();
 
-        const data = await response.json();
-
-        responseElement.innerHTML = "";
+        response.innerHTML = "";
 
         data.forEach(item => {
-            const element = document.createElement("div");
-
-            element.className = "item";
-
-            element.innerHTML = `
-                <h3>ID: ${item.id}</h3>
-                <p>Name: ${item.name}</p>
+            response.innerHTML += `
+                <div class="item">
+                    <h3>ID: ${item.id}</h3>
+                    <p>Name: ${item.name}</p>
+                </div>
             `;
-
-            responseElement.appendChild(element);
         });
 
     } catch (error) {
-        responseElement.textContent = "Error: " + error.message;
+        response.textContent = "Error: " + error.message;
     }
 });
