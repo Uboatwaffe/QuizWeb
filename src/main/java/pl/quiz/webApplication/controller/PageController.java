@@ -11,12 +11,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class PageController {
 
+    /**
+     * @return index.html
+     */
     @GetMapping("/")
     public String home() {
         return "index";
     }
 
-
+    /**
+     * @return login.html
+     */
     @GetMapping("/login")
     public String loginPage() {
         return "login";

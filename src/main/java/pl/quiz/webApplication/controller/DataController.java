@@ -3,8 +3,7 @@ package pl.quiz.webApplication.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.quiz.webApplication.data.DataRepository;
-
-
+import pl.quiz.webApplication.objects.UserTemp;
 
 
 /**
@@ -20,10 +19,14 @@ public class DataController {
     @Autowired
     DataRepository dataRepository;
 
-
+    /**
+     * This method receives user details
+     * @param userTemp details of user trying to log in
+     * @return 200
+     */
     @PostMapping("/login/login")
-    public int loginUser(@RequestBody String body){
-        System.out.println(body);
+    public int loginUser(@RequestBody UserTemp userTemp){
+        System.out.println(userTemp.getLogin() + "\n" + userTemp.getPassword());
         return 200;
     }
 }
