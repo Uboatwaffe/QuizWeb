@@ -43,4 +43,9 @@ public class PageController {
 
         return "home";
     }
+
+    @GetMapping("/signup")
+    public String signup(){
+        return "signup";
+    }
 }
