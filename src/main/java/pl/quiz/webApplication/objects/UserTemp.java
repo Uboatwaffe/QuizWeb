@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
+import pl.quiz.webApplication.Role;
 
 /**
  * <p>Created on 27.07.2026</p>
@@ -26,5 +27,5 @@ public class UserTemp {
     private String password;
 
     @Field("role")
-    private String role;
+    private Role role;
 }
