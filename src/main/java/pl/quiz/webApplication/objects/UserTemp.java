@@ -21,6 +21,10 @@ public class UserTemp {
 
     @Field("username")
     private String login;
+
+    @Field("password")
     private String password;
+
+    @Field("role")
     private String role;
 }

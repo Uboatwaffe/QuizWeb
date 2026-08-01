@@ -25,11 +25,9 @@ public class DataRepository {
     @Autowired
     MongoTemplate mongoTemplate;
 
-    public boolean authenticateUser(String username, String password){
+    public UserTemp authenticateUser(String username, String password){
         Query query = Query.query(Criteria.where("username").is(username));
 
-        UserTemp user = mongoTemplate.findOne(query, UserTemp.class, "users");
-
-        return user != null;
+        return mongoTemplate.findOne(query, UserTemp.class, "users");
     }
 }

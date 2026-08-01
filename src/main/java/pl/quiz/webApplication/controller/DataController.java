@@ -1,5 +1,6 @@
 package pl.quiz.webApplication.controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,10 +28,11 @@ public class DataController {
      * @return 200
      */
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody UserTemp userTemp){
-        boolean authenticated = dataRepository.authenticateUser(userTemp.getLogin(), userTemp.getPassword());
+    public ResponseEntity<?> loginUser(@RequestBody UserTemp userTemp, HttpSession session){
+        UserTemp user = dataRepository.authenticateUser(userTemp.getLogin(), userTemp.getPassword());
 
-        if (authenticated) {
+        if (user != null) {
+            session.setAttribute("user", user);
             return ResponseEntity.ok().build();
         }
 
