@@ -31,4 +31,9 @@ public class PageController {
     public String loginPage() {
         return "login";
     }
+
+    @GetMapping("/home")
+    public String home(){
+        return "home";
+    }
 }

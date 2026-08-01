@@ -18,6 +18,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class UserTemp {
     @Id
     private Object id;
+
     @Field("username")
     private String login;
     private String password;

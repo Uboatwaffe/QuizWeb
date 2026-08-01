@@ -18,7 +18,7 @@ function submitData(){
     })
         .then(response => {
             if (response.ok) {
-                window.location.href = "/test";
+                window.location.href = "/home";
             } else {
                 alert("Wrong login or password");
             }
