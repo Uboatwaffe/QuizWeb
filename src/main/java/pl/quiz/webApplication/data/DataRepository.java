@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
+import pl.quiz.webApplication.enums.Role;
 import pl.quiz.webApplication.objects.User;
 
 /**
@@ -23,14 +24,14 @@ public class DataRepository {
     MongoTemplate mongoTemplate;
 
     public User authenticateUser(String username, String password){
-        Query query = Query.query(Criteria.where("username").is(username));
+        Query query = Query.query(Criteria.where("username").is(username).and("password").is(password));
 
         return mongoTemplate.findOne(query, User.class, "user");
     }
 
-    public User addUser(String login, String password){
+    public User addUser(String login, String password, Role role){
 
-        return mongoTemplate.insert(new User(login, password));
+        return mongoTemplate.insert(new User(login, password, role));
 
     }
 }

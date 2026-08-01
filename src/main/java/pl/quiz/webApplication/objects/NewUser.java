@@ -18,4 +18,5 @@ public class NewUser {
     private String login;
     private String passwordOne;
     private String passwordRepeat;
+    private Role role;
 }

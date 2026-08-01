@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.quiz.webApplication.data.DataRepository;
+import pl.quiz.webApplication.enums.Role;
 import pl.quiz.webApplication.objects.NewUser;
 import pl.quiz.webApplication.objects.User;
 
@@ -46,14 +47,14 @@ public class DataController {
         String login = newUser.getLogin();
         String passwordOne = newUser.getPasswordOne();
         String passwordRepeat = newUser.getPasswordRepeat();
+        Role role = newUser.getRole();
 
         if (passwordOne.compareTo(passwordRepeat) != 0){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        System.out.println(login+passwordOne+passwordRepeat);
 
-        User user = dataRepository.addUser(login, passwordOne);
+        User user = dataRepository.addUser(login, passwordOne, role);
 
         if (user != null){
             session.setAttribute("user", user);
