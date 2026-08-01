@@ -29,7 +29,7 @@ public class DataController {
     /**
      * This method receives user details
      * @param userTemp details of user trying to log in
-     * @return 200
+     * @return ResponseEntity
      */
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody User userTemp, HttpSession session){

@@ -31,6 +31,11 @@ public class PageController {
         return "login";
     }
 
+    /**
+     * @param session current session
+     * @param model current model
+     * @return home.html
+     */
     @GetMapping("/home")
     public String home(HttpSession session, Model model){
 
@@ -41,6 +46,9 @@ public class PageController {
         return "home";
     }
 
+    /**
+     * @return signup.html
+     */
     @GetMapping("/signup")
     public String signup(){
         return "signup";

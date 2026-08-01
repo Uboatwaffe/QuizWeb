@@ -23,12 +23,25 @@ public class DataRepository {
     @Autowired
     MongoTemplate mongoTemplate;
 
+    /**
+     * This method checks whether user had given correct credentials
+     * @param username login
+     * @param password password
+     * @return User of given details if exist in DB if not null
+     */
     public User authenticateUser(String username, String password){
         Query query = Query.query(Criteria.where("username").is(username).and("password").is(password));
 
         return mongoTemplate.findOne(query, User.class, "user");
     }
 
+    /**
+     * This method adds user of listed details to DB
+     * @param login login
+     * @param password password
+     * @param role role (ADMIN or USER)
+     * @return User of given details
+     */
     public User addUser(String login, String password, Role role){
 
         return mongoTemplate.insert(new User(login, password, role));
