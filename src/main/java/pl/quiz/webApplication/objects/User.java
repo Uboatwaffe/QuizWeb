@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
-import pl.quiz.webApplication.Role;
+import pl.quiz.webApplication.enums.Role;
 
 /**
  * <p>Created on 27.07.2026</p>
@@ -16,9 +16,9 @@ import pl.quiz.webApplication.Role;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserTemp {
+public class User {
     @Id
-    private Object id;
+    private String id;
 
     @Field("username")
     private String login;
@@ -28,4 +28,16 @@ public class UserTemp {
 
     @Field("role")
     private Role role;
+
+    public User(String login, String password) {
+        this.login = login;
+        this.password = password;
+        role = Role.USER;
+    }
+
+    public User(String login, String password, Role role) {
+        this.login = login;
+        this.password = password;
+        this.role = role;
+    }
 }

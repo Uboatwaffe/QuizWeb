@@ -6,7 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.quiz.webApplication.data.DataRepository;
-import pl.quiz.webApplication.objects.UserTemp;
+import pl.quiz.webApplication.objects.NewUser;
+import pl.quiz.webApplication.objects.User;
 
 
 /**
@@ -28,8 +29,8 @@ public class DataController {
      * @return 200
      */
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody UserTemp userTemp, HttpSession session){
-        UserTemp user = dataRepository.authenticateUser(userTemp.getLogin(), userTemp.getPassword());
+    public ResponseEntity<?> loginUser(@RequestBody User userTemp, HttpSession session){
+        User user = dataRepository.authenticateUser(userTemp.getLogin(), userTemp.getPassword());
 
         if (user != null) {
             session.setAttribute("user", user);
@@ -37,5 +38,29 @@ public class DataController {
         }
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<?> signUpUser(@RequestBody NewUser newUser, HttpSession session){
+
+        String login = newUser.getLogin();
+        String passwordOne = newUser.getPasswordOne();
+        String passwordRepeat = newUser.getPasswordRepeat();
+
+        if (passwordOne.compareTo(passwordRepeat) != 0){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        System.out.println(login+passwordOne+passwordRepeat);
+
+        User user = dataRepository.addUser(login, passwordOne);
+
+        if (user != null){
+            session.setAttribute("user", user);
+            return ResponseEntity.ok().build();
+        }
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).build();
+
     }
 }

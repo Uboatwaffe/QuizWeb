@@ -1,14 +1,10 @@
 package pl.quiz.webApplication.controller;
 
 import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import pl.quiz.webApplication.data.DataRepository;
-import pl.quiz.webApplication.objects.UserTemp;
+import pl.quiz.webApplication.objects.User;
 
 /**
  * This class is responsible for loading correct pages <br>
@@ -37,7 +33,7 @@ public class PageController {
     @GetMapping("/home")
     public String home(HttpSession session, Model model){
 
-        UserTemp user = (UserTemp) session.getAttribute("user");
+        User user = (User) session.getAttribute("user");
 
         model.addAttribute("user", user);
 

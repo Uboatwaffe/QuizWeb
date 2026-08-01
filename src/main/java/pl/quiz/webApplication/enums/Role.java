@@ -1,4 +1,4 @@
-package pl.quiz.webApplication;
+package pl.quiz.webApplication.enums;
 
 /**
  * <p>Created on 01.08.2026<\p>

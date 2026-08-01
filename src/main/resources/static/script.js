@@ -29,6 +29,56 @@ function submitData(){
 }
 
 
+function submitNewUser(){
+    const data = {
+        login: document.getElementById("loginInput").value,
+        passwordOne: document.getElementById("passwordInput").value,
+        passwordRepeat: document.getElementById("passwordInputRepeat").value
+    }
+
+    fetch("api/signup", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    })
+        .then(response => {
+            if (response.ok) {
+                window.location.href = "/home";
+            } else {
+                alert("Something went wrong");
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

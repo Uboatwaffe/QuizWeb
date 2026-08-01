@@ -5,10 +5,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
-import pl.quiz.webApplication.objects.UserTemp;
-
-
-import java.util.List;
+import pl.quiz.webApplication.objects.User;
 
 /**
  * This class is responsible for sending queries to the database
@@ -25,9 +22,15 @@ public class DataRepository {
     @Autowired
     MongoTemplate mongoTemplate;
 
-    public UserTemp authenticateUser(String username, String password){
+    public User authenticateUser(String username, String password){
         Query query = Query.query(Criteria.where("username").is(username));
 
-        return mongoTemplate.findOne(query, UserTemp.class, "users");
+        return mongoTemplate.findOne(query, User.class, "user");
+    }
+
+    public User addUser(String login, String password){
+
+        return mongoTemplate.insert(new User(login, password));
+
     }
 }
