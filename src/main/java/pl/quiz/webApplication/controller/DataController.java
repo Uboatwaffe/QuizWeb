@@ -2,12 +2,14 @@ package pl.quiz.webApplication.controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.server.servlet.Session;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.quiz.webApplication.data.DataRepository;
 import pl.quiz.webApplication.enums.Role;
 import pl.quiz.webApplication.objects.NewUser;
+import pl.quiz.webApplication.objects.SessionUser;
 import pl.quiz.webApplication.objects.User;
 
 
@@ -34,13 +36,22 @@ public class DataController {
         User user = dataRepository.authenticateUser(userTemp.getLogin(), userTemp.getPassword());
 
         if (user != null) {
-            session.setAttribute("user", user);
+
+            SessionUser sessionUser = new SessionUser(user.getLogin(), user.getRole());
+
+            session.setAttribute("user", sessionUser);
             return ResponseEntity.ok().build();
         }
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
+    /**
+     * This method handles the signing up the user and sets up the current session
+     * @param newUser details of new user
+     * @param session current session
+     * @return ResponseEntity
+     */
     @PostMapping("/signup")
     public ResponseEntity<?> signUpUser(@RequestBody NewUser newUser, HttpSession session){
 
@@ -56,8 +67,10 @@ public class DataController {
 
         User user = dataRepository.addUser(login, passwordOne, role);
 
+        SessionUser sessionUser = new SessionUser(login, role);
+
         if (user != null){
-            session.setAttribute("user", user);
+            session.setAttribute("user", sessionUser);
             return ResponseEntity.ok().build();
         }
 

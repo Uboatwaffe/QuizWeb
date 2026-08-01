@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import pl.quiz.webApplication.objects.SessionUser;
 import pl.quiz.webApplication.objects.User;
 
 /**
@@ -33,9 +34,9 @@ public class PageController {
     @GetMapping("/home")
     public String home(HttpSession session, Model model){
 
-        User user = (User) session.getAttribute("user");
+        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
 
-        model.addAttribute("user", user);
+        model.addAttribute("user", sessionUser);
 
         return "home";
     }
