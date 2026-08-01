@@ -9,16 +9,22 @@ function submitData(){
         password: document.getElementById("passwordInput").value
     }
 
-    fetch("api/login/login", {
+    fetch("api/login", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(data)
     })
-        .then(response => response.json())
-        .then(result => {
-            console.log(result);
+        .then(response => {
+            if (response.ok) {
+                window.location.href = "/test";
+            } else {
+                alert("Wrong login or password");
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
         });
 }
 

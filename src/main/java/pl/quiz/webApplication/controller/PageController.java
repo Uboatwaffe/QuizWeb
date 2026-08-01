@@ -1,7 +1,12 @@
 package pl.quiz.webApplication.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import pl.quiz.webApplication.data.DataRepository;
+import pl.quiz.webApplication.objects.UserTemp;
 
 /**
  * This class is responsible for loading correct pages <br>
@@ -15,7 +20,7 @@ public class PageController {
      * @return index.html
      */
     @GetMapping("/")
-    public String home() {
+    public String index() {
         return "index";
     }
 

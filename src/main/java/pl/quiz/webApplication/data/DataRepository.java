@@ -2,8 +2,10 @@ package pl.quiz.webApplication.data;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
+import pl.quiz.webApplication.objects.UserTemp;
 
 
 import java.util.List;
@@ -23,5 +25,11 @@ public class DataRepository {
     @Autowired
     MongoTemplate mongoTemplate;
 
+    public boolean authenticateUser(String username, String password){
+        Query query = Query.query(Criteria.where("username").is(username));
 
+        UserTemp user = mongoTemplate.findOne(query, UserTemp.class, "users");
+
+        return user != null;
+    }
 }
