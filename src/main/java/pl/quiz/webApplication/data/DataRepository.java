@@ -5,7 +5,10 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
+import pl.quiz.webApplication.enums.Answer;
 import pl.quiz.webApplication.enums.Role;
+import pl.quiz.webApplication.enums.Type;
+import pl.quiz.webApplication.objects.Question;
 import pl.quiz.webApplication.objects.User;
 
 /**
@@ -50,7 +53,21 @@ public class DataRepository {
             return null;
         }
 
-        return mongoTemplate.insert(new User(login, password, role));
+        return mongoTemplate.insert(new User(login, password, role), "user");
 
+    }
+
+    public boolean checkIfExists(String collection, String key, String value, Class classInstance){
+        Query query = new Query(Criteria.where(key).is(value));
+
+        if (mongoTemplate.find(query, classInstance, collection).size() == 0){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public Question addQuestion(boolean starting, String question, Type type, Answer answer, int points, String set){
+        return mongoTemplate.insert(new Question(starting, question, type, answer, points, set), "question");
     }
 }

@@ -2,15 +2,14 @@ package pl.quiz.webApplication.controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.server.servlet.Session;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.quiz.webApplication.data.DataRepository;
+import pl.quiz.webApplication.enums.Answer;
 import pl.quiz.webApplication.enums.Role;
-import pl.quiz.webApplication.objects.NewUser;
-import pl.quiz.webApplication.objects.SessionUser;
-import pl.quiz.webApplication.objects.User;
+import pl.quiz.webApplication.enums.Type;
+import pl.quiz.webApplication.objects.*;
 
 
 /**
@@ -75,5 +74,26 @@ public class DataController {
 
         return ResponseEntity.status(HttpStatus.CONFLICT).build();
 
+    }
+
+    @PostMapping("new_set")
+    public ResponseEntity<?> createNewSet(@RequestBody Set set) {
+
+        if (set.getName().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        // Check if the name is already taken
+        if (dataRepository.checkIfExists("question", "set", set.getName(), Set.class)){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        Question question = dataRepository.addQuestion(true, "Are you ready?", Type.YN, Answer.YES, 0, set.getName());
+
+        if (question != null) {
+            return ResponseEntity.ok().build();
+        }
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 }

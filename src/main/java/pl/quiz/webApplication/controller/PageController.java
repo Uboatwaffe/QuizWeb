@@ -19,7 +19,10 @@ public class PageController {
      * @return index.html
      */
     @GetMapping("/")
-    public String index() {
+    public String index(Model model) {
+        SessionUser sessionUser = new SessionUser();
+        model.addAttribute("user", sessionUser);
+
         return "index";
     }
 
@@ -31,9 +34,7 @@ public class PageController {
      */
     @GetMapping("/home")
     public String home(HttpSession session, Model model){
-
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");
-
         model.addAttribute("user", sessionUser);
 
         return "home";
@@ -46,4 +47,16 @@ public class PageController {
     public String signup(){
         return "signup";
     }
+
+    /**
+     * @return new_set.html
+     */
+    @GetMapping("/new_set")
+    public String newSet(HttpSession session, Model model){
+        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
+        model.addAttribute("user", sessionUser);
+
+        return "new_set";
+    }
+
 }

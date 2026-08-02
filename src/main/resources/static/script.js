@@ -63,8 +63,30 @@ function submitNewUser(){
         });
 }
 
+function createNewSet() {
+    const data = {
+        name: document.getElementById("setNameInput").value
+    }
 
-
+    fetch("api/new_set", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    })
+        .then(response => {
+            window.location.href = "/home";
+            if (response.ok) {
+                alert("Set created successfully")
+            } else {
+                alert("Something went wrong")
+            }
+        })
+        .catch(error => {
+            conole.error("Error:", error);
+        })
+}
 
 
 
