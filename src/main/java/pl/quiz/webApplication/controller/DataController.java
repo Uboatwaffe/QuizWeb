@@ -96,4 +96,9 @@ public class DataController {
 
         return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
+
+    @GetMapping("choose_set")
+    public String chooseSets() {
+        return "{}";
+    }
 }

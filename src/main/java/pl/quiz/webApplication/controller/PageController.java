@@ -59,4 +59,12 @@ public class PageController {
         return "new_set";
     }
 
+    @GetMapping("/choose_set")
+    public String chooseSet(HttpSession session, Model model){
+        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
+        model.addAttribute("user", sessionUser);
+
+        return "choose_set";
+    }
+
 }

@@ -88,7 +88,28 @@ function createNewSet() {
         })
 }
 
+ function getSets() {
+    const response = fetch("/api/choose_set", {
+        method: "GET"
+    });
 
+    const data = response.json();
+
+    responseElement.textContent = JSON.stringify(data, null, 2);
+    responseElement.innerHTML = "";
+
+    data.forEach(item => {
+        const element = document.createElement("div");
+
+        element.className = "item";
+
+        element.innerHTML = `
+                <h3>Name: ${item.name}</h3>
+            `;
+
+        responseElement.appendChild(element);
+    });
+}
 
 
 
