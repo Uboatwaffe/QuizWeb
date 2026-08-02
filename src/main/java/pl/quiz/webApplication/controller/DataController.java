@@ -31,7 +31,7 @@ public class DataController {
      * @param userTemp details of user trying to log in
      * @return ResponseEntity
      */
-    @PostMapping("/login")
+    @PostMapping("/")
     public ResponseEntity<?> loginUser(@RequestBody User userTemp, HttpSession session){
         User user = dataRepository.authenticateUser(userTemp.getLogin(), userTemp.getPassword());
 

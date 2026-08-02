@@ -1,20 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GET Request Example</title>
+    <title>Login</title>
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 
-    <div class="container">
+<div>
 
-        <a href="/login">
-            <button>Start the app</button>
+    <h1>Log in</h1>
+
+
+    <div class="container">
+        <label class="label">Please insert your login:</label><br>
+        <input type="text" id="loginInput"><br>
+        <label class="label">Please insert your password:</label><br>
+        <input type="password" id="passwordInput"><br>
+        <button id="loginBtn" onclick="submitData()">Log In</button>
+
+
+        <hr>
+
+        <p id="anotherAction">Or sign up</p><br>
+
+        <a href="http://localhost:8080/signup">
+            <button id="goToSignUp">Sign up</button>
         </a>
     </div>
+</div>
 
-    <script src="../static/script.js"></script>
+<script src="/script.js"></script>
+
 </body>
 </html>

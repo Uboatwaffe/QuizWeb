@@ -23,13 +23,6 @@ public class PageController {
         return "index";
     }
 
-    /**
-     * @return login.html
-     */
-    @GetMapping("/login")
-    public String loginPage() {
-        return "login";
-    }
 
     /**
      * @param session current session

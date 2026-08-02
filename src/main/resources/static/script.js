@@ -9,7 +9,7 @@ function submitData(){
         password: document.getElementById("passwordInput").value
     }
 
-    fetch("api/login", {
+    fetch("api/", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
