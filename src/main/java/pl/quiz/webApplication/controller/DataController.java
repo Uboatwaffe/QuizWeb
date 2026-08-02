@@ -67,9 +67,8 @@ public class DataController {
 
         User user = dataRepository.addUser(login, passwordOne, role);
 
-        SessionUser sessionUser = new SessionUser(login, role);
-
         if (user != null){
+            SessionUser sessionUser = new SessionUser(login, role);
             session.setAttribute("user", sessionUser);
             return ResponseEntity.ok().build();
         }

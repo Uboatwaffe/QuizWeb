@@ -58,7 +58,7 @@ function submitNewUser(){
             if (response.ok) {
                 window.location.href = "/home";
             } else {
-                alert("Something went wrong");
+                alert("This username is already taken");
             }
         })
         .catch(error => {

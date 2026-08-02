@@ -44,6 +44,12 @@ public class DataRepository {
      */
     public User addUser(String login, String password, Role role){
 
+        Query query = new Query(Criteria.where("username").is(login));
+
+        if (mongoTemplate.find(query, User.class, "user").size() != 0) {
+            return null;
+        }
+
         return mongoTemplate.insert(new User(login, password, role));
 
     }
