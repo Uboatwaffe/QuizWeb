@@ -36,6 +36,10 @@ h1 {
     text-align: center;
 }
 
+h3 {
+    text-align: center;
+}
+
 input {
     margin: 10px;
 }
@@ -43,4 +47,9 @@ input {
 #anotherAction {
     margin-top: 8px;
     margin-bottom: 0;
+}
+
+.option {
+    margin-top: 10px;
+    width: 180px;
 }

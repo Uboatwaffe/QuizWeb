@@ -1,6 +1,3 @@
-const button = document.getElementById("getDataBtn");
-const response = document.getElementById("response");
-
 
 function submitData(){
 
