@@ -19,14 +19,18 @@
     </h3>
 
     <div class="container">
-        <label class="label">What do you want to do?</label>
-        <br>
-        <a href="/new_set">
-            <button class="option" id="newSet">Create new set</button>
-        </a>
-        <button class="option" id="deleteSet">Delete set</button>
-        <button class="option" id="modifySet">Modify set</button>
-        <button class="option" id="startQuiz">Start quiz</button>
+
+        <div id="userOptions"
+             th:if="${user.role.name() == 'USER'}">
+            <label class="label">What do you want to do?</label>
+            <br>
+            <a href="/new_set">
+                <button class="option" id="newSet">Create new set</button>
+            </a>
+            <button class="option" id="deleteSet">Delete set</button>
+            <button class="option" id="modifySet">Modify set</button>
+            <button class="option" id="startQuiz">Start quiz</button>
+        </div>
 
         <div id="adminOptions"
              th:if="${user.role.name() == 'ADMIN'}">
