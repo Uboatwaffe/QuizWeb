@@ -98,11 +98,7 @@ public class DataController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        String login = user.getLogin();
-
-        System.out.println("User: " + login);
-
-        Question question = dataRepository.addQuestion(true, "Are you ready?", Type.YN, Answer.YES, 0, set.getName(), login);
+        Question question = dataRepository.addQuestion(true, "Are you ready?", Type.YN, Answer.YES, 0, set.getName(), user.getLogin());
 
         if (question != null) {
             return ResponseEntity.ok().build();
@@ -112,13 +108,18 @@ public class DataController {
     }
 
     @GetMapping("/choose_set")
-    public List<Set> chooseSets() {
-        return dataRepository.getAllSets();
+    public List<Set> chooseSets(HttpSession session) {
+        SessionUser user = (SessionUser) session.getAttribute("user");
+        System.out.println(dataRepository.getAllSets(user.getLogin()));
+
+        return dataRepository.getAllSets(user.getLogin());
     }
 
     @DeleteMapping("/delete/{name}")
-    public ResponseEntity<?> deleteSet(@PathVariable("name") String name){
-        if (dataRepository.deleteSet(name)){
+    public ResponseEntity<?> deleteSet(@PathVariable("name") String name, HttpSession session){
+        SessionUser user = (SessionUser) session.getAttribute("user");
+
+        if (dataRepository.deleteSet(name, user.getLogin())){
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();

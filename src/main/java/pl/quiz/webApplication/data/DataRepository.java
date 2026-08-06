@@ -71,9 +71,10 @@ public class DataRepository {
         return mongoTemplate.insert(new Question(starting, question, type, answer, points, set, owner), "question");
     }
 
-    public List<Set> getAllSets(){
+    public List<Set> getAllSets(String login){
         Query query = new Query(Criteria
-                .where("startingQuestion").is(true));
+                .where("startingQuestion").is(true)
+                .and("owner").is(login));
 
         query.fields()
                 .include("set");
@@ -82,9 +83,10 @@ public class DataRepository {
         return mongoTemplate.find(query, Set.class, "question");
     }
 
-    public boolean deleteSet(String name){
+    public boolean deleteSet(String name, String login){
         Query query = new Query(Criteria
-                .where("set").is(name));
+                .where("set").is(name)
+                .and("owner").is(login));
 
         return mongoTemplate.remove(query, "question").wasAcknowledged();
     }
