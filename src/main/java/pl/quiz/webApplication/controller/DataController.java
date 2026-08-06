@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.quiz.webApplication.data.DataRepository;
 import pl.quiz.webApplication.enums.Answer;
@@ -80,7 +81,7 @@ public class DataController {
     }
 
     @PostMapping("new_set")
-    public ResponseEntity<?> createNewSet(@RequestBody Set set) {
+    public ResponseEntity<?> createNewSet(@RequestBody Set set, HttpSession session) {
 
         if (set.getName().isEmpty()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -91,7 +92,17 @@ public class DataController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        Question question = dataRepository.addQuestion(true, "Are you ready?", Type.YN, Answer.YES, 0, set.getName());
+        SessionUser user = (SessionUser) session.getAttribute("user");
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        String login = user.getLogin();
+
+        System.out.println("User: " + login);
+
+        Question question = dataRepository.addQuestion(true, "Are you ready?", Type.YN, Answer.YES, 0, set.getName(), login);
 
         if (question != null) {
             return ResponseEntity.ok().build();
@@ -103,5 +114,14 @@ public class DataController {
     @GetMapping("/choose_set")
     public List<Set> chooseSets() {
         return dataRepository.getAllSets();
+    }
+
+    @DeleteMapping("/delete/{name}")
+    public ResponseEntity<?> deleteSet(@PathVariable("name") String name){
+        if (dataRepository.deleteSet(name)){
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
     }
 }

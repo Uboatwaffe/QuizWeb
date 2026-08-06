@@ -23,13 +23,15 @@ public class Question {
     private Answer answer;
     private int points;
     private String set;
+    private String owner;
 
-    public Question(boolean starting, String question, Type type, Answer answer, int points, String set){
+    public Question(boolean starting, String question, Type type, Answer answer, int points, String set, String owner){
         startingQuestion = starting;
         this.question = question;
         this.type = type;
         this.answer = answer;
         this.points = points;
         this.set = set;
+        this.owner = owner;
     }
 }

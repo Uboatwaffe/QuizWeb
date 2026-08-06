@@ -9,6 +9,7 @@ import pl.quiz.webApplication.enums.Answer;
 import pl.quiz.webApplication.enums.Role;
 import pl.quiz.webApplication.enums.Type;
 import pl.quiz.webApplication.objects.Question;
+import pl.quiz.webApplication.objects.SessionUser;
 import pl.quiz.webApplication.objects.Set;
 import pl.quiz.webApplication.objects.User;
 
@@ -66,8 +67,8 @@ public class DataRepository {
         return !mongoTemplate.find(query, classInstance, collection).isEmpty();
     }
 
-    public Question addQuestion(boolean starting, String question, Type type, Answer answer, int points, String set){
-        return mongoTemplate.insert(new Question(starting, question, type, answer, points, set), "question");
+    public Question addQuestion(boolean starting, String question, Type type, Answer answer, int points, String set, String owner){
+        return mongoTemplate.insert(new Question(starting, question, type, answer, points, set, owner), "question");
     }
 
     public List<Set> getAllSets(){
@@ -79,6 +80,13 @@ public class DataRepository {
 
 
         return mongoTemplate.find(query, Set.class, "question");
+    }
+
+    public boolean deleteSet(String name){
+        Query query = new Query(Criteria
+                .where("set").is(name));
+
+        return mongoTemplate.remove(query, "question").wasAcknowledged();
     }
 
 }
