@@ -7,8 +7,8 @@ import pl.quiz.webApplication.enums.Answer;
 import pl.quiz.webApplication.enums.Type;
 
 /**
+ * This class represents details of question
  * <p>Created on 02.08.2026</p>
- *
  * @author Maciej
  * @version 0.1
  */

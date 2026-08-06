@@ -80,6 +80,12 @@ public class DataController {
 
     }
 
+    /**
+     * This method creates new set of questions
+     * @param set object that contains details of set to be created
+     * @param session current session
+     * @return ResponseEntity
+     */
     @PostMapping("new_set")
     public ResponseEntity<?> createNewSet(@RequestBody Set set, HttpSession session) {
 
@@ -107,6 +113,11 @@ public class DataController {
         return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 
+    /**
+     * This method returns all sets belonging to a current user
+     * @param session current session
+     * @return List of Sets available
+     */
     @GetMapping("/choose_set")
     public List<Set> chooseSets(HttpSession session) {
         SessionUser user = (SessionUser) session.getAttribute("user");
@@ -115,6 +126,12 @@ public class DataController {
         return dataRepository.getAllSets(user.getLogin());
     }
 
+    /**
+     * This method deletes the set of name specified in path
+     * @param name name of the set to be deleted
+     * @param session current session
+     * @return ResponseEntity
+     */
     @DeleteMapping("/delete/{name}")
     public ResponseEntity<?> deleteSet(@PathVariable("name") String name, HttpSession session){
         SessionUser user = (SessionUser) session.getAttribute("user");

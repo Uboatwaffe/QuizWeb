@@ -61,16 +61,40 @@ public class DataRepository {
 
     }
 
+    /**
+     * This method checkes if searched object exists
+     * @param collection collection in which it will be looked for
+     * @param key key of searched value
+     * @param value searched value
+     * @param classInstance instance of class of result
+     * @return TRUE if exist, if not then FALSE
+     */
     public boolean checkIfExists(String collection, String key, String value, Class classInstance){
         Query query = new Query(Criteria.where(key).is(value));
 
         return !mongoTemplate.find(query, classInstance, collection).isEmpty();
     }
 
+    /**
+     * This method creates a question
+     * @param starting is this a first question in a set? (are you ready question)
+     * @param question question itself
+     * @param type type of the question (Type.java)
+     * @param answer answer expected (Answer.java)
+     * @param points how many points for question
+     * @param set to which set should it belong
+     * @param owner who is the owner of this question
+     * @return Question.java
+     */
     public Question addQuestion(boolean starting, String question, Type type, Answer answer, int points, String set, String owner){
         return mongoTemplate.insert(new Question(starting, question, type, answer, points, set, owner), "question");
     }
 
+    /**
+     * This method return all sets of the current user
+     * @param login login of the user
+     * @return List of Sets available
+     */
     public List<Set> getAllSets(String login){
         Query query = new Query(Criteria
                 .where("startingQuestion").is(true)
@@ -83,6 +107,12 @@ public class DataRepository {
         return mongoTemplate.find(query, Set.class, "question");
     }
 
+    /**
+     * This method deletes a set
+     * @param name name of the set to be deleted
+     * @param login login of the current user
+     * @return TRUE if successful, if not then FALSE
+     */
     public boolean deleteSet(String name, String login){
         Query query = new Query(Criteria
                 .where("set").is(name)

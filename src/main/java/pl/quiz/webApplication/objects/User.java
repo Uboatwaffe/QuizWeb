@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import pl.quiz.webApplication.enums.Role;
 
 /**
- *  This class represents a user
+ * This class represents a user
  * <p>Created on 27.07.2026</p>
  * @author Maciej
  * @version 0.1

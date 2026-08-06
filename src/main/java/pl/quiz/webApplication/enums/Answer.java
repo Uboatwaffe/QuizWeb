@@ -1,8 +1,8 @@
 package pl.quiz.webApplication.enums;
 
 /**
+ * Every possible type of answer
  * <p>Created on 02.08.2026<\p>
- *
  * @author Maciej
  * @version 0.1
  */

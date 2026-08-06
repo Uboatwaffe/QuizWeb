@@ -6,8 +6,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 /**
+ * This class contains the name of current set
  * <p>Created on 02.08.2026</p>
- *
  * @author Maciej
  * @version 0.1
  */
