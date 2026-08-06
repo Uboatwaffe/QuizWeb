@@ -79,3 +79,11 @@ input {
     color: #0078ff;
     font-size: 1.2rem;
 }
+
+.no-sets {
+    color: #0078ff;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    margin: 30px 0;
+}

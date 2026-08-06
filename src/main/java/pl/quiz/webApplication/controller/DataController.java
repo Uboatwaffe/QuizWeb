@@ -101,11 +101,7 @@ public class DataController {
     }
 
     @GetMapping("/choose_set")
-    public List<Map<String, String>> chooseSets() {
-        return List.of(
-                Map.of("name", "Java Basics"),
-                Map.of("name", "Spring Boot"),
-                Map.of("name", "HTML & CSS")
-        );
+    public List<Set> chooseSets() {
+        return dataRepository.getAllSets();
     }
 }

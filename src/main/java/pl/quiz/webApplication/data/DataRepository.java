@@ -9,7 +9,10 @@ import pl.quiz.webApplication.enums.Answer;
 import pl.quiz.webApplication.enums.Role;
 import pl.quiz.webApplication.enums.Type;
 import pl.quiz.webApplication.objects.Question;
+import pl.quiz.webApplication.objects.Set;
 import pl.quiz.webApplication.objects.User;
+
+import java.util.List;
 
 /**
  * This class is responsible for sending queries to the database
@@ -49,7 +52,7 @@ public class DataRepository {
 
         Query query = new Query(Criteria.where("username").is(login));
 
-        if (mongoTemplate.find(query, User.class, "user").size() != 0) {
+        if (!mongoTemplate.find(query, User.class, "user").isEmpty()) {
             return null;
         }
 
@@ -60,14 +63,22 @@ public class DataRepository {
     public boolean checkIfExists(String collection, String key, String value, Class classInstance){
         Query query = new Query(Criteria.where(key).is(value));
 
-        if (mongoTemplate.find(query, classInstance, collection).size() == 0){
-            return false;
-        } else {
-            return true;
-        }
+        return !mongoTemplate.find(query, classInstance, collection).isEmpty();
     }
 
     public Question addQuestion(boolean starting, String question, Type type, Answer answer, int points, String set){
         return mongoTemplate.insert(new Question(starting, question, type, answer, points, set), "question");
     }
+
+    public List<Set> getAllSets(){
+        Query query = new Query(Criteria
+                .where("startingQuestion").is(true));
+
+        query.fields()
+                .include("set");
+
+
+        return mongoTemplate.find(query, Set.class, "question");
+    }
+
 }

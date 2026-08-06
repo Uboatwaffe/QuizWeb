@@ -96,6 +96,15 @@ async function getSets() {
     const response = await fetch("/api/choose_set");
     const data = await response.json();
 
+    if (data.length === 0) {
+        responseElement.innerHTML = `
+        <p class="no-sets">
+            No quiz sets are available right now.
+        </p>
+    `;
+        return;
+    }
+
     responseElement.innerHTML = "";
 
     data.forEach(item => {
