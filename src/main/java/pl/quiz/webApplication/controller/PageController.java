@@ -19,10 +19,7 @@ public class PageController {
      * @return index.html
      */
     @GetMapping("/")
-    public String index(Model model) {
-        SessionUser sessionUser = new SessionUser();
-        model.addAttribute("user", sessionUser);
-
+    public String index() {
         return "index";
     }
 
@@ -53,28 +50,24 @@ public class PageController {
 
     /**
      * Returns HTML page
-     * @param session current session
-     * @param model model for ThymeLeaf
      * @return new_set.html
      */
     @GetMapping("/new_set")
-    public String newSet(HttpSession session, Model model){
-        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
-        model.addAttribute("user", sessionUser);
-
+    public String newSet(){
         return "new_set";
     }
 
     /**
      * Returns HTML page
-     * @param session current session
-     * @return choose_set.html
+     * @return choose_set_to_delete.html
      */
-    @GetMapping("/choose_set")
-    public String chooseSet(HttpSession session){
-        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
-
-        return "choose_set";
+    @GetMapping("/choose_set_to_delete")
+    public String chooseSetToDelete(){
+        return "choose_set_to_delete";
     }
 
+    @GetMapping("/choose_set_to_start")
+    public String chooseSetToStart(){
+        return "choose_set_to_start";
+    }
 }
