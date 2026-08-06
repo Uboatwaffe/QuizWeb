@@ -88,26 +88,21 @@ function createNewSet() {
         })
 }
 
- function getSets() {
-    const response = fetch("/api/choose_set", {
-        method: "GET"
-    });
+const responseElement = document.getElementById("response");
 
-    const data = response.json();
+window.addEventListener("DOMContentLoaded", getSets);
 
-    responseElement.textContent = JSON.stringify(data, null, 2);
+async function getSets() {
+    const response = await fetch("/api/choose_set");
+    const data = await response.json();
+
     responseElement.innerHTML = "";
 
     data.forEach(item => {
-        const element = document.createElement("div");
-
-        element.className = "item";
-
-        element.innerHTML = `
-                <h3>Name: ${item.name}</h3>
-            `;
-
-        responseElement.appendChild(element);
+        const div = document.createElement("div");
+        div.className = "item";
+        div.innerHTML = `<h3>${item.name}</h3>`;
+        responseElement.appendChild(div);
     });
 }
 

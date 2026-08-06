@@ -11,6 +11,9 @@ import pl.quiz.webApplication.enums.Role;
 import pl.quiz.webApplication.enums.Type;
 import pl.quiz.webApplication.objects.*;
 
+import java.util.List;
+import java.util.Map;
+
 
 /**
  * This class is responsible for sending data to user
@@ -97,8 +100,12 @@ public class DataController {
         return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 
-    @GetMapping("choose_set")
-    public String chooseSets() {
-        return "{}";
+    @GetMapping("/choose_set")
+    public List<Map<String, String>> chooseSets() {
+        return List.of(
+                Map.of("name", "Java Basics"),
+                Map.of("name", "Spring Boot"),
+                Map.of("name", "HTML & CSS")
+        );
     }
 }
