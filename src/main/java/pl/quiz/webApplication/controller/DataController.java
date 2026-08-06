@@ -121,7 +121,6 @@ public class DataController {
     @GetMapping("/choose_set")
     public List<Set> chooseSets(HttpSession session) {
         SessionUser user = (SessionUser) session.getAttribute("user");
-        System.out.println(dataRepository.getAllSets(user.getLogin()));
 
         return dataRepository.getAllSets(user.getLogin());
     }
