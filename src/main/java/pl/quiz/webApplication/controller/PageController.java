@@ -70,4 +70,9 @@ public class PageController {
     public String chooseSetToStart(){
         return "choose_set_to_start";
     }
+
+    @GetMapping("/choose_set_to_modify")
+    public String chooseSetToModify(){
+        return "choose_set_to_modify";
+    }
 }
