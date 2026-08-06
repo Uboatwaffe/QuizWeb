@@ -35,6 +35,7 @@ public class PageController {
     @GetMapping("/home")
     public String home(HttpSession session, Model model){
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");
+
         model.addAttribute("user", sessionUser);
 
         return "home";

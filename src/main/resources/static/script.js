@@ -110,7 +110,11 @@ async function getSets() {
     data.forEach(item => {
         const div = document.createElement("div");
         div.className = "item";
-        div.innerHTML = `<h3>${item.name}</h3>`;
+        div.innerHTML = `        
+            <button class="set-button">
+                ${item.name}
+            </button>
+        `;
         responseElement.appendChild(div);
     });
 }

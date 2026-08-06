@@ -87,3 +87,21 @@ input {
     text-align: center;
     margin: 30px 0;
 }
+
+.set-button {
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+}
+
+.set-button:hover {
+    background: transparent;
+}
+
+.justDiv {
+    align-content: center;
+}
