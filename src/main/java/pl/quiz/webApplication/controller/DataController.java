@@ -92,9 +92,9 @@ public class DataController {
         if (set.getName().isEmpty()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-
+        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
         // Check if the name is already taken
-        if (dataRepository.checkIfExists("question", "set", set.getName(), Set.class)){
+        if (dataRepository.checkIfExists("question", "set", set.getName(), "owner", sessionUser.getLogin(), Set.class)){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 

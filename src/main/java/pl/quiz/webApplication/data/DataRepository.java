@@ -67,10 +67,12 @@ public class DataRepository {
      * @param key key of searched value
      * @param value searched value
      * @param classInstance instance of class of result
-     * @return TRUE if exist, if not then FALSE
+     * @return TRUE if existed, if not then FALSE
      */
-    public boolean checkIfExists(String collection, String key, String value, Class classInstance){
-        Query query = new Query(Criteria.where(key).is(value));
+    public boolean checkIfExists(String collection, String key, String value, String key2, String value2, Class classInstance){
+        Query query = new Query(Criteria
+                .where(key).is(value)
+                .and(key2).is(value2));
 
         return !mongoTemplate.find(query, classInstance, collection).isEmpty();
     }
