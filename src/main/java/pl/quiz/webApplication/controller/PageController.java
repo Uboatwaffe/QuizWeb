@@ -1,10 +1,12 @@
 package pl.quiz.webApplication.controller;
 
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import pl.quiz.webApplication.data.DataRepository;
 import pl.quiz.webApplication.objects.SessionUser;
 import pl.quiz.webApplication.objects.Set;
 
@@ -15,6 +17,9 @@ import pl.quiz.webApplication.objects.Set;
  */
 @Controller
 public class PageController {
+
+    @Autowired
+    DataRepository dataRepository;
 
     /**
      * Returns HTML page
@@ -93,7 +98,7 @@ public class PageController {
      * @return quiz.html
      */
     @GetMapping("/quiz/{name}")
-    public String quiz(@PathVariable String name, Model model){
+    public String quiz(@PathVariable("name") String name, Model model, HttpSession session){
         model.addAttribute("set", new Set(name));
 
         return "quiz";

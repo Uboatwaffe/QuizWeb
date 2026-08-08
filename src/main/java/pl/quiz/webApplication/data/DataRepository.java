@@ -13,6 +13,7 @@ import pl.quiz.webApplication.objects.SessionUser;
 import pl.quiz.webApplication.objects.Set;
 import pl.quiz.webApplication.objects.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -131,5 +132,6 @@ public class DataRepository {
 
         return mongoTemplate.find(query, Question.class, "question");
     }
+
 
 }
