@@ -34,6 +34,15 @@ async function getSets() {
                 </button>
             `;
 
+            const button = div.querySelector(".set-button");
+
+            button.addEventListener("click", async function () {
+                const setName = encodeURIComponent(item.name.trim());
+
+                window.location.href = "/modify/" + setName;
+
+            })
+
             responseElement.appendChild(div);
         });
     } catch (error) {

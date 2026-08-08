@@ -100,7 +100,12 @@ public class PageController {
     @GetMapping("/quiz/{name}")
     public String quiz(@PathVariable("name") String name, Model model, HttpSession session){
         model.addAttribute("set", new Set(name));
-
         return "quiz";
+    }
+
+    @GetMapping("/modify/{name}")
+    public String modify(@PathVariable("name") String name, Model model, HttpSession session){
+        model.addAttribute("set", new Set(name));
+        return "modify_set";
     }
 }
