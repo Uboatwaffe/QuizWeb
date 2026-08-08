@@ -34,6 +34,15 @@ async function getSets() {
                 </button>
             `;
 
+            const button = div.querySelector(".set-button");
+
+            button.addEventListener("click", async function () {
+                const setName = encodeURIComponent(this.textContent.trim());
+
+                window.location.replace("/quiz/" + setName);
+
+            })
+
             responseElement.appendChild(div);
         });
     } catch (error) {

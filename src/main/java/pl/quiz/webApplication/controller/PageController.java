@@ -4,7 +4,9 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import pl.quiz.webApplication.objects.SessionUser;
+import pl.quiz.webApplication.objects.Set;
 
 /**
  * This class is responsible for loading correct pages <br>
@@ -76,6 +78,10 @@ public class PageController {
         return "choose_set_to_modify";
     }
 
-    @GetMapping("/quiz")
-    public String quiz(){return "quiz";}
+    @GetMapping("/quiz/{name}")
+    public String quiz(@PathVariable String name, Model model){
+        model.addAttribute("set", new Set(name));
+
+        return "quiz";
+    }
 }
