@@ -2,6 +2,8 @@ package pl.quiz.webApplication.controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -141,4 +143,12 @@ public class DataController {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
+
+    @GetMapping("/quiz/{set}")
+    public List<Question> getQuestions(@PathVariable("set") String set, HttpSession session){
+        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
+
+        return dataRepository.getQuestions(sessionUser, set);
+    }
+
 }

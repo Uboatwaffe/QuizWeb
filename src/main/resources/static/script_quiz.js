@@ -1,12 +1,14 @@
 async function getQuestions() {
     const responseElement = document.getElementById("response");
 
+    const setName = document.getElementById("setName").textContent.trim();
+
     if (!responseElement) {
         return;
     }
 
     try {
-        const response = await fetch("/api/quiz", {
+        const response = await fetch("/api/quiz/" + setName, {
             method: "GET"
         });
 
@@ -31,7 +33,7 @@ async function getQuestions() {
 
             div.innerHTML = `
                 <button class="set-button">
-                    ${item.name}
+                    ${item.question}
                 </button>
             `;
 
@@ -47,4 +49,4 @@ async function getQuestions() {
         `;
     }
 }
-window.addEventListener("DOMContentLoaded", getSets);
+window.addEventListener("DOMContentLoaded", getQuestions);

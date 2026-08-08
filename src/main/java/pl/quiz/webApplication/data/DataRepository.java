@@ -123,4 +123,13 @@ public class DataRepository {
         return mongoTemplate.remove(query, "question").wasAcknowledged();
     }
 
+
+    public List<Question> getQuestions(SessionUser sessionUser, String set){
+        Query query = new Query(Criteria
+                .where("set").is(set)
+                .and("owner").is(sessionUser.getLogin()));
+
+        return mongoTemplate.find(query, Question.class, "question");
+    }
+
 }
