@@ -68,16 +68,30 @@ public class PageController {
         return "choose_set_to_delete";
     }
 
+    /**
+     * Returns HTML page
+     * @return choose_set_to_start.html
+     */
     @GetMapping("/choose_set_to_start")
     public String chooseSetToStart(){
         return "choose_set_to_start";
     }
 
+    /**
+     * Returns HTML page
+     * @return choose_set_to_modify.html
+     */
     @GetMapping("/choose_set_to_modify")
     public String chooseSetToModify(){
         return "choose_set_to_modify";
     }
 
+    /**
+     * Returns HTML page
+     * @param name name of the quiz to be run
+     * @param model model for ThymeLeaf
+     * @return quiz.html
+     */
     @GetMapping("/quiz/{name}")
     public String quiz(@PathVariable String name, Model model){
         model.addAttribute("set", new Set(name));
