@@ -75,4 +75,7 @@ public class PageController {
     public String chooseSetToModify(){
         return "choose_set_to_modify";
     }
+
+    @GetMapping("/quiz")
+    public String quiz(){return "quiz";}
 }
