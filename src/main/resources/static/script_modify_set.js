@@ -271,6 +271,9 @@ window.addEventListener("DOMContentLoaded", getQuestions);
 
 
 function newQuestion(){
+    const responseElement = document.getElementById("newDivQuestion");
+
+
     const div = document.createElement("div");
     div.className = "question";
 
@@ -278,7 +281,7 @@ function newQuestion(){
 
     div.innerHTML = `
         <label>Question:</label><br>
-        <input class="questionInput" value="${item.question}"><br>
+        <input class="questionInput" value="Insert new question here"><br>
 
             <hr>
 
@@ -299,7 +302,7 @@ function newQuestion(){
                 <input
                     type="number"
                     class="pointsInput"
-                    value="${item.points}"
+                    value="0"
                 >
 
                 <br>
@@ -417,8 +420,6 @@ function newQuestion(){
                     updateOptions(this.value);
                 });
 
-                select.value = item.type;
-
                 optionsContainer.addEventListener("change", function (event) {
                     if (event.target.type === "checkbox") {
                         const checkboxes = optionsContainer.querySelectorAll(
@@ -433,25 +434,9 @@ function newQuestion(){
                     }
                 });
 
-                updateOptions(item.type);
-
 
                 deleteButton.addEventListener("click", async function () {
-                    const id = item.id;
-
-                    try {
-                        const deleteResponse = await fetch(`/api/deleteQuestion/${item.id}`, {
-                            method: "DELETE",
-                        })
-
-                        if (deleteResponse.ok) {
-                            div.remove();
-                        } else {
-                            console.error("Delete failed");
-                        }
-                    } catch (error) {
-                        console.error("Error deleteing question", error);
-                    }
+                    div.remove();
                 });
 
                 document.addEventListener("input", function (e) {
