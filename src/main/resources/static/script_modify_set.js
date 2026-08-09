@@ -32,6 +32,7 @@ async function getQuestions() {
         data.forEach(item => {
             const div = document.createElement("div");
             div.className = "question";
+            div.dataset.id = item.id;
 
             div.innerHTML = `         
                 <label>Question:</label><br>
@@ -202,7 +203,6 @@ async function getQuestions() {
 
 
             deleteButton.addEventListener("click", async function () {
-                const id = item.id;
 
                 try {
                     const deleteResponse = await fetch(`/api/deleteQuestion/${item.id}`, {
@@ -416,6 +416,8 @@ function newQuestion(){
                     }
                 }
 
+                updateOptions("ABCD");
+
                 select.addEventListener("change", function () {
                     updateOptions(this.value);
                 });
@@ -446,7 +448,7 @@ function newQuestion(){
                             e.target.value = e.target.value.slice(0, 2);
                         }
 
-                        if (e.target.value < 1) {
+                        if (e.target.value < 0) {
                             e.target.value = 1;
                         } else if (e.target.value > 31) {
                             e.target.value = 31;
@@ -458,7 +460,7 @@ function newQuestion(){
                             e.target.value = e.target.value.slice(0, 2);
                         }
 
-                        if (e.target.value < 1) {
+                        if (e.target.value < 0) {
                             e.target.value = 1;
                         } else if (e.target.value > 12) {
                             e.target.value = 12;
@@ -474,6 +476,67 @@ function newQuestion(){
 
                 responseElement.appendChild(div);
 }
+
+function getNewQuestions() {
+    const newQuestionContainer = document.getElementById("newDivQuestion");
+    const setName = document.getElementById("setName").textContent.trim()
+
+    if (!newQuestionContainer) {
+        console.error("Could not find #newDivQuestion");
+        return [];
+    }
+
+    const questionDivs = newQuestionContainer.querySelectorAll(".question");
+    const questions = [];
+
+    questionDivs.forEach(div => {
+        const questionData = {
+            question: div.querySelector(".questionInput")?.value ?? "",
+            type: div.querySelector(".typeSelect")?.value ?? "",
+            points: Number(div.querySelector(".pointInput")?.value ?? 0),
+            set: setName,
+            answer: null
+        };
+
+        const type = questionData.type;
+
+        if (type === "ABCD" || type === "TF" || type === "YN") {
+            const checked = div.querySelector(
+                ".typeOptions input[type='checkbox']:checked"
+            );
+
+            if (checked) {
+                questionData.answer = checked.value;
+            }
+
+        } else if (type === "OPEN") {
+            const open = div.querySelector(
+                ".openAnswer input[type='text']"
+            );
+
+            if (open) {
+                questionData.answer = open.value.trim();
+            }
+
+        } else if (type === "DATE") {
+            const day = div.querySelector(".dayInput");
+            const month = div.querySelector(".monthInput");
+            const year = div.querySelector(".yearInput");
+
+            questionData.answer = {
+                day: day?.value || null,
+                month: month?.value || null,
+                year: year?.value || null
+            };
+        }
+
+        questions.push(questionData);
+    });
+
+    console.log(questions);
+    return questions;
+}
+
 
 
 

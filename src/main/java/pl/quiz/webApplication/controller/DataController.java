@@ -106,7 +106,7 @@ public class DataController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        Question question = dataRepository.addQuestion(true, "Are you ready?", Type.YN, Answer.YES, 0, set.getName(), user.getLogin());
+        Question question = dataRepository.addQuestion("Are you ready?", Type.YN, Answer.YES, 0, set.getName(), user.getLogin());
 
         if (question != null) {
             return ResponseEntity.ok().build();

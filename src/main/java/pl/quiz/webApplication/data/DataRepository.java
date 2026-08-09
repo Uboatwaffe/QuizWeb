@@ -89,8 +89,8 @@ public class DataRepository {
      * @param owner who is the owner of this question
      * @return Question.java
      */
-    public Question addQuestion(boolean starting, String question, Type type, Answer answer, int points, String set, String owner){
-        return mongoTemplate.insert(new Question(starting, question, type, answer, points, set, owner), "question");
+    public Question addQuestion(String question, Type type, Answer answer, int points, String set, String owner){
+        return mongoTemplate.insert(new Question(question, type, answer, points, set, owner), "question");
     }
 
     /**
@@ -99,15 +99,22 @@ public class DataRepository {
      * @return List of Sets available
      */
     public List<Set> getAllSets(String login){
-        Query query = new Query(Criteria
-                .where("startingQuestion").is(true)
-                .and("owner").is(login));
+        Query query = new Query();
 
         query.fields()
                 .include("set");
 
+        List<Set> sets = mongoTemplate.find(query, Set.class, "question");
 
-        return mongoTemplate.find(query, Set.class, "question");
+        List<Set> removedDuplicates = new ArrayList<>();
+
+        for (Set set: sets) {
+            if (!removedDuplicates.contains(set)) {
+                removedDuplicates.add(set);
+            }
+        }
+
+        return removedDuplicates;
     }
 
     /**

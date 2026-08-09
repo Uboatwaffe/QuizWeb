@@ -17,7 +17,7 @@ import pl.quiz.webApplication.enums.Type;
 @NoArgsConstructor
 public class Question {
     private String id;
-    private boolean startingQuestion;
+
     private String question;
     private Type type;
     private Answer answer;
@@ -25,8 +25,7 @@ public class Question {
     private String set;
     private String owner;
 
-    public Question(boolean starting, String question, Type type, Answer answer, int points, String set, String owner){
-        startingQuestion = starting;
+    public Question(String question, Type type, Answer answer, int points, String set, String owner){
         this.question = question;
         this.type = type;
         this.answer = answer;
