@@ -267,3 +267,231 @@ async function getQuestions() {
 }
 
 window.addEventListener("DOMContentLoaded", getQuestions);
+
+
+
+function newQuestion(){
+    const div = document.createElement("div");
+    div.className = "question";
+
+
+
+    div.innerHTML = `
+        <label>Question:</label><br>
+        <input class="questionInput" value="${item.question}"><br>
+
+            <hr>
+
+                <label>Type:</label><br>
+                <select class="typeSelect">
+                    <option value="ABCD">ABCD</option>
+                    <option value="TF">True or False</option>
+                    <option value="OPEN">Open question</option>
+                    <option value="DATE">Date question</option>
+                    <option value="YN">Yes or No</option>
+                </select>
+
+                <div class="typeOptions"></div>
+
+                <hr>
+
+                <label>Points:</label><br>
+                <input
+                    type="number"
+                    class="pointsInput"
+                    value="${item.points}"
+                >
+
+                <br>
+                <hr>
+
+                <button type="button" class="deleteQuestion">
+                    Delete
+                </button>
+                `;
+
+                const select = div.querySelector(".typeSelect");
+                const optionsContainer = div.querySelector(".typeOptions");
+                const deleteButton = div.querySelector(".deleteQuestion");
+
+                function updateOptions(type) {
+                    optionsContainer.innerHTML = "";
+
+                    if (type === "YN") {
+                        optionsContainer.innerHTML = `
+                            <label>
+                                <input type="checkbox" value="YES">
+                                Yes
+                            </label>
+    
+                            <label>
+                                <input type="checkbox" value="NO">
+                                No
+                            </label>
+                        `;
+
+                    } else if (type === "ABCD") {
+                        optionsContainer.innerHTML = `
+                            <label>
+                                <input type="checkbox" value="A">
+                                A
+                            </label>
+    
+                            <label>
+                                <input type="checkbox" value="B">
+                                B
+                            </label>
+    
+                            <label>
+                                <input type="checkbox" value="C">
+                                C
+                            </label>
+    
+                            <label>
+                                <input type="checkbox" value="D">
+                                D
+                            </label>
+                        `;
+
+                    } else if (type === "TF") {
+                        optionsContainer.innerHTML = `
+                            <label>
+                                <input type="checkbox" value="TRUE">
+                                True
+                            </label>
+    
+                            <label>
+                                <input type="checkbox" value="FALSE">
+                                False
+                            </label>
+                        `;
+
+                    } else if (type === "OPEN") {
+                        optionsContainer.innerHTML = `
+                            <input
+                                type="text"
+                                class="openAnswer"
+                                placeholder="Answer"
+                            >
+                        `;
+
+                    } else if (type === "DATE") {
+                        optionsContainer.innerHTML = `
+                            <div class="dateContainer">
+    
+                                <div class="dateInputs">
+                                    Day<br>
+                                    <input
+                                        type="number"
+                                        class="shortInput dayInput"
+                                        min="1"
+                                        max="31"
+                                    >
+                                </div>
+    
+                                <div class="dateInputs">
+                                    Month<br>
+                                    <input
+                                        type="number"
+                                        class="shortInput monthInput"
+                                        min="1"
+                                        max="12"
+                                    >
+                                </div>
+    
+                                <div class="dateInputs">
+                                    Year<br>
+                                    <input
+                                        type="number"
+                                        class="longerInput yearInput"
+                                        min="1"
+                                    >
+                                </div>
+    
+                            </div>
+                        `;
+                    }
+                }
+
+                select.addEventListener("change", function () {
+                    updateOptions(this.value);
+                });
+
+                select.value = item.type;
+
+                optionsContainer.addEventListener("change", function (event) {
+                    if (event.target.type === "checkbox") {
+                        const checkboxes = optionsContainer.querySelectorAll(
+                            'input[type="checkbox"]'
+                        );
+
+                        checkboxes.forEach(checkbox => {
+                            if (checkbox !== event.target) {
+                                checkbox.checked = false;
+                            }
+                        });
+                    }
+                });
+
+                updateOptions(item.type);
+
+
+                deleteButton.addEventListener("click", async function () {
+                    const id = item.id;
+
+                    try {
+                        const deleteResponse = await fetch(`/api/deleteQuestion/${item.id}`, {
+                            method: "DELETE",
+                        })
+
+                        if (deleteResponse.ok) {
+                            div.remove();
+                        } else {
+                            console.error("Delete failed");
+                        }
+                    } catch (error) {
+                        console.error("Error deleteing question", error);
+                    }
+                });
+
+                document.addEventListener("input", function (e) {
+
+                    if (e.target.classList.contains("dayInput")) {
+                        if (e.target.value.length > 2) {
+                            e.target.value = e.target.value.slice(0, 2);
+                        }
+
+                        if (e.target.value < 1) {
+                            e.target.value = 1;
+                        } else if (e.target.value > 31) {
+                            e.target.value = 31;
+                        }
+                    }
+
+                    if (e.target.classList.contains("monthInput")) {
+                        if (e.target.value.length > 2) {
+                            e.target.value = e.target.value.slice(0, 2);
+                        }
+
+                        if (e.target.value < 1) {
+                            e.target.value = 1;
+                        } else if (e.target.value > 12) {
+                            e.target.value = 12;
+                        }
+                    }
+
+                    if (e.target.classList.contains("yearInput")) {
+                        if (e.target.value.length > 4) {
+                            e.target.value = e.target.value.slice(0, 4);
+                        }
+                    }
+                });
+
+                responseElement.appendChild(div);
+}
+
+
+
+
+
+
