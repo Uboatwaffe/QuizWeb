@@ -33,7 +33,7 @@ async function getQuestions() {
             const div = document.createElement("div");
             div.className = "question";
 
-            div.innerHTML = `
+            div.innerHTML = `         
                 <label>Question:</label><br>
                 <input class="questionInput" value="${item.question}"><br>
 
@@ -201,10 +201,22 @@ async function getQuestions() {
             updateOptions(item.type);
 
 
-            deleteButton.addEventListener("click", function () {
+            deleteButton.addEventListener("click", async function () {
+                const id = item.id;
 
-                //TODO: Delete a question
-                //div.remove();
+                try {
+                    const deleteResponse = await fetch(`/api/deleteQuestion/${item.id}`, {
+                        method: "DELETE",
+                    })
+
+                    if (deleteResponse.ok) {
+                        div.remove();
+                    } else {
+                        console.error("Delete failed");
+                    }
+                } catch (error) {
+                    console.error("Error deleteing question", error);
+                }
             });
 
             document.addEventListener("input", function (e) {

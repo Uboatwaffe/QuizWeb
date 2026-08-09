@@ -151,4 +151,14 @@ public class DataController {
         return dataRepository.getQuestions(sessionUser, set);
     }
 
+    @DeleteMapping("/deleteQuestion/{id}")
+    public ResponseEntity<?> deleteQuestion(@PathVariable("id") String id){
+        if (dataRepository.deleteQuestion(id)) {
+            System.out.println("deleted");
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
+
 }

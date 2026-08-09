@@ -133,5 +133,11 @@ public class DataRepository {
         return mongoTemplate.find(query, Question.class, "question");
     }
 
+    public boolean deleteQuestion(String id){
+        Query query = new Query(Criteria.where("_id").is(id));
+
+        return mongoTemplate.remove(query, "question").wasAcknowledged();
+    }
+
 
 }
