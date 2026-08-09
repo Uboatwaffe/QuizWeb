@@ -131,7 +131,12 @@ public class DataRepository {
         return mongoTemplate.remove(query, "question").wasAcknowledged();
     }
 
-
+    /**
+     * This method returns list of all questions in specified set
+     * @param sessionUser current user details
+     * @param set set of the questions
+     * @return List of questions
+     */
     public List<Question> getQuestions(SessionUser sessionUser, String set){
         Query query = new Query(Criteria
                 .where("set").is(set)
@@ -140,6 +145,11 @@ public class DataRepository {
         return mongoTemplate.find(query, Question.class, "question");
     }
 
+    /**
+     * This method deletes question
+     * @param id id of the question to be deleted
+     * @return TRUE if successful, if not then FALSE
+     */
     public boolean deleteQuestion(String id){
         Query query = new Query(Criteria.where("_id").is(id));
 

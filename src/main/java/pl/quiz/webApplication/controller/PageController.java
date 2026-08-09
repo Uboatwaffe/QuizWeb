@@ -103,6 +103,13 @@ public class PageController {
         return "quiz";
     }
 
+    /**
+     * Returns HTML page
+     * @param name name of the set to be modified
+     * @param model model for ThymeLeaf
+     * @param session current session
+     * @return modify_set.html
+     */
     @GetMapping("/modify/{name}")
     public String modify(@PathVariable("name") String name, Model model, HttpSession session){
         model.addAttribute("set", new Set(name));

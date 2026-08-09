@@ -215,7 +215,7 @@ async function getQuestions() {
                         console.error("Delete failed");
                     }
                 } catch (error) {
-                    console.error("Error deleteing question", error);
+                    console.error("Error deleting question", error);
                 }
             });
 
@@ -511,12 +511,12 @@ function getNewQuestions() {
 
         } else if (type === "OPEN") {
             const open = div.querySelector(
-                ".openAnswer input[type='text']"
+                ".openAnswer"
             );
 
-            if (open) {
-                questionData.answer = open.value.trim();
-            }
+            // TODO: fix it
+            questionData.answer = open.value.trim();
+
 
         } else if (type === "DATE") {
             const day = div.querySelector(".dayInput");

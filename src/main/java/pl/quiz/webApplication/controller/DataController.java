@@ -144,6 +144,12 @@ public class DataController {
         }
     }
 
+    /**
+     * This method returns list of questions in specified set
+     * @param set set of the questions
+     * @param session current session
+     * @return List of questions
+     */
     @GetMapping("/quiz/{set}")
     public List<Question> getQuestions(@PathVariable("set") String set, HttpSession session){
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");
@@ -151,6 +157,11 @@ public class DataController {
         return dataRepository.getQuestions(sessionUser, set);
     }
 
+    /**
+     * This method deletes question of specified id
+     * @param id id of the question to be deleted
+     * @return ResponseEntity
+     */
     @DeleteMapping("/deleteQuestion/{id}")
     public ResponseEntity<?> deleteQuestion(@PathVariable("id") String id){
         if (dataRepository.deleteQuestion(id)) {
