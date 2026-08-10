@@ -156,7 +156,12 @@ public class DataRepository {
         return mongoTemplate.remove(query, "question").wasAcknowledged();
     }
 
-
+    /**
+     * This method updates a question
+     * @param question details of a question
+     * @param sessionUser current SessionUser
+     * @return TRUE if successful, if not then FALSE
+     */
     public boolean updateQuestion(Question question, SessionUser sessionUser){
         Query query = new Query(Criteria.where("_id").is(question.getId()));
 

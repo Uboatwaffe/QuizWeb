@@ -174,6 +174,12 @@ public class DataController {
         }
     }
 
+    /**
+     * This method inserts new questions into DB
+     * @param listOfNewQuestions list of question details
+     * @param session current session
+     * @return ResponseEntity
+     */
     @PostMapping("/newQuestions")
     public ResponseEntity<?> newQuestions(@RequestBody List<Question> listOfNewQuestions, HttpSession session) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");
@@ -191,6 +197,12 @@ public class DataController {
         }
     }
 
+    /**
+     * This method updates old questions
+     * @param listOfOldQuestions list of updated questions
+     * @param session current session
+     * @return ResponseEntity
+     */
     @PutMapping("/updateQuestions")
     public ResponseEntity<?> updateQuestions(@RequestBody List<Question> listOfOldQuestions, HttpSession session) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");
