@@ -146,3 +146,7 @@ select {
     display: block;
     margin: 5px;
 }
+.answerButton.selected {
+    background-color: darkblue;
+    color: white;
+}

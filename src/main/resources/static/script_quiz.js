@@ -8,9 +8,12 @@ async function getQuestions() {
     }
 
     try {
-        const response = await fetch("/api/quiz/" + setName, {
-            method: "GET"
-        });
+        const response = await fetch(
+            "/api/quiz/" + encodeURIComponent(setName),
+            {
+                method: "GET"
+            }
+        );
 
         const data = await response.json();
 
@@ -25,89 +28,211 @@ async function getQuestions() {
             return;
         }
 
-        // TODO: make it display correct type of ui depending on the type of question
         data.forEach(item => {
             const div = document.createElement("div");
 
             div.className = "question";
+            div.dataset.id = item.id;
 
-            div.innerHTML = ` 
-              <h5>${item.question}</h5>  
+            div.innerHTML = `
+                <h5>${item.question}</h5>
             `;
 
-            if (item.type === "ABCD"){
+            if (item.type === "ABCD") {
+
                 div.innerHTML += `
-                    <button id="A">A</button>
-                    <button id="B">B</button>
-                    <button id="C">C</button>
-                    <button id="D">D</button>
+                    <button type="button" class="answerButton" data-answer="A">
+                        A
+                    </button>
+
+                    <button type="button" class="answerButton" data-answer="B">
+                        B
+                    </button>
+
+                    <button type="button" class="answerButton" data-answer="C">
+                        C
+                    </button>
+
+                    <button type="button" class="answerButton" data-answer="D">
+                        D
+                    </button>
                 `;
-            } else if (item.type === "DATE"){
+
+            } else if (item.type === "DATE") {
+
                 div.innerHTML += `
                     <div class="dateContainer">
+
                         <div class="dateInputs">
                             Day
                             <br>
-                            <input type="number" id="dayInput" class="shortInput">
+                            <input
+                                type="number"
+                                class="shortInput dayInput"
+                                min="1"
+                                max="31"
+                            >
                         </div>
+
                         <div class="dateInputs">
                             Month
                             <br>
-                            <input type="number" id="monthInput" class="shortInput">
+                            <input
+                                type="number"
+                                class="shortInput monthInput"
+                                min="1"
+                                max="12"
+                            >
                         </div>
+
                         <div class="dateInputs">
                             Year
                             <br>
-                            <input type="number" id="yearInput" class="longerInput">
+                            <input
+                                type="number"
+                                class="longerInput yearInput"
+                                min="1"
+                            >
                         </div>
+
                     </div>
                 `;
 
-                document.addEventListener("input", function (e) {
-                    if (e.target.classList.contains("shortInput")) {
-                        if (e.target.value.length > 2) {
-                            e.target.value = e.target.value.slice(0, 2);
-                        }
+            } else if (item.type === "TF") {
 
-                        if (e.target.value < 1) {
-                            e.target.value = 1
-                        } else if (e.target.value > 12) {
-                            e.target.value = 12
-                        }
-                    }
+                div.innerHTML += `
+                    <button type="button" class="answerButton" data-answer="TRUE">
+                        True
+                    </button>
 
-                    if (e.target.classList.contains("longerInput")) {
-                        if (e.target.value.length > 4) {
-                            e.target.value = e.target.value.slice(0, 4);
-                        }
-                    }
-                });
-            } else if (item.type === "TF"){
-                div.innerHTML += `
-                    <button id="true">True</button>
-                    <button id="false">False</button>
+                    <button type="button" class="answerButton" data-answer="FALSE">
+                        False
+                    </button>
                 `;
-            } else if (item.type === "OPEN"){
+
+            } else if (item.type === "OPEN") {
+
                 div.innerHTML += `
-                    <input type="text" id="openInput">
+                    <input
+                        type="text"
+                        class="openInput"
+                    >
                 `;
-            } else if (item.type === "YN"){
+
+            } else if (item.type === "YN") {
+
                 div.innerHTML += `
-                    <button id="yes">Yes</button>
-                    <button id="no">No</button>
+                    <button type="button" class="answerButton" data-answer="YES">
+                        Yes
+                    </button>
+
+                    <button type="button" class="answerButton" data-answer="NO">
+                        No
+                    </button>
                 `;
             }
 
+
+            /*
+             * Answer button handling.
+             *
+             * Only one button can be selected
+             * for each question.
+             */
+            const answerButtons = div.querySelectorAll(
+                ".answerButton"
+            );
+
+            answerButtons.forEach(button => {
+
+                button.addEventListener("click", function () {
+
+                    // Remove selected state from all buttons
+                    // belonging to this question.
+                    answerButtons.forEach(otherButton => {
+                        otherButton.classList.remove("selected");
+                    });
+
+                    // Select the clicked button.
+                    this.classList.add("selected");
+                });
+            });
+
+
             responseElement.appendChild(div);
         });
+
     } catch (error) {
+
         console.error("Error loading questions:", error);
 
         responseElement.innerHTML = `
-           <p class="no-sets">
-               Failed to load quiz.
-           </p>
+            <p class="no-sets">
+                Failed to load quiz.
+            </p>
         `;
     }
 }
-window.addEventListener("DOMContentLoaded", getQuestions);
+
+
+/*
+ * Date input validation.
+ *
+ * This listener is outside getQuestions(),
+ * so it is only registered once.
+ */
+document.addEventListener("input", function (e) {
+
+    /*
+     * Day
+     */
+    if (e.target.classList.contains("dayInput")) {
+
+        if (e.target.value.length > 2) {
+            e.target.value =
+                e.target.value.slice(0, 2);
+        }
+
+        if (e.target.value < 1) {
+            e.target.value = 1;
+        } else if (e.target.value > 31) {
+            e.target.value = 31;
+        }
+    }
+
+
+    /*
+     * Month
+     */
+    if (e.target.classList.contains("monthInput")) {
+
+        if (e.target.value.length > 2) {
+            e.target.value =
+                e.target.value.slice(0, 2);
+        }
+
+        if (e.target.value < 1) {
+            e.target.value = 1;
+        } else if (e.target.value > 12) {
+            e.target.value = 12;
+        }
+    }
+
+
+    /*
+     * Year
+     */
+    if (e.target.classList.contains("longerInput")) {
+
+        if (e.target.value.length > 4) {
+            e.target.value =
+                e.target.value.slice(0, 4);
+        }
+    }
+});
+
+
+window.addEventListener(
+    "DOMContentLoaded",
+    getQuestions
+);
