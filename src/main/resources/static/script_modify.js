@@ -1,3 +1,4 @@
+// This function returns all available sets
 async function getSets() {
     const responseElement = document.getElementById("response");
 
@@ -23,6 +24,7 @@ async function getSets() {
             return;
         }
 
+        // creates <div class="item"> for every set
         data.forEach(item => {
             const div = document.createElement("div");
 
@@ -36,6 +38,7 @@ async function getSets() {
 
             const button = div.querySelector(".set-button");
 
+            // setting up a listener to send user to modify_set.html with correct set
             button.addEventListener("click", async function () {
                 const setName = encodeURIComponent(item.name.trim());
 

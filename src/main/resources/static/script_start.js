@@ -1,3 +1,4 @@
+// This function returns every available set
 async function getSets() {
     const responseElement = document.getElementById("response");
 

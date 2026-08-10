@@ -1,4 +1,4 @@
-
+// This function submits data for logging in
 function submitData(){
 
     const data = {
@@ -6,6 +6,7 @@ function submitData(){
         password: document.getElementById("passwordInput").value
     }
 
+    // request
     fetch("api/", {
         method: "POST",
         headers: {
@@ -25,7 +26,7 @@ function submitData(){
         });
 }
 
-
+// this function is responsible for sending new user details
 function submitNewUser(){
     let role = document.getElementById("wantToBeAdmin").checked
 
@@ -44,6 +45,7 @@ function submitNewUser(){
         role: role
     }
 
+    // request
     fetch("api/signup", {
         method: "POST",
         headers: {
@@ -63,6 +65,7 @@ function submitNewUser(){
         });
 }
 
+// This function creates new set of specified name
 function createNewSet() {
     const data = {
         name: document.getElementById("setNameInput").value

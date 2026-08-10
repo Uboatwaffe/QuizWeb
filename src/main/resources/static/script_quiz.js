@@ -1,3 +1,4 @@
+// This function gets all question from specified set
 async function getQuestions() {
     const responseElement = document.getElementById("response");
 
@@ -28,6 +29,7 @@ async function getQuestions() {
             return;
         }
 
+        // creates <div class="question"> for each item
         data.forEach(item => {
             const div = document.createElement("div");
 
@@ -39,6 +41,7 @@ async function getQuestions() {
                 <h5>Points: ${item.points}</h5>
             `;
 
+            // sets up what should be visible depending on what type of question this is
             if (item.type === "ABCD") {
 
                 div.innerHTML += `
@@ -136,9 +139,7 @@ async function getQuestions() {
 
             /*
              * Answer button handling.
-             *
-             * Only one button can be selected
-             * for each question.
+             * Only one button can be selected for each question.
              */
             const answerButtons = div.querySelectorAll(
                 ".answerButton"
@@ -148,8 +149,7 @@ async function getQuestions() {
 
                 button.addEventListener("click", function () {
 
-                    // Remove selected state from all buttons
-                    // belonging to this question.
+                    // Remove selected state from all buttons belonging to this question.
                     answerButtons.forEach(otherButton => {
                         otherButton.classList.remove("selected");
                     });
@@ -239,6 +239,7 @@ window.addEventListener(
 );
 
 
+// This function submits all answers (id and answer only)
 async function submitAnswers() {
 
     const setNameElement = document.getElementById("setName");
@@ -258,6 +259,7 @@ async function submitAnswers() {
 
         let answer = null;
 
+        // getting correct type of answer
         /*
          * ABCD, TF and YN
          */
@@ -285,6 +287,7 @@ async function submitAnswers() {
         const monthInput = question.querySelector(".monthInput");
         const yearInput = question.querySelector(".yearInput");
 
+        // merging date data
         if (dayInput && monthInput && yearInput) {
 
             const day = dayInput.value.trim();
@@ -324,14 +327,7 @@ async function submitAnswers() {
 
         const data = await response.json();
 
-        /*
-         * Expected response:
-         * {
-         *     "scored": 8
-         *     "outOf": 10
-         * }
-         */
-
+        // redirecting user to score.html with their score in url
         window.location.href =
             "/score?score=" +
             encodeURIComponent(data.scored) +

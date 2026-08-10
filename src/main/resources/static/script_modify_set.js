@@ -1,3 +1,4 @@
+// This function returns every question in a set
 async function getQuestions() {
     const responseElement = document.getElementById("response");
 
@@ -29,6 +30,7 @@ async function getQuestions() {
             return;
         }
 
+        // creating a <div class="question"> for every question
         data.forEach(item => {
             const div = document.createElement("div");
             div.className = "question";
@@ -79,9 +81,8 @@ async function getQuestions() {
             const optionsContainer = div.querySelector(".typeOptions");
             const deleteButton = div.querySelector(".deleteQuestion");
 
-            /*
-             * Creates the inputs/options depending on question type.
-             */
+
+            // creates the input options depending on question type
             function updateOptions(type) {
                 optionsContainer.innerHTML = "";
 
@@ -185,11 +186,8 @@ async function getQuestions() {
                     `;
                 }
 
-                if (
-                    type === "YN" ||
-                    type === "ABCD" ||
-                    type === "TF"
-                ) {
+                // chooses saved answer and displays it
+                if (type === "YN" || type === "ABCD" || type === "TF") {
                     const checkbox = optionsContainer.querySelector(
                         `input[type="checkbox"][value="${item.answer}"]`
                     );
@@ -197,19 +195,13 @@ async function getQuestions() {
                     if (checkbox) {
                         checkbox.checked = true;
                     }
-                }
-
-
-                else if (type === "OPEN") {
+                } else if (type === "OPEN") {
                     const input = optionsContainer.querySelector(".openAnswer");
 
                     if (input) {
                         input.value = item.answer ?? "";
                     }
-                }
-
-
-                else if (type === "DATE") {
+                } else if (type === "DATE") {
                     const [day, month, year] = item.answer.split("/");
 
                     const dayInput = optionsContainer.querySelector(".dayInput");
@@ -223,13 +215,12 @@ async function getQuestions() {
             }
 
 
-
+            // makes it so that when i choose a option it autoupdates
             select.addEventListener("change", function () {
                 updateOptions(this.value);
             });
 
-            select.value = item.type;
-
+            // this function prevents user from clicking more than one option at a time
             optionsContainer.addEventListener("change", function (event) {
                 if (event.target.type === "checkbox") {
                     const checkboxes = optionsContainer.querySelectorAll(
@@ -244,9 +235,13 @@ async function getQuestions() {
                 }
             });
 
+            // sets up a saved a question type
+            select.value = item.type;
+
+            // updates type of question
             updateOptions(item.type);
 
-
+            // this function deletes chosen question from set
             deleteButton.addEventListener("click", async function () {
 
                 try {
@@ -264,6 +259,7 @@ async function getQuestions() {
                 }
             });
 
+            // This function prevents user from inserting wrong type of data
             document.addEventListener("input", function (e) {
 
                 if (e.target.classList.contains("dayInput")) {
@@ -314,7 +310,8 @@ async function getQuestions() {
 window.addEventListener("DOMContentLoaded", getQuestions);
 
 
-
+// This function creates new question div
+// Any further code in this function is identical to getQuestions() for any troubleshooting refer to that function
 function newQuestion(){
     const responseElement = document.getElementById("newDivQuestion");
 
@@ -522,6 +519,7 @@ function newQuestion(){
                 responseElement.appendChild(div);
 }
 
+// This function retrieves data only from newly created questions
 function getNewQuestions() {
     const newQuestionContainer = document.getElementById("newDivQuestion");
     const setName = document.getElementById("setName").textContent.trim()
@@ -534,6 +532,7 @@ function getNewQuestions() {
     const questionDivs = newQuestionContainer.querySelectorAll(".question");
     const questions = [];
 
+    // setting up data
     questionDivs.forEach(div => {
         const questionData = {
             question: div.querySelector(".questionInput")?.value ?? "",
@@ -545,6 +544,7 @@ function getNewQuestions() {
 
         const type = questionData.type;
 
+        // getting correct answer depending on which type of question it is
         if (type === "ABCD" || type === "TF" || type === "YN") {
             const checked = div.querySelector(
                 ".typeOptions input[type='checkbox']:checked"
@@ -579,9 +579,11 @@ function getNewQuestions() {
 
     console.log(questions);
 
+    // returns list of questions
     return questions;
 }
 
+// This function retrieves data from already existing questions to modify
 function getOldQuestions() {
     const oldQuestionContainer = document.getElementById("response");
 
@@ -595,6 +597,7 @@ function getOldQuestions() {
     const questionDivs = oldQuestionContainer.querySelectorAll(".question");
     const questions = [];
 
+    // sets up data
     questionDivs.forEach(div => {
         const questionData = {
             id: div.dataset.id,
@@ -607,6 +610,7 @@ function getOldQuestions() {
 
         const type = questionData.type;
 
+        // chooses correct type of answer depending on what type question it is
         if (type === "ABCD" || type === "TF" || type === "YN") {
             const checked = div.querySelector(
                 ".typeOptions input[type='checkbox']:checked"
@@ -643,6 +647,7 @@ function getOldQuestions() {
 
     console.log(questions);
 
+    // returns list of modified questions
     return questions;
 }
 
@@ -650,6 +655,7 @@ async function submitChanges() {
     const oldQuestions = getOldQuestions();
     const newQuestions = getNewQuestions();
 
+    // makes POST request with new questions
     try {
         const response = await fetch("/api/newQuestions", {
             method: "POST",
@@ -667,6 +673,7 @@ async function submitChanges() {
         console.log(error);
     }
 
+    // makes PUT request with old questions
     try {
         const response = await fetch("/api/updateQuestions", {
             method: "PUT",
