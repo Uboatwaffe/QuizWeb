@@ -173,6 +173,12 @@ public class DataRepository {
 
     }
 
+    /**
+     * This method cheks whether answer provided by user is correct
+     * @param id id of the question
+     * @param userAnswer answer provided
+     * @return number of points if answered correctly, if not then 0
+     */
     public int checkAnswer(String id, String userAnswer){
         Query query = new Query(Criteria.where("_id").is(id));
 
@@ -193,6 +199,12 @@ public class DataRepository {
         }
     }
 
+    /**
+     * This method returns number of points that can be achieved when playing specified set
+     * @param set specified set
+     * @param sessionUser current sessionUser
+     * @return number of points available to be collected
+     */
     public int allPointsInSet(Set set, SessionUser sessionUser){
         Query query = new Query(Criteria
                 .where("set").is(set.getName())

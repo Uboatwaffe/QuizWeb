@@ -116,6 +116,12 @@ public class PageController {
         return "modify_set";
     }
 
+    /**
+     * Returns HTML page
+     * @param model model for ThymeLeaf
+     * @param session current session
+     * @return score.html
+     */
     @GetMapping("/score")
     public String score(Model model, HttpSession session){
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");

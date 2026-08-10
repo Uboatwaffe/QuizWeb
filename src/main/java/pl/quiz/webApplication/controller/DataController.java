@@ -216,6 +216,13 @@ public class DataController {
         }
     }
 
+    /**
+     * This method checks answers sent by user and returns score
+     * @param set set that the user has been solving
+     * @param list list of id and answer
+     * @param session current session
+     * @return Score (yourScore / outOfPossiblePoints)
+     */
     @PostMapping("/submitAnswers/{name}")
     public Score submitAnswers(@PathVariable("name") Set set, @RequestBody List<Question> list, HttpSession session) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");
