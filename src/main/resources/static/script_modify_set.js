@@ -48,6 +48,13 @@ async function getQuestions() {
                     <option value="DATE">Date question</option>
                     <option value="YN">Yes or No</option>
                 </select>
+                
+                <hr>
+                
+                <label>Answer:</label>
+                
+                <br>
+                <br>
 
                 <div class="typeOptions"></div>
 
