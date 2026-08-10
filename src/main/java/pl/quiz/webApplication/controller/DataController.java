@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.quiz.webApplication.data.DataRepository;
-import pl.quiz.webApplication.enums.Answer;
 import pl.quiz.webApplication.enums.Role;
 import pl.quiz.webApplication.enums.Type;
 import pl.quiz.webApplication.objects.*;
@@ -105,7 +104,7 @@ public class DataController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        Question question = dataRepository.addQuestion("Are you ready?", Type.YN, Answer.YES, 0, set.getName(), user.getLogin());
+        Question question = dataRepository.addQuestion("Are you ready?", Type.YN, "YES", 0, set.getName(), user.getLogin());
 
         if (question != null) {
             return ResponseEntity.ok().build();

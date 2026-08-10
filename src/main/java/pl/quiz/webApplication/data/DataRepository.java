@@ -5,7 +5,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
-import pl.quiz.webApplication.enums.Answer;
 import pl.quiz.webApplication.enums.Role;
 import pl.quiz.webApplication.enums.Type;
 import pl.quiz.webApplication.objects.Question;
@@ -89,7 +88,7 @@ public class DataRepository {
      * @param owner who is the owner of this question
      * @return Question.java
      */
-    public Question addQuestion(String question, Type type, Answer answer, int points, String set, String owner){
+    public Question addQuestion(String question, Type type, String answer, int points, String set, String owner){
         return mongoTemplate.insert(new Question(question, type, answer, points, set, owner), "question");
     }
 

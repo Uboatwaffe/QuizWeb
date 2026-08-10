@@ -82,7 +82,7 @@ async function getQuestions() {
 
                     optionsContainer.innerHTML = `
                         <label>
-                            <input type="checkbox" value="YES">
+                            <input type="checkbox" value="YES" checked="">
                             Yes
                         </label>
 
@@ -177,7 +177,53 @@ async function getQuestions() {
                         </div>
                     `;
                 }
+
+                if (
+                    type === "YN" ||
+                    type === "ABCD" ||
+                    type === "TF"
+                ) {
+                    const checkbox = optionsContainer.querySelector(
+                        `input[type="checkbox"][value="${item.answer}"]`
+                    );
+
+                    if (checkbox) {
+                        checkbox.checked = true;
+                    }
+                }
+
+
+                else if (type === "OPEN") {
+                    const input = optionsContainer.querySelector(".openAnswer");
+
+                    if (input) {
+                        input.value = item.answer ?? "";
+                    }
+                }
+
+
+                else if (type === "DATE") {
+                    const day = optionsContainer.querySelector(".dayInput");
+                    const month = optionsContainer.querySelector(".monthInput");
+                    const year = optionsContainer.querySelector(".yearInput");
+
+                    if (item.answer) {
+                        if (day) {
+                            day.value = item.answer.day ?? "";
+                        }
+
+                        if (month) {
+                            month.value = item.answer.month ?? "";
+                        }
+
+                        if (year) {
+                            year.value = item.answer.year ?? "";
+                        }
+                    }
+                }
             }
+
+
 
             select.addEventListener("change", function () {
                 updateOptions(this.value);
@@ -532,6 +578,8 @@ function getNewQuestions() {
         questions.push(questionData);
     });
 
+    console.log(questions);
+
     return questions;
 }
 
@@ -592,8 +640,6 @@ function getOldQuestions() {
 
     });
 
-    console.log(questions)
-
     return questions;
 }
 
@@ -613,7 +659,7 @@ async function submitChanges() {
         if (response.ok) {
             window.location.href = "/home";
         } else {
-            console.alert("Something went wrong!");
+            console.log("Something went wrong!");
             window.location.reload();
         }
     } catch (error) {
