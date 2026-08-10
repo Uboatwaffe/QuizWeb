@@ -514,7 +514,6 @@ function getNewQuestions() {
                 ".openAnswer"
             );
 
-            // TODO: fix it
             questionData.answer = open.value.trim();
 
 
@@ -533,7 +532,68 @@ function getNewQuestions() {
         questions.push(questionData);
     });
 
-    console.log(questions);
+    return questions;
+}
+
+function getOldQuestions() {
+    const oldQuestionContainer = document.getElementById("response");
+
+    const setName = document.getElementById("setName").textContent.trim()
+
+    if (!oldQuestionContainer) {
+        console.error("Could not find #response");
+        return [];
+    }
+
+    const questionDivs = oldQuestionContainer.querySelectorAll(".question");
+    const questions = [];
+
+    questionDivs.forEach(div => {
+        const questionData = {
+            question: div.querySelector(".questionInput")?.value ?? "",
+            type: div.querySelector(".typeSelect")?.value ?? "",
+            points: Number(div.querySelector(".pointInput")?.value ?? 0),
+            set: setName,
+            answer: null
+        };
+
+        const type = questionData.type;
+
+        if (type === "ABCD" || type === "TF" || type === "YN") {
+            const checked = div.querySelector(
+                ".typeOptions input[type='checkbox']:checked"
+            );
+
+            if (checked) {
+                questionData.answer = checked.value;
+            }
+
+        } else if (type === "OPEN") {
+            const open = div.querySelector(
+                ".openAnswer"
+            );
+
+            questionData.answer = open.value.trim();
+
+
+        } else if (type === "DATE") {
+            const day = div.querySelector(".dayInput");
+            const month = div.querySelector(".monthInput");
+            const year = div.querySelector(".yearInput");
+
+            questionData.answer = {
+                day: day?.value || null,
+                month: month?.value || null,
+                year: year?.value || null
+            };
+        }
+
+        questions.push(questionData);
+
+    });
+
+    console.log(questions)
+
     return questions;
 }
 
