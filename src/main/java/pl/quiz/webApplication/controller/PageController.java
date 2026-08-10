@@ -15,6 +15,7 @@ import pl.quiz.webApplication.objects.Set;
  * Uses Thymeleaf
  *
  */
+@SuppressWarnings("SameReturnValue")
 @Controller
 public class PageController {
 

@@ -215,7 +215,7 @@ async function getQuestions() {
             }
 
 
-            // makes it so that when i choose a option it autoupdates
+            // makes it so that when user chooses an option it autoupdates
             select.addEventListener("change", function () {
                 updateOptions(this.value);
             });

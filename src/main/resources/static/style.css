@@ -146,6 +146,8 @@ select {
     display: block;
     margin: 5px;
 }
+
+/*noinspection CssUnusedSymbol*/
 .answerButton.selected {
     background-color: darkblue;
     color: white;

@@ -63,18 +63,19 @@ public class DataRepository {
     }
 
     /**
-     * This method checkes if searched object exists
+     * This method checks if searched object exists
      * @param collection collection in which it will be looked for
      * @param key key of searched value
      * @param value searched value
      * @param classInstance instance of class of result
      * @return TRUE if existed, if not then FALSE
      */
-    public boolean checkIfExists(String collection, String key, String value, String key2, String value2, Class classInstance){
+    public boolean checkIfExists(String collection, String key, String value, String key2, String value2, @SuppressWarnings("rawtypes") Class classInstance) {
         Query query = new Query(Criteria
                 .where(key).is(value)
                 .and(key2).is(value2));
 
+        //noinspection unchecked
         return !mongoTemplate.find(query, classInstance, collection).isEmpty();
     }
 

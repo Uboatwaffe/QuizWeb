@@ -87,7 +87,7 @@ function createNewSet() {
             }
         })
         .catch(error => {
-            conole.error("Error:", error);
+            console.error("Error:", error);
         })
 }
 
