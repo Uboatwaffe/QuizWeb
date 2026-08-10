@@ -203,23 +203,15 @@ async function getQuestions() {
 
 
                 else if (type === "DATE") {
-                    const day = optionsContainer.querySelector(".dayInput");
-                    const month = optionsContainer.querySelector(".monthInput");
-                    const year = optionsContainer.querySelector(".yearInput");
+                    const [day, month, year] = item.answer.split("/");
 
-                    if (item.answer) {
-                        if (day) {
-                            day.value = item.answer.day ?? "";
-                        }
+                    const dayInput = optionsContainer.querySelector(".dayInput");
+                    const monthInput = optionsContainer.querySelector(".monthInput");
+                    const yearInput = optionsContainer.querySelector(".yearInput");
 
-                        if (month) {
-                            month.value = item.answer.month ?? "";
-                        }
-
-                        if (year) {
-                            year.value = item.answer.year ?? "";
-                        }
-                    }
+                    dayInput.value = day;
+                    monthInput.value = month;
+                    yearInput.value = year;
                 }
             }
 
@@ -568,11 +560,11 @@ function getNewQuestions() {
             const month = div.querySelector(".monthInput");
             const year = div.querySelector(".yearInput");
 
-            questionData.answer = {
-                day: day?.value || null,
-                month: month?.value || null,
-                year: year?.value || null
-            };
+            const dayAns = day?.value ?? "";
+            const monthAns = month?.value ?? "";
+            const yearAns = year?.value ?? "";
+
+            questionData.answer = dayAns + "/" + monthAns + "/" + yearAns;
         }
 
         questions.push(questionData);
@@ -598,6 +590,7 @@ function getOldQuestions() {
 
     questionDivs.forEach(div => {
         const questionData = {
+            id: div.dataset.id,
             question: div.querySelector(".questionInput")?.value ?? "",
             type: div.querySelector(".typeSelect")?.value ?? "",
             points: Number(div.querySelector(".pointInput")?.value ?? 0),
@@ -629,16 +622,19 @@ function getOldQuestions() {
             const month = div.querySelector(".monthInput");
             const year = div.querySelector(".yearInput");
 
-            questionData.answer = {
-                day: day?.value || null,
-                month: month?.value || null,
-                year: year?.value || null
-            };
+            const dayAns = day?.value ?? "";
+            const monthAns = month?.value ?? "";
+            const yearAns = year?.value ?? "";
+
+            questionData.answer = dayAns + "/" + monthAns + "/" + yearAns;
+
         }
 
         questions.push(questionData);
 
     });
+
+    console.log(questions);
 
     return questions;
 }
@@ -656,17 +652,35 @@ async function submitChanges() {
             }
         });
 
-        if (response.ok) {
-            window.location.href = "/home";
-        } else {
-            console.log("Something went wrong!");
+        if (!response.ok) {
+            alert("Something went wrong with new questions!");
             window.location.reload();
         }
     } catch (error) {
         console.log(error);
     }
 
+    try {
+        const response = await fetch("/api/updateQuestions", {
+            method: "PUT",
+            body: JSON.stringify(oldQuestions),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (!response.ok) {
+            alert("Something went wrong with old questions!");
+            window.location.reload();
+        }
+    } catch (error) {
+        console.log(error);
+    }
+
+    window.location.href = "/home";
 }
+
+
 
 
 

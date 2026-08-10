@@ -190,6 +190,24 @@ public class DataController {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
+
+    @PutMapping("/updateQuestions")
+    public ResponseEntity<?> updateQuestions(@RequestBody List<Question> listOfOldQuestions, HttpSession session) {
+        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
+
+        try {
+            for (Question question : listOfOldQuestions) {
+                if (!dataRepository.updateQuestion(question, sessionUser)){
+                    return ResponseEntity.status(HttpStatus.CONFLICT).build();
+                }
+            }
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+
+
+    }
 }
 
 

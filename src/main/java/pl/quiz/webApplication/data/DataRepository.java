@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 import pl.quiz.webApplication.enums.Role;
 import pl.quiz.webApplication.enums.Type;
@@ -156,4 +157,16 @@ public class DataRepository {
     }
 
 
+    public boolean updateQuestion(Question question, SessionUser sessionUser){
+        Query query = new Query(Criteria.where("_id").is(question.getId()));
+
+        Update update = new Update();
+        update.set("question", question.getQuestion());
+        update.set("answer", question.getAnswer());
+        update.set("points", question.getPoints());
+        update.set("type", question.getType());
+
+        return mongoTemplate.updateFirst(query, update, "question").wasAcknowledged();
+
+    }
 }
