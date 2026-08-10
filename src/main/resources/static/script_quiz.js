@@ -35,7 +35,8 @@ async function getQuestions() {
             div.dataset.id = item.id;
 
             div.innerHTML = `
-                <h5>${item.question}</h5>
+                <h3>${item.question}</h3>
+                <h5>Points: ${item.points}</h5>
             `;
 
             if (item.type === "ABCD") {
@@ -236,3 +237,113 @@ window.addEventListener(
     "DOMContentLoaded",
     getQuestions
 );
+
+
+async function submitAnswers() {
+
+    const setNameElement = document.getElementById("setName");
+
+    if (!setNameElement) {
+        return;
+    }
+
+    const setName = setNameElement.textContent.trim();
+    const questions = document.querySelectorAll(".question");
+
+    const answers = [];
+
+    questions.forEach(question => {
+
+        const questionId = question.dataset.id;
+
+        let answer = null;
+
+        /*
+         * ABCD, TF and YN
+         */
+        const selectedButton = question.querySelector(
+            ".answerButton.selected"
+        );
+
+        if (selectedButton) {
+            answer = selectedButton.dataset.answer;
+        }
+
+        /*
+         * OPEN
+         */
+        const openInput = question.querySelector(".openInput");
+
+        if (openInput) {
+            answer = openInput.value.trim();
+        }
+
+        /*
+         * DATE
+         */
+        const dayInput = question.querySelector(".dayInput");
+        const monthInput = question.querySelector(".monthInput");
+        const yearInput = question.querySelector(".yearInput");
+
+        if (dayInput && monthInput && yearInput) {
+
+            const day = dayInput.value.trim();
+            const month = monthInput.value.trim();
+            const year = yearInput.value.trim();
+
+            if (day && month && year) {
+                answer = `${day}/${month}/${year}`;
+            }
+        }
+
+        answers.push({
+            id: questionId,
+            answer: answer
+        });
+    });
+
+
+    try {
+
+        const response = await fetch(
+            "/api/submitAnswers/" + encodeURIComponent(setName),
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(answers)
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                `Failed to submit answers: ${response.status}`
+            );
+        }
+
+        const data = await response.json();
+
+        /*
+         * Expected response:
+         * {
+         *     "scored": 8
+         *     "outOf": 10
+         * }
+         */
+
+        window.location.href =
+            "/score?score=" +
+            encodeURIComponent(data.scored) +
+            "&maxScore=" +
+            encodeURIComponent(data.outOf);
+
+
+    } catch (error) {
+
+        console.error("Error submitting answers:", error);
+
+        alert("Failed to submit quiz. Please try again.");
+    }
+}
+

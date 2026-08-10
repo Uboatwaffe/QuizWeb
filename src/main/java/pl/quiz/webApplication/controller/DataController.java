@@ -214,7 +214,20 @@ public class DataController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
+    }
 
+    @PostMapping("/submitAnswers/{name}")
+    public Score submitAnswers(@PathVariable("name") Set set, @RequestBody List<Question> list, HttpSession session) {
+        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
+
+        int scoredPoints = 0;
+
+        for  (Question question : list) {
+            scoredPoints += dataRepository.checkAnswer(question.getId(), question.getAnswer());
+
+        }
+
+        return new Score(scoredPoints, dataRepository.allPointsInSet(set, sessionUser));
 
     }
 }

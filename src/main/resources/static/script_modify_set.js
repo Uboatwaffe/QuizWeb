@@ -538,7 +538,7 @@ function getNewQuestions() {
         const questionData = {
             question: div.querySelector(".questionInput")?.value ?? "",
             type: div.querySelector(".typeSelect")?.value ?? "",
-            points: Number(div.querySelector(".pointInput")?.value ?? 0),
+            points: Number(div.querySelector(".pointsInput")?.value ?? 0),
             set: setName,
             answer: null
         };
@@ -600,7 +600,7 @@ function getOldQuestions() {
             id: div.dataset.id,
             question: div.querySelector(".questionInput")?.value ?? "",
             type: div.querySelector(".typeSelect")?.value ?? "",
-            points: Number(div.querySelector(".pointInput")?.value ?? 0),
+            points: Number(div.querySelector(".pointsInput")?.value ?? 0),
             set: setName,
             answer: null
         };

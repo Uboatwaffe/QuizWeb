@@ -172,4 +172,40 @@ public class DataRepository {
         return mongoTemplate.updateFirst(query, update, "question").wasAcknowledged();
 
     }
+
+    public int checkAnswer(String id, String userAnswer){
+        Query query = new Query(Criteria.where("_id").is(id));
+
+        query.fields()
+                .include("points")
+                .include("answer");
+
+        Question question = mongoTemplate.findOne(query, Question.class, "question");
+
+        if (question == null) {
+            return 0;
+        }
+
+        if (question.getAnswer().equals(userAnswer)) {
+            return question.getPoints();
+        } else {
+            return 0;
+        }
+    }
+
+    public int allPointsInSet(Set set, SessionUser sessionUser){
+        Query query = new Query(Criteria
+                .where("set").is(set.getName())
+                .and("owner").is(sessionUser.getLogin()));
+
+        List<Question> questions = mongoTemplate.find(query, Question.class, "question");
+
+        int score = 0;
+
+        for  (Question question : questions) {
+            score += question.getPoints();
+        }
+
+        return score;
+    }
 }

@@ -115,4 +115,11 @@ public class PageController {
         model.addAttribute("set", new Set(name));
         return "modify_set";
     }
+
+    @GetMapping("/score")
+    public String score(Model model, HttpSession session){
+        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
+        model.addAttribute("user", sessionUser);
+        return "score";
+    }
 }
