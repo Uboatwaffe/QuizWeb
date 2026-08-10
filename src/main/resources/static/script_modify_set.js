@@ -597,6 +597,31 @@ function getOldQuestions() {
     return questions;
 }
 
+async function submitChanges() {
+    const oldQuestions = getOldQuestions();
+    const newQuestions = getNewQuestions();
+
+    try {
+        const response = await fetch("/api/newQuestions", {
+            method: "POST",
+            body: JSON.stringify(newQuestions),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (response.ok) {
+            window.location.href = "/home";
+        } else {
+            console.alert("Something went wrong!");
+            window.location.reload();
+        }
+    } catch (error) {
+        console.log(error);
+    }
+
+}
+
 
 
 

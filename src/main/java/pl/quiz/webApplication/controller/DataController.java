@@ -2,11 +2,8 @@ package pl.quiz.webApplication.controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.quiz.webApplication.data.DataRepository;
 import pl.quiz.webApplication.enums.Answer;
@@ -15,7 +12,6 @@ import pl.quiz.webApplication.enums.Type;
 import pl.quiz.webApplication.objects.*;
 
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -33,11 +29,12 @@ public class DataController {
 
     /**
      * This method receives user details
+     *
      * @param userTemp details of user trying to log in
      * @return ResponseEntity
      */
     @PostMapping("/")
-    public ResponseEntity<?> loginUser(@RequestBody User userTemp, HttpSession session){
+    public ResponseEntity<?> loginUser(@RequestBody User userTemp, HttpSession session) {
         User user = dataRepository.authenticateUser(userTemp.getLogin(), userTemp.getPassword());
 
         if (user != null) {
@@ -53,26 +50,27 @@ public class DataController {
 
     /**
      * This method handles the signing up the user and sets up the current session
+     *
      * @param newUser details of new user
      * @param session current session
      * @return ResponseEntity
      */
     @PostMapping("/signup")
-    public ResponseEntity<?> signUpUser(@RequestBody NewUser newUser, HttpSession session){
+    public ResponseEntity<?> signUpUser(@RequestBody NewUser newUser, HttpSession session) {
 
         String login = newUser.getLogin();
         String passwordOne = newUser.getPasswordOne();
         String passwordRepeat = newUser.getPasswordRepeat();
         Role role = newUser.getRole();
 
-        if (passwordOne.compareTo(passwordRepeat) != 0){
+        if (passwordOne.compareTo(passwordRepeat) != 0) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
 
         User user = dataRepository.addUser(login, passwordOne, role);
 
-        if (user != null){
+        if (user != null) {
             SessionUser sessionUser = new SessionUser(login, role);
             session.setAttribute("user", sessionUser);
             return ResponseEntity.ok().build();
@@ -84,7 +82,8 @@ public class DataController {
 
     /**
      * This method creates new set of questions
-     * @param set object that contains details of set to be created
+     *
+     * @param set     object that contains details of set to be created
      * @param session current session
      * @return ResponseEntity
      */
@@ -96,7 +95,7 @@ public class DataController {
         }
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");
         // Check if the name is already taken
-        if (dataRepository.checkIfExists("question", "set", set.getName(), "owner", sessionUser.getLogin(), Set.class)){
+        if (dataRepository.checkIfExists("question", "set", set.getName(), "owner", sessionUser.getLogin(), Set.class)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
@@ -117,6 +116,7 @@ public class DataController {
 
     /**
      * This method returns all sets belonging to a current user
+     *
      * @param session current session
      * @return List of Sets available
      */
@@ -129,15 +129,16 @@ public class DataController {
 
     /**
      * This method deletes the set of name specified in path
-     * @param name name of the set to be deleted
+     *
+     * @param name    name of the set to be deleted
      * @param session current session
      * @return ResponseEntity
      */
     @DeleteMapping("/delete/{name}")
-    public ResponseEntity<?> deleteSet(@PathVariable("name") String name, HttpSession session){
+    public ResponseEntity<?> deleteSet(@PathVariable("name") String name, HttpSession session) {
         SessionUser user = (SessionUser) session.getAttribute("user");
 
-        if (dataRepository.deleteSet(name, user.getLogin())){
+        if (dataRepository.deleteSet(name, user.getLogin())) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -146,12 +147,13 @@ public class DataController {
 
     /**
      * This method returns list of questions in specified set
-     * @param set set of the questions
+     *
+     * @param set     set of the questions
      * @param session current session
      * @return List of questions
      */
     @GetMapping("/quiz/{set}")
-    public List<Question> getQuestions(@PathVariable("set") String set, HttpSession session){
+    public List<Question> getQuestions(@PathVariable("set") String set, HttpSession session) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");
 
         return dataRepository.getQuestions(sessionUser, set);
@@ -159,11 +161,12 @@ public class DataController {
 
     /**
      * This method deletes question of specified id
+     *
      * @param id id of the question to be deleted
      * @return ResponseEntity
      */
     @DeleteMapping("/deleteQuestion/{id}")
-    public ResponseEntity<?> deleteQuestion(@PathVariable("id") String id){
+    public ResponseEntity<?> deleteQuestion(@PathVariable("id") String id) {
         if (dataRepository.deleteQuestion(id)) {
             System.out.println("deleted");
             return ResponseEntity.ok().build();
@@ -172,4 +175,32 @@ public class DataController {
         }
     }
 
+    @PostMapping("/newQuestions")
+    public ResponseEntity<?> newQuestions(@RequestBody List<Question> listOfNewQuestions, HttpSession session) {
+        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
+
+        try {
+            for (Question question : listOfNewQuestions) {
+                dataRepository.addQuestion(question.getQuestion(), question.getType(), question.getAnswer()
+                        , question.getPoints(), question.getSet(), sessionUser.getLogin());
+            }
+
+            return ResponseEntity.ok().build();
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
