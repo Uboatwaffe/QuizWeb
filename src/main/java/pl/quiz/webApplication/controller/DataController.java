@@ -167,7 +167,6 @@ public class DataController {
     @DeleteMapping("/deleteQuestion/{id}")
     public ResponseEntity<?> deleteQuestion(@PathVariable("id") String id) {
         if (dataRepository.deleteQuestion(id)) {
-            System.out.println("deleted");
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -200,16 +199,14 @@ public class DataController {
     /**
      * This method updates old questions
      * @param listOfOldQuestions list of updated questions
-     * @param session current session
      * @return ResponseEntity
      */
     @PutMapping("/updateQuestions")
-    public ResponseEntity<?> updateQuestions(@RequestBody List<Question> listOfOldQuestions, HttpSession session) {
-        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
+    public ResponseEntity<?> updateQuestions(@RequestBody List<Question> listOfOldQuestions) {
 
         try {
             for (Question question : listOfOldQuestions) {
-                if (!dataRepository.updateQuestion(question, sessionUser)){
+                if (!dataRepository.updateQuestion(question)){
                     return ResponseEntity.status(HttpStatus.CONFLICT).build();
                 }
             }

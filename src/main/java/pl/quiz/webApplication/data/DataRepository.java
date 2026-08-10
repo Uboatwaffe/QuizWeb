@@ -80,7 +80,6 @@ public class DataRepository {
 
     /**
      * This method creates a question
-     * @param starting is this a first question in a set? (are you ready question)
      * @param question question itself
      * @param type type of the question (Type.java)
      * @param answer answer expected (Answer.java)
@@ -99,7 +98,7 @@ public class DataRepository {
      * @return List of Sets available
      */
     public List<Set> getAllSets(String login){
-        Query query = new Query();
+        Query query = new Query(Criteria.where("owner").is(login));
 
         query.fields()
                 .include("set");
@@ -159,10 +158,9 @@ public class DataRepository {
     /**
      * This method updates a question
      * @param question details of a question
-     * @param sessionUser current SessionUser
      * @return TRUE if successful, if not then FALSE
      */
-    public boolean updateQuestion(Question question, SessionUser sessionUser){
+    public boolean updateQuestion(Question question){
         Query query = new Query(Criteria.where("_id").is(question.getId()));
 
         Update update = new Update();
