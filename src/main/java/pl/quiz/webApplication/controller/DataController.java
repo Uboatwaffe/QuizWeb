@@ -262,6 +262,26 @@ public class DataController {
                 ResponseEntity.ok().build() :
                 ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
+
+    @GetMapping("/choose_any_set")
+    public List<Set> chooseAnySets(HttpSession session) {
+        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
+
+        if (!sessionUser.getRole().equals(Role.ADMIN)) {
+            return new ArrayList<>();
+        }
+
+        return dataRepository.getEverySet();
+    }
+
+    @DeleteMapping("/deleteNoAuth/{name}")
+    public ResponseEntity<?> deleteSet(@PathVariable("name") String name) {
+        if (dataRepository.deleteSetNoAuth(name)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
 }
 
 

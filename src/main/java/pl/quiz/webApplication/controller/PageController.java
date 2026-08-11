@@ -134,4 +134,9 @@ public class PageController {
     public String deleteUser() {
         return "delete_user";
     }
+
+    @GetMapping("/delete_any_set")
+    public String deleteAnySet() {
+        return "delete_any_set";
+    }
 }

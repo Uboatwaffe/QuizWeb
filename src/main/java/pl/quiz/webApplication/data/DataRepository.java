@@ -231,4 +231,31 @@ public class DataRepository {
 
         return mongoTemplate.remove(query, "user").wasAcknowledged();
     }
+
+    public List<Set> getEverySet() {
+        Query query = new Query();
+
+        query.fields()
+                .include("set");
+
+        List<Set> sets = mongoTemplate.find(query, Set.class, "question");
+
+        List<Set> removedDuplicates = new ArrayList<>();
+
+        for (Set set : sets) {
+            if (!removedDuplicates.contains(set)) {
+                removedDuplicates.add(set);
+            }
+        }
+
+        return removedDuplicates;
+    }
+
+    public boolean deleteSetNoAuth(String name) {
+        Query query = new Query(Criteria
+                .where("set").is(name));
+
+        return mongoTemplate.remove(query, "question").wasAcknowledged();
+    }
+
 }
