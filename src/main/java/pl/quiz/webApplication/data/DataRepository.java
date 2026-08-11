@@ -222,16 +222,30 @@ public class DataRepository {
         return score;
     }
 
+    /**
+     * This method returns every user in database
+     *
+     * @return List of user
+     */
     public List<User> getAllUsers() {
         return mongoTemplate.findAll(User.class, "user");
     }
 
+    /**
+     * This method deletes user of specified id
+     * @param id id of the user to be deleted
+     * @return TRUE if successful, if not then FALSE
+     */
     public boolean deleteUser(String id) {
         Query query = new Query(Criteria.where("_id").is(id));
 
         return mongoTemplate.remove(query, "user").wasAcknowledged();
     }
 
+    /**
+     * This method returns every set in database
+     * @return List of set
+     */
     public List<Set> getEverySet() {
         Query query = new Query();
 
@@ -251,6 +265,11 @@ public class DataRepository {
         return removedDuplicates;
     }
 
+    /**
+     * This method deletes set without checking if the current user is the owner
+     * @param name name of the set to be deleted
+     * @return TRUE if successful, if not then FALSE
+     */
     public boolean deleteSetNoAuth(String name) {
         Query query = new Query(Criteria
                 .where("set").is(name));
@@ -258,6 +277,11 @@ public class DataRepository {
         return mongoTemplate.remove(query, "question").wasAcknowledged();
     }
 
+    /**
+     * This method updates a user
+     * @param user new user details
+     * @return TRUE if successful, if not then FALSE
+     */
     public boolean updateUser(User user) {
         Query query = new Query(Criteria.where("_id").is(user.getId()));
 

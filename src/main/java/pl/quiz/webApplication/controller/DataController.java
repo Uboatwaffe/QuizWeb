@@ -239,6 +239,12 @@ public class DataController {
 
     }
 
+    /**
+     * This method returns every user in database
+     *
+     * @param session current session
+     * @return List of users
+     */
     @GetMapping("/get_users")
     public List<User> getUsers(HttpSession session) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");
@@ -250,6 +256,12 @@ public class DataController {
         return dataRepository.getAllUsers();
     }
 
+    /**
+     * This method deletes user of specified id
+     * @param id id of the user to be deleted
+     * @param session current session
+     * @return ResponseEntity
+     */
     @DeleteMapping("/deleteUser/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable("id") String id, HttpSession session) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");
@@ -263,6 +275,11 @@ public class DataController {
                 ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 
+    /**
+     * This method returns every set in the database
+     * @param session current session
+     * @return List of sets
+     */
     @GetMapping("/choose_any_set")
     public List<Set> chooseAnySets(HttpSession session) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");
@@ -274,6 +291,11 @@ public class DataController {
         return dataRepository.getEverySet();
     }
 
+    /**
+     * This method deletes set without checking if the current user is the owner of said set
+     * @param name name of the set to be deleted
+     * @return ResponseEntity
+     */
     @DeleteMapping("/deleteNoAuth/{name}")
     public ResponseEntity<?> deleteSet(@PathVariable("name") String name) {
         if (dataRepository.deleteSetNoAuth(name)) {
@@ -283,6 +305,12 @@ public class DataController {
         }
     }
 
+    /**
+     * This method updates users
+     * @param users List of user details
+     * @param session current session
+     * @return ResponseEntity
+     */
     @PutMapping("/updateUsers")
     public ResponseEntity<?> updateUsers(@RequestBody List<User> users, HttpSession session) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");
