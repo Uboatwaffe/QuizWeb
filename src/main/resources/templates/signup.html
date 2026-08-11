@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<!--suppress HtmlFormInputWithoutLabel, HtmlFormInputWithoutLabel -->
+<html lang="en">
+<head>
+    <title>WebQuiz</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div>
+
+    <h1>Sign up</h1>
+
+
+    <div class="container">
+
+        <label class="label">Please insert your login:</label><br>
+        <input type="text" id="loginInput"><br>
+        <label class="label">Please insert your password:</label><br>
+        <input type="password" id="passwordInput"><br>
+        <label class="label">Repeat your password:</label><br>
+        <input type="password" id="passwordInputRepeat"><br>
+        <input type="checkbox" id="wantToBeAdmin" name="role" value="ADMIN">
+        <label class="label">I want to be an admin</label><br>
+        <hr>
+        <button id="loginBtn" onclick="submitNewUser()">Sign up</button>
+
+
+    </div>
+</div>
+
+<script src="/script.js"></script>
+
+</body>
+</html>

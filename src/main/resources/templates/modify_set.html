@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pl-PL">
+<head>
+    <title>WebQuiz</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Questions</h1>
+    <h3>
+        Set:
+        <span id="setName" th:text="${set.name}"></span>
+    </h3>
+
+    <div id="response">Loading...</div>
+
+    <div id="newDivQuestion"></div>
+
+    <button id="newQuestion" onclick="newQuestion()">New question</button>
+
+    <hr>
+
+    <button id="returnButton" onclick="window.location.replace('/home')">Return</button>
+    <button id="submitButton" onclick="submitChanges()">Submit</button>
+
+</div>
+
+<script src="/script_modify_set.js"></script>
+</body>
+</html>

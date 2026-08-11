@@ -1,0 +1,150 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #eeeeee;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    min-height: 100vh;
+    margin: 0;
+    padding: 30px 0;
+    box-sizing: border-box;
+}
+
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    text-align: center;
+    width: 500px;
+}
+
+button {
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #0078ff;
+    color: white;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #005ec2;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+h3 {
+    text-align: center;
+}
+
+input {
+    margin: 10px;
+}
+
+select {
+    margin: 10px;
+}
+
+#anotherAction {
+    margin-top: 8px;
+    margin-bottom: 0;
+}
+
+.option {
+    margin-top: 10px;
+    width: 180px;
+}
+
+.item {
+    background: #f5f5f5;
+    color: #333;
+    padding: 16px 20px;
+    margin: 12px 0;
+    border-radius: 10px;
+    border: 1px solid #b8d8ff;
+    border-left: 5px solid #0078ff;
+    box-shadow: 0 3px 8px rgba(0, 120, 255, 0.15);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.item:hover {
+    transform: translateY(-2px);
+    background: #ffffff;
+    box-shadow: 0 6px 14px rgba(0, 120, 255, 0.25);
+    border-left-color: #005ec2;
+}
+
+.question {
+    background: #f5f5f5;
+    color: #333;
+    padding: 16px 20px;
+    margin: 12px 0;
+    border-radius: 10px;
+    border: 1px solid #b8d8ff;
+    border-left: 5px solid #0078ff;
+    box-shadow: 0 3px 8px rgba(0, 120, 255, 0.15);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.item h3 {
+    margin: 0;
+    color: #0078ff;
+    font-size: 1.2rem;
+}
+
+.no-sets {
+    color: #0078ff;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    margin: 30px 0;
+}
+
+.set-button {
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+}
+
+.set-button:hover {
+    background: transparent;
+}
+
+.dateContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+}
+
+.longerInput{
+    text-align: center;
+    width: 60px;
+}
+
+.shortInput {
+    width: 30px;
+    text-align: center;
+}
+
+.optionsContainer label {
+    display: block;
+    margin: 5px;
+}
+
+.answerButton.selected {
+    background-color: darkblue;
+    color: white;
+}

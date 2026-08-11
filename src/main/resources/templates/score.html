@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>WebQuiz</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div>
+
+  <h1>
+    Hello
+    <span th:text="${user.login}"></span>
+  </h1>
+
+
+  <div class="container">
+    <h3>
+      You scored:
+      <span id="score"></span>
+      /
+      <span id="out"></span>
+    </h3>
+
+    <hr>
+
+    <button onclick="window.location.href='/home'">Finish</button>
+
+  </div>
+</div>
+
+<script src="/script_score.js"></script>
+
+</body>
+</html>

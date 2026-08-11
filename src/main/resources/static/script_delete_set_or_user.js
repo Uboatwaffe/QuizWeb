@@ -1,0 +1,76 @@
+// This function returns all available sets
+async function getUsers() {
+    const responseElement = document.getElementById("response");
+
+    if (!responseElement) {
+        return;
+    }
+
+    try {
+        const response = await fetch("/api/getUsers", {
+            method: "GET"
+        });
+
+        const data = await response.json();
+
+        responseElement.innerHTML = "";
+
+        if (data === null || data.length === 0) {
+            responseElement.innerHTML = `
+                <p class="no-sets">
+                    No quiz sets available.
+                </p>
+            `;
+            return;
+        }
+
+        // creating <div class="item"> for every set
+        data.forEach(item => {
+            const div = document.createElement("div");
+
+            div.className = "item";
+
+            div.innerHTML = `
+                <button class="set-button">
+                    <h3>${item.login}</h3>
+                    <h5>${item.role}</h5>
+                </button>
+            `;
+
+            const button = div.querySelector(".set-button");
+
+            // setting up a listener to delete a clicked set
+            button.addEventListener("click", async function () {
+                const setName = encodeURIComponent(this.textContent.trim());
+
+                try {
+                    const deleteResponse = await fetch(`/api/deleteUser/` + encodeURIComponent(item.id), {
+                        method: "DELETE"
+                    });
+
+                    if (deleteResponse.ok) {
+                        div.remove();
+                    } else {
+                        console.error("Delete failed");
+                    }
+
+                } catch (error) {
+                    console.error("Error deleting set:", error);
+                }
+            });
+
+            responseElement.appendChild(div);
+        });
+
+    } catch (error) {
+        console.error("Error loading questions:", error);
+
+        responseElement.innerHTML = `
+            <p class="no-sets">
+                Failed to load quiz sets.
+            </p>
+        `;
+    }
+}
+
+window.addEventListener("DOMContentLoaded", getUsers);
