@@ -6,6 +6,7 @@ async function getUsers() {
     }
 
     try {
+        // TODO: make api request follow same pattern
         const response = await fetch(`/api/get_users`, {
             method: 'GET',
         });
@@ -31,7 +32,8 @@ async function getUsers() {
             div.dataset.id = user.id;
 
             div.innerHTML = `
-                <h3>Login: ${user.login}</h3>
+                <h3>Login:</h3>
+                <input type="text" class="loginInput" value="${user.username}" />
                 
                 <hr>
                 
@@ -42,6 +44,10 @@ async function getUsers() {
                 </select>    
             `;
 
+            const select = div.querySelector(".roleSelect");
+
+            select.value = user.role;
+
             responseElement.appendChild(div);
 
         })
@@ -51,3 +57,40 @@ async function getUsers() {
 }
 
 window.addEventListener("DOMContentLoaded", getUsers);
+
+function submitChanges() {
+    const changesContainer = document.getElementById("response");
+
+    if (!changesContainer) {
+        console.error("Could not find #response");
+        return [];
+    }
+
+    const userDivs = changesContainer.querySelectorAll(".question");
+    const users = [];
+
+    userDivs.forEach(div => {
+        const userData = {
+            id: div.dataset.id,
+            login: div.querySelector(".loginInput").textContent.trim(),
+            role: div.querySelector(".roleSelect").value,
+        }
+
+        users.push(userData);
+    })
+    console.log(users);
+    return users
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
