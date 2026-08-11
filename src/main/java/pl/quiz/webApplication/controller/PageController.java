@@ -139,4 +139,9 @@ public class PageController {
     public String deleteAnySet() {
         return "delete_any_set";
     }
+
+    @GetMapping("change_role")
+    public String changeRole() {
+        return "change_role";
+    }
 }
