@@ -1,3 +1,4 @@
+// This function retrieves every user from backend
 async function getUsers() {
     const responseElement = document.getElementById('response');
 
@@ -6,8 +7,7 @@ async function getUsers() {
     }
 
     try {
-        // TODO: make api request follow same pattern
-        const response = await fetch(`/api/get_users`, {
+        const response = await fetch(`/api/getUsers`, {
             method: 'GET',
         });
 
@@ -24,6 +24,7 @@ async function getUsers() {
             return;
         }
 
+        // Sets up fields for every user
         data.forEach(user => {
             const div = document.createElement("div");
             div.className = "question"
@@ -56,6 +57,7 @@ async function getUsers() {
 
 window.addEventListener("DOMContentLoaded", getUsers);
 
+// This function retrieves data from ui
 function getChanges() {
     const changesContainer = document.getElementById("response");
 
@@ -79,6 +81,7 @@ function getChanges() {
     return users
 }
 
+// This function submits the changes to backend to update users
 async function submitChanges() {
     const data = await getChanges();
 
