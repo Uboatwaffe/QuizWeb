@@ -7,7 +7,7 @@ async function getSets() {
     }
 
     try {
-        const response = await fetch("/api/choose_any_set", {
+        const response = await fetch("/api/chooseAnySet", {
             method: "GET"
         });
 

@@ -87,7 +87,7 @@ public class DataController {
      * @param session current session
      * @return ResponseEntity
      */
-    @PostMapping("new_set")
+    @PostMapping("newSet")
     public ResponseEntity<?> createNewSet(@RequestBody Set set, HttpSession session) {
 
         if (set.getName().isEmpty()) {
@@ -120,7 +120,7 @@ public class DataController {
      * @param session current session
      * @return List of Sets available
      */
-    @GetMapping("/choose_set")
+    @GetMapping("/chooseSet")
     public List<Set> chooseSets(HttpSession session) {
         SessionUser user = (SessionUser) session.getAttribute("user");
 
@@ -245,7 +245,7 @@ public class DataController {
      * @param session current session
      * @return List of users
      */
-    @GetMapping("/get_users")
+    @GetMapping("/getUsers")
     public List<User> getUsers(HttpSession session) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");
 
@@ -280,7 +280,7 @@ public class DataController {
      * @param session current session
      * @return List of sets
      */
-    @GetMapping("/choose_any_set")
+    @GetMapping("/chooseAnySet")
     public List<Set> chooseAnySets(HttpSession session) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");
 

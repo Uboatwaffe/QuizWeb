@@ -7,7 +7,7 @@ async function getUsers() {
     }
 
     try {
-        const response = await fetch("/api/get_users", {
+        const response = await fetch("/api/getUsers", {
             method: "GET"
         });
 

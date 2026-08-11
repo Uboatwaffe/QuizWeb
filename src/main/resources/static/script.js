@@ -71,7 +71,7 @@ function createNewSet() {
         name: document.getElementById("setNameInput").value
     }
 
-    fetch("api/new_set", {
+    fetch("api/newSet", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
