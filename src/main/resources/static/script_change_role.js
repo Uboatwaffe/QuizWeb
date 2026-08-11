@@ -13,8 +13,6 @@ async function getUsers() {
 
         const data = await response.json();
 
-        console.log(data);
-
         responseElement.innerHTML = "";
 
         if (data === null || data.length === 0) {
@@ -33,7 +31,7 @@ async function getUsers() {
 
             div.innerHTML = `
                 <h3>Login:</h3>
-                <input type="text" class="loginInput" value="${user.username}" />
+                <input type="text" class="loginInput" value="${user.login}" />
                 
                 <hr>
                 
@@ -58,7 +56,7 @@ async function getUsers() {
 
 window.addEventListener("DOMContentLoaded", getUsers);
 
-function submitChanges() {
+function getChanges() {
     const changesContainer = document.getElementById("response");
 
     if (!changesContainer) {
@@ -72,14 +70,36 @@ function submitChanges() {
     userDivs.forEach(div => {
         const userData = {
             id: div.dataset.id,
-            login: div.querySelector(".loginInput").textContent.trim(),
+            login: div.querySelector(".loginInput").value,
             role: div.querySelector(".roleSelect").value,
         }
 
         users.push(userData);
     })
-    console.log(users);
     return users
+}
+
+async function submitChanges() {
+    const data = await getChanges();
+
+    try {
+        const response = await fetch("/api/updateUsers", {
+            method: 'PUT',
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+
+        if (response.ok) {
+            window.location.href = "/home"
+        } else {
+            alert("Could not update users")
+            window.location.replace("/home");
+        }
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 

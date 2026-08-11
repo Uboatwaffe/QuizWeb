@@ -282,6 +282,23 @@ public class DataController {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
+
+    @PutMapping("/updateUsers")
+    public ResponseEntity<?> updateUsers(@RequestBody List<User> users, HttpSession session) {
+        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
+
+        if (!sessionUser.getRole().equals(Role.ADMIN)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        for (User user : users) {
+            if (!dataRepository.updateUser(user)) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            }
+        }
+
+        return ResponseEntity.ok().build();
+    }
 }
 
 

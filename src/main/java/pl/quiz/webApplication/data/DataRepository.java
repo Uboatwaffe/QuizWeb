@@ -258,4 +258,14 @@ public class DataRepository {
         return mongoTemplate.remove(query, "question").wasAcknowledged();
     }
 
+    public boolean updateUser(User user) {
+        Query query = new Query(Criteria.where("_id").is(user.getId()));
+
+        Update update = new Update();
+        update.set("username", user.getLogin());
+        update.set("role", user.getRole());
+
+        return mongoTemplate.updateFirst(query, update, "user").wasAcknowledged();
+    }
+
 }
