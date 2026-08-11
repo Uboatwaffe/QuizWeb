@@ -10,6 +10,7 @@ import pl.quiz.webApplication.enums.Role;
 import pl.quiz.webApplication.enums.Type;
 import pl.quiz.webApplication.objects.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -236,6 +237,30 @@ public class DataController {
 
         return new Score(scoredPoints, dataRepository.allPointsInSet(set, sessionUser));
 
+    }
+
+    @GetMapping("/get_users")
+    public List<User> getUsers(HttpSession session) {
+        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
+
+        if (!sessionUser.getRole().equals(Role.ADMIN)) {
+            return new ArrayList<>();
+        }
+
+        return dataRepository.getAllUsers();
+    }
+
+    @DeleteMapping("/deleteUser/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable("id") String id, HttpSession session) {
+        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
+
+        if (!sessionUser.getRole().equals(Role.ADMIN)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        return dataRepository.deleteUser(id) ?
+                ResponseEntity.ok().build() :
+                ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 }
 

@@ -221,4 +221,14 @@ public class DataRepository {
 
         return score;
     }
+
+    public List<User> getAllUsers() {
+        return mongoTemplate.findAll(User.class, "user");
+    }
+
+    public boolean deleteUser(String id) {
+        Query query = new Query(Criteria.where("_id").is(id));
+
+        return mongoTemplate.remove(query, "user").wasAcknowledged();
+    }
 }

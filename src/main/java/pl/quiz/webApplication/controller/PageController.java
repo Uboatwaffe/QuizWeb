@@ -129,4 +129,9 @@ public class PageController {
         model.addAttribute("user", sessionUser);
         return "score";
     }
+
+    @GetMapping("/delete_user")
+    public String deleteUser() {
+        return "delete_user";
+    }
 }
