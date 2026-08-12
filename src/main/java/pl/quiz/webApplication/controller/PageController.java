@@ -54,14 +54,6 @@ public class PageController {
         return "home";
     }
 
-    /**
-     * Returns HTML page
-     * @return signup.html
-     */
-    @GetMapping("/signup")
-    public String signup(){
-        return "signup";
-    }
 
     /**
      * Returns HTML page

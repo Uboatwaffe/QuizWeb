@@ -13,6 +13,15 @@
 
 
     <div class="container">
+        <div class="success-message"
+             th:if="${param.signupSuccess}">
+            <h3>
+                Account created successfully! You can now log in.
+            </h3>
+            <br>
+        </div>
+
+
         <form action="/login" method="POST">
             <label class="label">Please insert your login:</label><br>
             <input id="loginInput"
