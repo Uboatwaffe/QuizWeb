@@ -26,7 +26,7 @@ public class PageController {
      * Returns HTML page
      * @return index.html
      */
-    @GetMapping("/")
+    @GetMapping("/login")
     public String index() {
         return "index";
     }
