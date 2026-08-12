@@ -2,6 +2,8 @@ package pl.quiz.webApplication.controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,21 +36,20 @@ public class PageController {
 
     /**
      * Returns HTML page
-     * @param session current session
-     * @param model model for ThymeLeaf
      * @return home.html
      */
     @GetMapping("/home")
-    public String home(HttpSession session, Model model){
-        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
+    public String home(Authentication authentication, Model model) {
 
-        System.out.println("SESSION USER = " + sessionUser);
+        model.addAttribute("username", authentication.getName());
 
-        if (sessionUser == null) {
-            return "redirect:/login";
-        }
+        String role = authentication.getAuthorities()
+                .stream()
+                .findFirst()
+                .map(GrantedAuthority::getAuthority)
+                .orElse("");
 
-        model.addAttribute("user", sessionUser);
+        model.addAttribute("role", role);
 
         return "home";
     }

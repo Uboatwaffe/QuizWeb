@@ -22,26 +22,32 @@ public class SecurityConfig {
             throws Exception {
 
         http
-                .csrf(csrf ->
-                        csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()
-                                )
-                                .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
+                .csrf(csrf -> csrf
+                        .csrfTokenRepository(
+                                CookieCsrfTokenRepository.withHttpOnlyFalse()
+                        )
+                        .csrfTokenRequestHandler(
+                                new CsrfTokenRequestAttributeHandler()
+                        )
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/",
-                                "/login",
                                 "/signup",
-                                "/api/signup",
-                                "/api/login",
                                 "/css/**",
                                 "/js/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login")
+                        .loginPage("/")
+                        .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/home", true)
+                        .failureUrl("/?error=true")
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutSuccessUrl("/")
                         .permitAll()
                 );
 

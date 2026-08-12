@@ -10,18 +10,18 @@
 
     <h1>
         Hello
-        <span th:text="${user.login}"></span>
+        <span th:text="${username}"></span>
     </h1>
 
     <h3>
         Your current role is:
-        <span th:text="${user.role}"></span>
+        <span th:text="${role}"></span>
     </h3>
 
     <div class="container">
 
         <div id="userOptions"
-             th:if="${user.role.name() == 'USER'}">
+             th:if="${role == 'ROLE_USER'}">
             <label class="label">What do you want to do?</label>
             <br>
             <a href="/new_set">
@@ -39,7 +39,7 @@
         </div>
 
         <div id="adminOptions"
-             th:if="${user.role.name() == 'ADMIN'}">
+             th:if="${role == 'ROLE_ADMIN'}">
             <hr>
             <label>Admin options:</label>
             <br>
