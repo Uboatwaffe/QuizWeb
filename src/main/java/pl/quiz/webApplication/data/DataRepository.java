@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import pl.quiz.webApplication.enums.Role;
 import pl.quiz.webApplication.enums.Type;
@@ -32,13 +33,18 @@ public class DataRepository {
     MongoTemplate mongoTemplate;
 
     /**
+     * This field is automatically set up by Spring Boot
+     */
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    /**
      * This method checks whether user had given correct credentials
      * @param username login
-     * @param password password
      * @return User of given details if exist in DB if not null
      */
-    public User authenticateUser(String username, String password){
-        Query query = Query.query(Criteria.where("username").is(username).and("password").is(password));
+    public User authenticateUser(String username) {
+        Query query = Query.query(Criteria.where("username").is(username));
 
         return mongoTemplate.findOne(query, User.class, "user");
     }
@@ -58,7 +64,9 @@ public class DataRepository {
             return null;
         }
 
-        return mongoTemplate.insert(new User(login, password, role), "user");
+        String encodedPassword = passwordEncoder.encode(password);
+
+        return mongoTemplate.insert(new User(login, encodedPassword, role), "user");
 
     }
 
