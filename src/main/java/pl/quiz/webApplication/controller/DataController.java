@@ -28,27 +28,6 @@ public class DataController {
     DataRepository dataRepository;
 
     /**
-     * This method receives user details
-     *
-     * @param userTemp details of user trying to log in
-     * @return ResponseEntity
-     */
-    @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody User userTemp, HttpSession session) {
-        User user = dataRepository.authenticateUser(userTemp.getLogin());
-
-        if (user != null) {
-
-            SessionUser sessionUser = new SessionUser(user.getLogin(), user.getRole());
-
-            session.setAttribute("user", sessionUser);
-            return ResponseEntity.ok().build();
-        }
-
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-    }
-
-    /**
      * This method handles the signing up the user and sets up the current session
      *
      * @param newUser details of new user

@@ -1,30 +1,3 @@
-// This function submits data for logging in
-function submitData(){
-
-    const data = {
-        login: document.getElementById("loginInput").value,
-        password: document.getElementById("passwordInput").value
-    }
-
-    // request
-    fetch("/api/login", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-    })
-        .then(response => {
-            if (response.ok) {
-                window.location.href = "/home";
-            } else {
-                alert("Wrong login or password");
-            }
-        })
-        .catch(error => {
-            console.error("Error:", error);
-        });
-}
 
 function getCookie(name) {
 

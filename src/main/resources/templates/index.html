@@ -13,11 +13,30 @@
 
 
     <div class="container">
-        <label class="label">Please insert your login:</label><br>
-        <input type="text" id="loginInput"><br>
-        <label class="label">Please insert your password:</label><br>
-        <input type="password" id="passwordInput"><br>
-        <button id="loginBtn" onclick="submitData()">Log In</button>
+        <form action="/login" method="POST">
+            <label class="label">Please insert your login:</label><br>
+            <input id="loginInput"
+                   name="username"
+                   required
+                   type="text">
+
+            <br>
+
+            <label class="label">Please insert your password:</label><br>
+            <input id="passwordInput"
+                   name="password"
+                   required
+                   type="password">
+            <br>
+
+            <input th:name="${_csrf.parameterName}"
+                   th:value="${_csrf.token}"
+                   type="hidden">
+
+            <button id="loginBtn" type="submit">
+                Log In
+            </button>
+        </form>
 
 
         <hr>
@@ -27,6 +46,7 @@
         <a href="/signup">
             <button id="goToSignUp">Sign up</button>
         </a>
+
     </div>
 </div>
 

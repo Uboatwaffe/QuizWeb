@@ -42,6 +42,12 @@ public class PageController {
     public String home(HttpSession session, Model model){
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");
 
+        System.out.println("SESSION USER = " + sessionUser);
+
+        if (sessionUser == null) {
+            return "redirect:/login";
+        }
+
         model.addAttribute("user", sessionUser);
 
         return "home";
