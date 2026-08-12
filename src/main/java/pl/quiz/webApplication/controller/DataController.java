@@ -4,6 +4,8 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 import pl.quiz.webApplication.data.DataRepository;
 import pl.quiz.webApplication.enums.Role;
@@ -27,64 +29,29 @@ public class DataController {
     @Autowired
     DataRepository dataRepository;
 
-    /**
-     * This method handles the signing up the user and sets up the current session
-     *
-     * @param newUser details of new user
-     * @param session current session
-     * @return ResponseEntity
-     */
-    @PostMapping("/signup")
-    public ResponseEntity<?> signUpUser(@RequestBody NewUser newUser, HttpSession session) {
 
-        String login = newUser.getLogin();
-        String passwordOne = newUser.getPasswordOne();
-        String passwordRepeat = newUser.getPasswordRepeat();
-        Role role = newUser.getRole();
-
-        if (passwordOne.compareTo(passwordRepeat) != 0) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-
-
-        User user = dataRepository.addUser(login, passwordOne, role);
-
-        if (user != null) {
-            SessionUser sessionUser = new SessionUser(login, role);
-            session.setAttribute("user", sessionUser);
-            return ResponseEntity.ok().build();
-        }
-
-        return ResponseEntity.status(HttpStatus.CONFLICT).build();
-
-    }
 
     /**
      * This method creates new set of questions
      *
      * @param set     object that contains details of set to be created
-     * @param session current session
+     * @param authentication authentication object
      * @return ResponseEntity
      */
     @PostMapping("newSet")
-    public ResponseEntity<?> createNewSet(@RequestBody Set set, HttpSession session) {
+    public ResponseEntity<?> createNewSet(@RequestBody Set set, Authentication authentication) {
 
         if (set.getName().isEmpty()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
+
         // Check if the name is already taken
-        if (dataRepository.checkIfExists("question", "set", set.getName(), "owner", sessionUser.getLogin(), Set.class)) {
+        if (dataRepository.checkIfExists("question", "set", set.getName(), "owner", authentication.getName(), Set.class)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        SessionUser user = (SessionUser) session.getAttribute("user");
 
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        Question question = dataRepository.addQuestion("Are you ready?", Type.YN, "YES", 0, set.getName(), user.getLogin());
+        Question question = dataRepository.addQuestion("Are you ready?", Type.YN, "YES", 0, set.getName(), authentication.getName());
 
         if (question != null) {
             return ResponseEntity.ok().build();
@@ -95,29 +62,25 @@ public class DataController {
 
     /**
      * This method returns all sets belonging to a current user
-     *
-     * @param session current session
+     * @param authentication authentication object
      * @return List of Sets available
      */
     @GetMapping("/chooseSet")
-    public List<Set> chooseSets(HttpSession session) {
-        SessionUser user = (SessionUser) session.getAttribute("user");
-
-        return dataRepository.getAllSets(user.getLogin());
+    public List<Set> chooseSets(Authentication authentication) {
+        return dataRepository.getAllSets(authentication.getName());
     }
 
     /**
      * This method deletes the set of name specified in path
      *
      * @param name    name of the set to be deleted
-     * @param session current session
+     * @param authentication authentication object
      * @return ResponseEntity
      */
     @DeleteMapping("/delete/{name}")
-    public ResponseEntity<?> deleteSet(@PathVariable("name") String name, HttpSession session) {
-        SessionUser user = (SessionUser) session.getAttribute("user");
+    public ResponseEntity<?> deleteSet(@PathVariable("name") String name, Authentication authentication) {
 
-        if (dataRepository.deleteSet(name, user.getLogin())) {
+        if (dataRepository.deleteSet(name, authentication.getName())) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -128,12 +91,18 @@ public class DataController {
      * This method returns list of questions in specified set
      *
      * @param set     set of the questions
-     * @param session current session
+     * @param authentication authentication object
      * @return List of questions
      */
     @GetMapping("/quiz/{set}")
-    public List<Question> getQuestions(@PathVariable("set") String set, HttpSession session) {
-        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
+    public List<Question> getQuestions(@PathVariable("set") String set, Authentication authentication) {
+        String role = authentication.getAuthorities()
+                .stream()
+                .findFirst()
+                .map(GrantedAuthority::getAuthority)
+                .orElse("");
+
+        SessionUser sessionUser = new SessionUser(authentication.getName(), Role.valueOf(role));
 
         return dataRepository.getQuestions(sessionUser, set);
     }
@@ -156,17 +125,16 @@ public class DataController {
     /**
      * This method inserts new questions into DB
      * @param listOfNewQuestions list of question details
-     * @param session current session
+     * @param authentication authentication object
      * @return ResponseEntity
      */
     @PostMapping("/newQuestions")
-    public ResponseEntity<?> newQuestions(@RequestBody List<Question> listOfNewQuestions, HttpSession session) {
-        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
+    public ResponseEntity<?> newQuestions(@RequestBody List<Question> listOfNewQuestions, Authentication authentication) {
 
         try {
             for (Question question : listOfNewQuestions) {
                 dataRepository.addQuestion(question.getQuestion(), question.getType(), question.getAnswer()
-                        , question.getPoints(), question.getSet(), sessionUser.getLogin());
+                        , question.getPoints(), question.getSet(), authentication.getName());
             }
 
             return ResponseEntity.ok().build();
@@ -200,12 +168,11 @@ public class DataController {
      * This method checks answers sent by user and returns score
      * @param set set that the user has been solving
      * @param list list of id and answer
-     * @param session current session
+     * @param authentication authentication object
      * @return Score (yourScore / outOfPossiblePoints)
      */
     @PostMapping("/submitAnswers/{name}")
-    public Score submitAnswers(@PathVariable("name") Set set, @RequestBody List<Question> list, HttpSession session) {
-        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
+    public Score submitAnswers(@PathVariable("name") Set set, @RequestBody List<Question> list, Authentication authentication) {
 
         int scoredPoints = 0;
 
@@ -213,6 +180,15 @@ public class DataController {
             scoredPoints += dataRepository.checkAnswer(question.getId(), question.getAnswer());
 
         }
+
+        String role = authentication.getAuthorities()
+                .stream()
+                .findFirst()
+                .map(GrantedAuthority::getAuthority)
+                .orElse("");
+
+        SessionUser sessionUser = new SessionUser(authentication.getName(), Role.valueOf(role));
+
 
         return new Score(scoredPoints, dataRepository.allPointsInSet(set, sessionUser));
 
@@ -224,6 +200,7 @@ public class DataController {
      * @param session current session
      * @return List of users
      */
+    // TODO: delete session
     @GetMapping("/getUsers")
     public List<User> getUsers(HttpSession session) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");
@@ -241,6 +218,7 @@ public class DataController {
      * @param session current session
      * @return ResponseEntity
      */
+    // TODO: Delete session
     @DeleteMapping("/deleteUser/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable("id") String id, HttpSession session) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");
@@ -259,6 +237,7 @@ public class DataController {
      * @param session current session
      * @return List of sets
      */
+    // TODO: Delete session
     @GetMapping("/chooseAnySet")
     public List<Set> chooseAnySets(HttpSession session) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");
@@ -290,6 +269,7 @@ public class DataController {
      * @param session current session
      * @return ResponseEntity
      */
+    // TODO: Delete session
     @PutMapping("/updateUsers")
     public ResponseEntity<?> updateUsers(@RequestBody List<User> users, HttpSession session) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");
