@@ -55,9 +55,9 @@
 
         <p id="anotherAction">Or log out</p><br>
 
-        <a href="http://localhost:8080/">
-            <button id="logout">Log out</button>
-        </a>
+        <form method="post" th:action="@{/logout}">
+            <button id="logout" type="submit">Log out</button>
+        </form>
     </div>
 </div>
 
