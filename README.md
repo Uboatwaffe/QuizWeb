@@ -6,16 +6,16 @@
 - ##### Point of logging in is to assign every question its own 'set'
 - ##### Each user has an unlimited number of sets
 - ##### There are 3 types of users: ``User``, ``Admin``, ``Guest``
-- ##### User can:
+- ##### ``User`` can:
      - Create a set
      - Modify a set
      - Delete a set
      - Start a quiz on selected set
-- #### Admin can:
+- #### ``Admin`` can:
      - Delete any set
      - Delete any user
      - Change username and role of any user
-- #### Guest can:
+- #### ``Guest`` can:
      - Start only the demo quiz
 
 ### Questions will be in 5 types:
@@ -23,7 +23,7 @@
 - ##### ``A/B/C/D`` (closed)
 - ##### ``TRUE/FALSE`` (closed)
 - ##### ``YES/NO`` (closed)
-- ##### ``DD/MM/YYYY`` (datale)
+- ##### ``DD/MM/YYYY`` (data)
 - ##### ``Insert answer here`` (open)
 
 ### At the end of each quiz the user will see how many question they got ``RIGHT/WRONG``
