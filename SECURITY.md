@@ -6,7 +6,7 @@ Only the section with :white_check_mark: are secure
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 0.0.1   | :x: |
+| v1.0    | :x:                |
 
 
 ## Reporting a Vulnerability
