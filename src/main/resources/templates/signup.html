@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <title>WebQuiz</title>
-    <link rel="stylesheet" href="/style.css">
+    <link href="/css/style.css" rel="stylesheet">
 </head>
 <body>
 
@@ -13,23 +13,88 @@
 
 
     <div class="container">
+        <div th:if="${param.error != null and param.error[0] == 'exists'}">
+            <h3>This login is already taken.</h3>
+        </div>
 
-        <label class="label">Please insert your login:</label><br>
-        <input type="text" id="loginInput"><br>
-        <label class="label">Please insert your password:</label><br>
-        <input type="password" id="passwordInput"><br>
-        <label class="label">Repeat your password:</label><br>
-        <input type="password" id="passwordInputRepeat"><br>
-        <input type="checkbox" id="wantToBeAdmin" name="role" value="ADMIN">
-        <label class="label">I want to be an admin</label><br>
+        <div th:if="${param.error != null and param.error[0] == 'password'}">
+            <h3>Passwords do not match.</h3>
+        </div>
+
+        <form action="/signup" method="post">
+
+            <input th:name="${_csrf.parameterName}"
+                   th:value="${_csrf.token}"
+                   type="hidden">
+
+            <label class="label">
+                Please insert your login:
+            </label>
+            <br>
+
+            <input id="loginInput"
+                   name="login"
+                   required
+                   type="text">
+            <br>
+
+            <label class="label">
+                Please insert your password:
+            </label>
+            <br>
+
+            <input id="passwordInput"
+                   name="password"
+                   required
+                   type="password">
+            <br>
+
+            <label class="label">
+                Repeat your password:
+            </label>
+            <br>
+
+            <input id="passwordInputRepeat"
+                   name="passwordRepeat"
+                   required
+                   type="password">
+            <br>
+
+            <input id="roleInput"
+                   name="role"
+                   type="hidden"
+                   value="USER">
+
+            <input id="wantToBeAdmin"
+                   onchange="document.getElementById('roleInput').value =
+                     this.checked ? 'ADMIN' : 'USER'"
+                   type="checkbox">
+
+            <label class="label">
+                I want to be an admin
+            </label>
+
+            <br>
+
+            <button type="reset">
+                Reset
+            </button>
+
+            <button type="submit">
+                Sign up
+            </button>
+
+        </form>
+
         <hr>
-        <button id="loginBtn" onclick="submitNewUser()">Sign up</button>
+
+        <button onclick="window.location.href='/login'">Return</button>
 
 
     </div>
 </div>
 
-<script src="/script.js"></script>
+<script src="/js/script.js"></script>
 
 </body>
 </html>

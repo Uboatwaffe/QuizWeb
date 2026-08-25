@@ -1,32 +1,53 @@
 <!DOCTYPE html>
-<!--suppress HtmlFormInputWithoutLabel -->
 <html lang="en">
 <head>
     <title>WebQuiz</title>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
 
 <div>
-
     <h1>Create new set</h1>
-
 
     <div class="container">
 
-        <label class="label">Please insert the name for the set:</label><br>
-        <input type="text" id="setNameInput"><br>
-        <hr>
-        <button id="loginBtn" onclick="createNewSet()">Create</button>
-        <a href="/home">
-        <button id="returnBtn">Return</button>
-        </a>
+        <form method="post"
+              th:action="@{/set/new_set}"
+              th:object="${set}">
 
+            <label class="label">
+                Please insert the name for the set:
+            </label>
+
+            <br>
+
+            <input th:field="*{name}"
+                   type="text">
+
+            <br>
+
+            <div class="text-danger"
+                 th:errors="*{name}"
+                 th:if="${#fields.hasErrors('name')}">
+            </div>
+
+            <hr>
+
+            <button id="loginBtn" type="submit">
+                Create
+            </button>
+
+            <a href="/home">
+                <button id="returnBtn" type="button">
+                    Return
+                </button>
+            </a>
+
+        </form>
 
     </div>
 </div>
-
-<script src="/script.js"></script>
 
 </body>
 </html>

@@ -1,13 +1,13 @@
 package pl.quiz.webApplication.controller;
 
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import pl.quiz.webApplication.data.DataRepository;
-import pl.quiz.webApplication.objects.SessionUser;
 import pl.quiz.webApplication.objects.Set;
 
 /**
@@ -26,7 +26,7 @@ public class PageController {
      * Returns HTML page
      * @return index.html
      */
-    @GetMapping("/")
+    @GetMapping("/login")
     public String index() {
         return "index";
     }
@@ -34,34 +34,32 @@ public class PageController {
 
     /**
      * Returns HTML page
-     * @param session current session
-     * @param model model for ThymeLeaf
      * @return home.html
      */
     @GetMapping("/home")
-    public String home(HttpSession session, Model model){
-        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
+    public String home(Authentication authentication, Model model) {
 
-        model.addAttribute("user", sessionUser);
+        model.addAttribute("username", authentication.getName());
+
+        String role = authentication.getAuthorities()
+                .stream()
+                .findFirst()
+                .map(GrantedAuthority::getAuthority)
+                .orElse("");
+
+        model.addAttribute("role", role);
 
         return "home";
     }
 
-    /**
-     * Returns HTML page
-     * @return signup.html
-     */
-    @GetMapping("/signup")
-    public String signup(){
-        return "signup";
-    }
 
     /**
      * Returns HTML page
      * @return new_set.html
      */
     @GetMapping("/new_set")
-    public String newSet(){
+    public String newSet(Model model) {
+        model.addAttribute("set", new Set());
         return "new_set";
     }
 
@@ -99,7 +97,7 @@ public class PageController {
      * @return quiz.html
      */
     @GetMapping("/quiz/{name}")
-    public String quiz(@PathVariable("name") String name, Model model, HttpSession session){
+    public String quiz(@PathVariable("name") String name, Model model) {
         model.addAttribute("set", new Set(name));
         return "quiz";
     }
@@ -108,11 +106,10 @@ public class PageController {
      * Returns HTML page
      * @param name name of the set to be modified
      * @param model model for ThymeLeaf
-     * @param session current session
      * @return modify_set.html
      */
     @GetMapping("/modify/{name}")
-    public String modify(@PathVariable("name") String name, Model model, HttpSession session){
+    public String modify(@PathVariable("name") String name, Model model) {
         model.addAttribute("set", new Set(name));
         return "modify_set";
     }
@@ -120,13 +117,12 @@ public class PageController {
     /**
      * Returns HTML page
      * @param model model for ThymeLeaf
-     * @param session current session
+     * @param authentication authentication object
      * @return score.html
      */
     @GetMapping("/score")
-    public String score(Model model, HttpSession session){
-        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
-        model.addAttribute("user", sessionUser);
+    public String score(Model model, Authentication authentication) {
+        model.addAttribute("username", authentication.getName());
         return "score";
     }
 

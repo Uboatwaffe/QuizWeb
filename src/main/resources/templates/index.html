@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <title>WebQuiz</title>
-    <link rel="stylesheet" href="/style.css">
+    <link href="/css/style.css" rel="stylesheet">
 </head>
 <body>
 
@@ -13,11 +13,39 @@
 
 
     <div class="container">
-        <label class="label">Please insert your login:</label><br>
-        <input type="text" id="loginInput"><br>
-        <label class="label">Please insert your password:</label><br>
-        <input type="password" id="passwordInput"><br>
-        <button id="loginBtn" onclick="submitData()">Log In</button>
+        <div class="success-message"
+             th:if="${param.signupSuccess}">
+            <h3>
+                Account created successfully! You can now log in.
+            </h3>
+            <br>
+        </div>
+
+
+        <form action="/login" method="POST">
+            <label class="label">Please insert your login:</label><br>
+            <input id="loginInput"
+                   name="username"
+                   required
+                   type="text">
+
+            <br>
+
+            <label class="label">Please insert your password:</label><br>
+            <input id="passwordInput"
+                   name="password"
+                   required
+                   type="password">
+            <br>
+
+            <input th:name="${_csrf.parameterName}"
+                   th:value="${_csrf.token}"
+                   type="hidden">
+
+            <button id="loginBtn" type="submit">
+                Log In
+            </button>
+        </form>
 
 
         <hr>
@@ -27,10 +55,11 @@
         <a href="/signup">
             <button id="goToSignUp">Sign up</button>
         </a>
+
     </div>
 </div>
 
-<script src="/script.js"></script>
+<script src="/js/script.js"></script>
 
 </body>
 </html>
