@@ -1,7 +1,7 @@
 package pl.quiz.webApplication.objects;
 
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +19,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class Set {
     @Field("set")
     @NotBlank(message = "Set name cannot be blank")
-    @Max(value = 20, message = "Set name cannot exceed 20 characters")
+    @Size(max = 20, message = "Set name must be 20 characters or shorter")
     private String name;
 }

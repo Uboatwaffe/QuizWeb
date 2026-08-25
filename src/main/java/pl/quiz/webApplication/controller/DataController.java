@@ -42,23 +42,6 @@ public class DataController {
     }
 
     /**
-     * This method deletes the set of name specified in path
-     *
-     * @param name    name of the set to be deleted
-     * @param authentication authentication object
-     * @return ResponseEntity
-     */
-    @DeleteMapping("/delete/{name}")
-    public ResponseEntity<?> deleteSet(@PathVariable("name") String name, Authentication authentication) {
-
-        if (dataRepository.deleteSet(name, authentication.getName())) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
-    }
-
-    /**
      * This method returns list of questions in specified set
      *
      * @param set     set of the questions

@@ -55,25 +55,6 @@ public class PageController {
 
     /**
      * Returns HTML page
-     * @return new_set.html
-     */
-    @GetMapping("/new_set")
-    public String newSet(Model model) {
-        model.addAttribute("set", new Set());
-        return "new_set";
-    }
-
-    /**
-     * Returns HTML page
-     * @return choose_set_to_delete.html
-     */
-    @GetMapping("/choose_set_to_delete")
-    public String chooseSetToDelete(){
-        return "choose_set_to_delete";
-    }
-
-    /**
-     * Returns HTML page
      * @return choose_set_to_start.html
      */
     @GetMapping("/choose_set_to_start")

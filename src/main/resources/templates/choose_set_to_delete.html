@@ -1,20 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <title>WebQuiz</title>
-    <link href="/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
 
 <div class="container">
+
     <h1>Available sets:</h1>
 
-    <div id="response">Loading...</div>
+    <div class="text-danger"
+         th:if="${error}"
+         th:text="${error}">
+    </div>
 
+    <div th:if="${sets.isEmpty()}">
+        <p class="no-sets">
+            No quiz sets available.
+        </p>
+    </div>
 
-    <button id="returnBtn" onclick="window.location.href='/home'">Return</button>
+    <div class="item"
+         th:each="set : ${sets}">
+
+        <form method="post"
+              th:action="@{/delete/{name}(name=${set.name})}">
+
+            <input th:name="${_csrf.parameterName}"
+                   th:value="${_csrf.token}"
+                   type="hidden">
+
+            <button class="set-button"
+                    th:text="${set.name}"
+                    type="submit">
+            </button>
+
+        </form>
+
+    </div>
+
+    <button id="returnBtn"
+            onclick="window.location.href='/home'"
+            type="button">
+        Return
+    </button>
+
 </div>
 
-<script src="/js/script_delete.js"></script>
 </body>
 </html>
