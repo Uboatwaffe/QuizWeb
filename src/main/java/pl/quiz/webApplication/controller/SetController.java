@@ -1,8 +1,11 @@
 package pl.quiz.webApplication.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,14 +21,17 @@ public class SetController {
 
     private final DataRepository dataRepository;
 
+
     @PostMapping("/new_set")
     public String createNewSet(
-            @ModelAttribute("set") Set set,
-            Authentication authentication) {
+            @ModelAttribute("set") @Valid
+            Set set,
+            BindingResult result,
+            Authentication authentication,
+            Model model) {
 
-        System.out.println(set);
 
-        if (set.getName() == null || set.getName().isBlank()) {
+        if (result.hasErrors()) {
             return "new_set";
         }
 
@@ -36,6 +42,12 @@ public class SetController {
                 "owner",
                 authentication.getName(),
                 Set.class)) {
+
+            result.rejectValue(
+                    "name",
+                    "duplicate",
+                    "A set with this name already exists"
+            );
 
             return "new_set";
         }

@@ -9,7 +9,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 import pl.quiz.webApplication.data.DataRepository;
 import pl.quiz.webApplication.enums.Role;
-import pl.quiz.webApplication.enums.Type;
 import pl.quiz.webApplication.objects.*;
 
 import java.util.ArrayList;
@@ -31,36 +30,6 @@ public class DataController {
 
     // TODO: make this an MVC app (delete rest controller)
 
-
-
-    /**
-     * This method creates new set of questions
-     *
-     * @param set     object that contains details of set to be created
-     * @param authentication authentication object
-     * @return ResponseEntity
-     */
-    @PostMapping("newSet")
-    public ResponseEntity<?> createNewSet(@RequestBody Set set, Authentication authentication) {
-
-        if (set.getName().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-
-        // Check if the name is already taken
-        if (dataRepository.checkIfExists("question", "set", set.getName(), "owner", authentication.getName(), Set.class)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-
-
-        Question question = dataRepository.addQuestion("Are you ready?", Type.YN, "YES", 0, set.getName(), authentication.getName());
-
-        if (question != null) {
-            return ResponseEntity.ok().build();
-        }
-
-        return ResponseEntity.status(HttpStatus.CONFLICT).build();
-    }
 
     /**
      * This method returns all sets belonging to a current user

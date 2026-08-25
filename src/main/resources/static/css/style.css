@@ -148,3 +148,7 @@ select {
     background-color: darkblue;
     color: white;
 }
+
+.text-danger {
+    color: red;
+}

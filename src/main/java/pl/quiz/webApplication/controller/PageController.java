@@ -58,7 +58,8 @@ public class PageController {
      * @return new_set.html
      */
     @GetMapping("/new_set")
-    public String newSet(){
+    public String newSet(Model model) {
+        model.addAttribute("set", new Set());
         return "new_set";
     }
 
