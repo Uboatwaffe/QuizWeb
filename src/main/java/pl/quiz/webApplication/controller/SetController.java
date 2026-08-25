@@ -47,6 +47,15 @@ public class SetController {
     }
 
 
+    /**
+     * This method creates new set
+     *
+     * @param set            details of the set to be created
+     * @param result         result of validation check
+     * @param authentication authentication object
+     * @param model          model for Thymeleaf
+     * @return updated view if any errors, if not then home.html
+     */
     @PostMapping("/new_set")
     public String createNewSet(
             @ModelAttribute("set") @Valid
@@ -93,6 +102,13 @@ public class SetController {
         return "new_set";
     }
 
+    /**
+     * This method deletes the specified set
+     * @param name name of the set to be deleted
+     * @param authentication authentication object
+     * @param redirectAttributes object to pass the model for the next view
+     * @return updated view of choose_set_to_delete.html
+     */
     @PostMapping("/delete/{name}")
     public String deleteSet(
             @PathVariable("name") String name,
