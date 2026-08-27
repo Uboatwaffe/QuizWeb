@@ -152,3 +152,8 @@ select {
 .text-danger {
     color: red;
 }
+
+.answerButton.selected {
+    background-color: green;
+    color: white;
+}
