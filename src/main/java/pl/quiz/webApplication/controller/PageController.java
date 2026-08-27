@@ -55,15 +55,6 @@ public class PageController {
 
     /**
      * Returns HTML page
-     * @return choose_set_to_start.html
-     */
-    @GetMapping("/choose_set_to_start")
-    public String chooseSetToStart(){
-        return "choose_set_to_start";
-    }
-
-    /**
-     * Returns HTML page
      * @return choose_set_to_modify.html
      */
     @GetMapping("/choose_set_to_modify")

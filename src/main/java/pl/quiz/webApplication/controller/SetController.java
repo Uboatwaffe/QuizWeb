@@ -127,4 +127,17 @@ public class SetController {
         return "redirect:/choose_set_to_delete";
     }
 
+    /**
+     * Returns HTML page
+     *
+     * @return choose_set_to_start.html
+     */
+    @GetMapping("/choose_set_to_start")
+    public String chooseSetToStart(Model model, Authentication authentication) {
+
+        model.addAttribute("sets", dataRepository.getAllSets(authentication.getName()));
+
+        return "choose_set_to_start";
+    }
+
 }
