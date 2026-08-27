@@ -24,7 +24,7 @@ public class SetController {
 
     /**
      * Returns HTML page
-     *
+     * @param model model for Thymeleaf
      * @return new_set.html
      */
     @GetMapping("/new_set")
@@ -35,7 +35,8 @@ public class SetController {
 
     /**
      * Returns HTML page
-     *
+     * @param model model for Thymeleaf
+     * @param authentication authentication object
      * @return choose_set_to_delete.html
      */
     @GetMapping("/choose_set_to_delete")
@@ -129,7 +130,8 @@ public class SetController {
 
     /**
      * Returns HTML page
-     *
+     * @param authentication authentication object
+     * @param model model for Thymeleaf
      * @return choose_set_to_start.html
      */
     @GetMapping("/choose_set_to_start")
