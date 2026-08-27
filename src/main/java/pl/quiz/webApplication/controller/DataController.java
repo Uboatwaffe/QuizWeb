@@ -58,7 +58,7 @@ public class DataController {
 
         SessionUser sessionUser = new SessionUser(authentication.getName(), Role.valueOf(role));
 
-        return dataRepository.getQuestions(sessionUser, set);
+        return dataRepository.getQuestions(authentication.getName(), set);
     }
 
     /**

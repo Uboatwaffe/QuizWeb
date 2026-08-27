@@ -55,18 +55,6 @@ public class PageController {
 
     /**
      * Returns HTML page
-     * @param name name of the quiz to be run
-     * @param model model for ThymeLeaf
-     * @return quiz.html
-     */
-    @GetMapping("/quiz/{name}")
-    public String quiz(@PathVariable("name") String name, Model model) {
-        model.addAttribute("set", new Set(name));
-        return "quiz";
-    }
-
-    /**
-     * Returns HTML page
      * @param name name of the set to be modified
      * @param model model for ThymeLeaf
      * @return modify_set.html

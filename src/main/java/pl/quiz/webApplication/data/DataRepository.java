@@ -141,14 +141,14 @@ public class DataRepository {
 
     /**
      * This method returns list of all questions in specified set
-     * @param sessionUser current user details
+     * @param login current user login
      * @param set set of the questions
      * @return List of questions
      */
-    public List<Question> getQuestions(SessionUser sessionUser, String set){
+    public List<Question> getQuestions(String login, String set) {
         Query query = new Query(Criteria
                 .where("set").is(set)
-                .and("owner").is(sessionUser.getLogin()));
+                .and("owner").is(login));
 
         return mongoTemplate.find(query, Question.class, "question");
     }
