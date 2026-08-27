@@ -10,16 +10,16 @@
 
   <h1>
     Hello
-    <span th:text="${user.login}"></span>
+    <span th:text="${username}"></span>
   </h1>
 
 
   <div class="container">
     <h3>
       You scored:
-      <span id="score"></span>
+      <span id="score" th:text="${score}"></span>
       /
-      <span id="out"></span>
+      <span id="out" th:text="${maxPoints}"></span>
     </h3>
 
     <hr>
@@ -29,7 +29,6 @@
   </div>
 </div>
 
-<script src="/js/script_score.js"></script>
 
 </body>
 </html>

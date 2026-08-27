@@ -41,15 +41,20 @@ public class QuizController {
             Model model,
             Authentication authentication) {
 
-        System.out.println("SUBMISSION:");
-        System.out.println(submission);
+        int score = 0;
+        String set = "";
 
         for (AnswerSubmission answer : submission.getAnswers()) {
-            System.out.println(
-                    "Question ID: " + answer.getQuestionId()
-                            + ", Answers: " + answer.getAnswers()
-            );
+            set = dataRepository.getSetFromId(answer.getQuestionId());
+
+            if (dataRepository.getQuestionAnswerById(answer.getQuestionId()) == answer.getAnswers()) {
+                score++;
+            }
         }
+
+        model.addAttribute("username", authentication.getName());
+        model.addAttribute("score", score);
+        model.addAttribute("maxPoints", dataRepository.allPointsInSet(new Set(set), authentication.getName()));
 
         return "score";
     }

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import pl.quiz.webApplication.enums.Role;
 import pl.quiz.webApplication.enums.Type;
 import pl.quiz.webApplication.objects.Question;
-import pl.quiz.webApplication.objects.SessionUser;
 import pl.quiz.webApplication.objects.Set;
 import pl.quiz.webApplication.objects.User;
 
@@ -153,6 +152,21 @@ public class DataRepository {
         return mongoTemplate.find(query, Question.class, "question");
     }
 
+    public List<String> getQuestionAnswerById(String id) {
+        Query query = new Query(Criteria.where("_id").is(id));
+
+        return mongoTemplate.find(query, String.class, "question");
+    }
+
+    public String getSetFromId(String id) {
+        Query query = new Query(Criteria.where("_id").is(id));
+
+        query.fields()
+                .include("set");
+
+        return mongoTemplate.findOne(query, String.class, "question");
+    }
+
     /**
      * This method deletes question
      * @param id id of the question to be deleted
@@ -214,10 +228,10 @@ public class DataRepository {
      * @param sessionUser current sessionUser
      * @return number of points available to be collected
      */
-    public int allPointsInSet(Set set, SessionUser sessionUser){
+    public int allPointsInSet(Set set, String username) {
         Query query = new Query(Criteria
                 .where("set").is(set.getName())
-                .and("owner").is(sessionUser.getLogin()));
+                .and("owner").is(username));
 
         List<Question> questions = mongoTemplate.find(query, Question.class, "question");
 

@@ -9,7 +9,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 import pl.quiz.webApplication.data.DataRepository;
 import pl.quiz.webApplication.enums.Role;
-import pl.quiz.webApplication.objects.*;
+import pl.quiz.webApplication.objects.Question;
+import pl.quiz.webApplication.objects.SessionUser;
+import pl.quiz.webApplication.objects.Set;
+import pl.quiz.webApplication.objects.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,36 +119,6 @@ public class DataController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
-    }
-
-    /**
-     * This method checks answers sent by user and returns score
-     * @param set set that the user has been solving
-     * @param list list of id and answer
-     * @param authentication authentication object
-     * @return Score (yourScore / outOfPossiblePoints)
-     */
-    @PostMapping("/submitAnswers/{name}")
-    public Score submitAnswers(@PathVariable("name") Set set, @RequestBody List<Question> list, Authentication authentication) {
-
-        int scoredPoints = 0;
-
-        for  (Question question : list) {
-            scoredPoints += dataRepository.checkAnswer(question.getId(), question.getAnswer());
-
-        }
-
-        String role = authentication.getAuthorities()
-                .stream()
-                .findFirst()
-                .map(GrantedAuthority::getAuthority)
-                .orElse("");
-
-        SessionUser sessionUser = new SessionUser(authentication.getName(), Role.valueOf(role));
-
-
-        return new Score(scoredPoints, dataRepository.allPointsInSet(set, sessionUser));
-
     }
 
     /**
