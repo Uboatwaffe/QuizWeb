@@ -126,32 +126,7 @@
     <button id="returnButton" onclick="window.location.replace('/home')">Return</button>
 
 </div>
-<script>
-    document.getElementById('resetBtn').addEventListener('click', () => {
-        document.querySelectorAll('.answerButton.selected').forEach(button => {
-            button.classList.remove('selected');
-        });
-    });
-
-
-    document.querySelectorAll('.question').forEach(question => {
-
-        const buttons = question.querySelectorAll('.answerButton');
-
-        buttons.forEach(button => {
-            button.addEventListener('click', () => {
-
-                // Remove selected from all buttons in this question
-                buttons.forEach(btn => {
-                    btn.classList.remove('selected');
-                });
-
-                // Select the clicked button
-                button.classList.add('selected');
-            });
-        });
-    });
-</script>
+<script src="/js/script_quiz.js"></script>
 
 
 </body>
