@@ -154,6 +154,6 @@ select {
 }
 
 .answerButton.selected {
-    background-color: green;
-    color: white;
+    transform: scale(1.05);
+    font-weight: bold;
 }
