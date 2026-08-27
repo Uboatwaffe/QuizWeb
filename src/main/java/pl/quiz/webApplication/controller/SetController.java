@@ -142,4 +142,19 @@ public class SetController {
         return "choose_set_to_start";
     }
 
+    /**
+     * Returns HTML page
+     *
+     * @param model          model for Thymeleaf
+     * @param authentication authentication object
+     * @return choose_set_to_modify.html
+     */
+    @GetMapping("/choose_set_to_modify")
+    public String chooseSetToModify(Model model, Authentication authentication) {
+
+        model.addAttribute("sets", dataRepository.getAllSets(authentication.getName()));
+
+        return "choose_set_to_modify";
+    }
+
 }
