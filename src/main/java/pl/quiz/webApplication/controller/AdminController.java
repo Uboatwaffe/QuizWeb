@@ -27,9 +27,7 @@ public class AdminController {
                 user.getLogin().equals(authentication.getName())
         );
 
-        model.addAttribute(
-                "users", allUsers
-        );
+        model.addAttribute("users", allUsers);
 
         return "delete_user";
     }
@@ -43,8 +41,22 @@ public class AdminController {
     }
 
     @GetMapping("/delete_any_set")
-    public String deleteAnySet() {
+    public String deleteAnySet(Model model) {
+
+        model.addAttribute(
+                "sets",
+                dataRepository.getEverySet()
+        );
+
         return "delete_any_set";
+    }
+
+    @PostMapping("/delete_any_set/{name}")
+    public String deleteAnySet(@PathVariable("name") String name) {
+
+        dataRepository.deleteSetNoAuth(name);
+
+        return "redirect:/delete_any_set";
     }
 
     @GetMapping("/change_role")
