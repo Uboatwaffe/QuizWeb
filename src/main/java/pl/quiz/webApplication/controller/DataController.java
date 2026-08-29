@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 import pl.quiz.webApplication.data.DataRepository;
 import pl.quiz.webApplication.enums.Role;
@@ -14,7 +13,6 @@ import pl.quiz.webApplication.objects.SessionUser;
 import pl.quiz.webApplication.objects.Set;
 import pl.quiz.webApplication.objects.User;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -44,62 +42,7 @@ public class DataController {
         return dataRepository.getAllSets(authentication.getName());
     }
 
-    /**
-     * This method returns list of questions in specified set
-     *
-     * @param set     set of the questions
-     * @param authentication authentication object
-     * @return List of questions
-     */
-    @GetMapping("/quiz/{set}")
-    public List<Question> getQuestions(@PathVariable("set") String set, Authentication authentication) {
-        String role = authentication.getAuthorities()
-                .stream()
-                .findFirst()
-                .map(GrantedAuthority::getAuthority)
-                .orElse("");
 
-        SessionUser sessionUser = new SessionUser(authentication.getName(), Role.valueOf(role));
-
-        return dataRepository.getQuestions(authentication.getName(), set);
-    }
-
-    /**
-     * This method deletes question of specified id
-     *
-     * @param id id of the question to be deleted
-     * @return ResponseEntity
-     */
-    @DeleteMapping("/deleteQuestion/{id}")
-    public ResponseEntity<?> deleteQuestion(@PathVariable("id") String id) {
-        if (dataRepository.deleteQuestion(id)) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
-    }
-
-    /**
-     * This method inserts new questions into DB
-     * @param listOfNewQuestions list of question details
-     * @param authentication authentication object
-     * @return ResponseEntity
-     */
-    @PostMapping("/newQuestions")
-    public ResponseEntity<?> newQuestions(@RequestBody List<Question> listOfNewQuestions, Authentication authentication) {
-
-        try {
-            for (Question question : listOfNewQuestions) {
-                dataRepository.addQuestion(question.getQuestion(), question.getType(), question.getAnswer()
-                        , question.getPoints(), question.getSet(), authentication.getName());
-            }
-
-            return ResponseEntity.ok().build();
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
-    }
 
     /**
      * This method updates old questions
@@ -121,74 +64,6 @@ public class DataController {
         }
     }
 
-    /**
-     * This method returns every user in database
-     *
-     * @param session current session
-     * @return List of users
-     */
-    // TODO: delete session
-    @GetMapping("/getUsers")
-    public List<User> getUsers(HttpSession session) {
-        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
-
-        if (!sessionUser.getRole().equals(Role.ADMIN)) {
-            return new ArrayList<>();
-        }
-
-        return dataRepository.getAllUsers();
-    }
-
-    /**
-     * This method deletes user of specified id
-     * @param id id of the user to be deleted
-     * @param session current session
-     * @return ResponseEntity
-     */
-    // TODO: Delete session
-    @DeleteMapping("/deleteUser/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable("id") String id, HttpSession session) {
-        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
-
-        if (!sessionUser.getRole().equals(Role.ADMIN)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-
-        return dataRepository.deleteUser(id) ?
-                ResponseEntity.ok().build() :
-                ResponseEntity.status(HttpStatus.CONFLICT).build();
-    }
-
-    /**
-     * This method returns every set in the database
-     * @param session current session
-     * @return List of sets
-     */
-    // TODO: Delete session
-    @GetMapping("/chooseAnySet")
-    public List<Set> chooseAnySets(HttpSession session) {
-        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
-
-        if (!sessionUser.getRole().equals(Role.ADMIN)) {
-            return new ArrayList<>();
-        }
-
-        return dataRepository.getEverySet();
-    }
-
-    /**
-     * This method deletes set without checking if the current user is the owner of said set
-     * @param name name of the set to be deleted
-     * @return ResponseEntity
-     */
-    @DeleteMapping("/deleteNoAuth/{name}")
-    public ResponseEntity<?> deleteSet(@PathVariable("name") String name) {
-        if (dataRepository.deleteSetNoAuth(name)) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
-    }
 
     /**
      * This method updates users

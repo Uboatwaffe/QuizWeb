@@ -1,24 +1,102 @@
 <!DOCTYPE html>
-<html lang="pl-PL">
+<html lang="pl-PL"
+      xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <title>WebQuiz</title>
     <link href="/css/style.css" rel="stylesheet">
 </head>
+
 <body>
 
 <div class="container">
+
     <h1>Users:</h1>
 
-    <div id="response">Loading...</div>
+    <p th:if="${error}"
+       th:text="${error}">
+        Could not update users
+    </p>
 
 
-    <hr>
+    <div th:if="${userSubmission.users.isEmpty()}">
 
-    <button id="returnButton" onclick="window.location.replace('/home')">Return</button>
-    <button id="submitButton" onclick="submitChanges()">Submit</button>
+        <p class="no-sets">
+            No users
+        </p>
+
+    </div>
+
+
+    <form method="post"
+          th:action="@{/change_role}"
+          th:object="${userSubmission}">
+
+
+        <div class="question"
+             th:each="user, stat : *{users}">
+
+
+            <!-- USER ID -->
+
+            <input th:field="*{users[__${stat.index}__].id}"
+                   type="hidden">
+
+
+            <!-- LOGIN -->
+
+            <h3>Login:</h3>
+
+            <input class="loginInput"
+                   th:field="*{users[__${stat.index}__].login}"
+                   type="text">
+
+
+            <hr>
+
+
+            <!-- ROLE -->
+
+            <label>Role:</label>
+
+            <select class="roleSelect"
+                    th:field="*{users[__${stat.index}__].role}">
+
+                <option value="ADMIN">
+                    Admin
+                </option>
+
+                <option value="USER">
+                    User
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <hr>
+
+
+        <button id="returnButton"
+                onclick="window.location.replace('/home')"
+                type="button">
+
+            Return
+
+        </button>
+
+
+        <button id="submitButton"
+                type="submit">
+
+            Submit
+
+        </button>
+
+    </form>
 
 </div>
 
-<script src="/js/script_change_role.js"></script>
 </body>
 </html>
