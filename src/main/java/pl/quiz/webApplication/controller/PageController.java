@@ -6,9 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import pl.quiz.webApplication.data.DataRepository;
-import pl.quiz.webApplication.objects.Set;
 
 /**
  * This class is responsible for loading correct pages <br>
@@ -50,20 +48,4 @@ public class PageController {
 
         return "home";
     }
-
-
-    /**
-     * Returns HTML page
-     * @param name name of the set to be modified
-     * @param model model for ThymeLeaf
-     * @return modify_set.html
-     */
-    @GetMapping("/modify/{name}")
-    public String modify(@PathVariable("name") String name, Model model) {
-        model.addAttribute("set", new Set(name));
-        return "modify_set";
-    }
-
-
-
 }
