@@ -15,7 +15,6 @@ import pl.quiz.webApplication.objects.Set;
  * Uses Thymeleaf
  *
  */
-@SuppressWarnings("SameReturnValue")
 @Controller
 public class PageController {
 
@@ -65,30 +64,6 @@ public class PageController {
         return "modify_set";
     }
 
-    /**
-     * Returns HTML page
-     * @param model model for ThymeLeaf
-     * @param authentication authentication object
-     * @return score.html
-     */
-    @GetMapping("/score")
-    public String score(Model model, Authentication authentication) {
-        model.addAttribute("username", authentication.getName());
-        return "score";
-    }
 
-    @GetMapping("/delete_user")
-    public String deleteUser() {
-        return "delete_user";
-    }
 
-    @GetMapping("/delete_any_set")
-    public String deleteAnySet() {
-        return "delete_any_set";
-    }
-
-    @GetMapping("change_role")
-    public String changeRole() {
-        return "change_role";
-    }
 }

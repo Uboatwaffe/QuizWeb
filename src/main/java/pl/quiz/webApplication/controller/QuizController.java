@@ -128,4 +128,17 @@ public class QuizController {
 
         return "score";
     }
+
+    /**
+     * Returns HTML page
+     *
+     * @param model          model for ThymeLeaf
+     * @param authentication authentication object
+     * @return score.html
+     */
+    @GetMapping("/score")
+    public String score(Model model, Authentication authentication) {
+        model.addAttribute("username", authentication.getName());
+        return "score";
+    }
 }
