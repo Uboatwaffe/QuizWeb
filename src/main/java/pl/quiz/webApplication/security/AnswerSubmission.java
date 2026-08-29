@@ -13,12 +13,4 @@ public class AnswerSubmission {
     private String questionId;
 
     private List<String> answers = new ArrayList<>();
-
-    @Override
-    public String toString() {
-        return "AnswerSubmission{" +
-                "questionId=" + questionId +
-                ", answers=" + answers +
-                '}';
-    }
 }

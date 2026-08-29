@@ -12,10 +12,4 @@ public class QuizSubmission {
 
     private List<AnswerSubmission> answers = new ArrayList<>();
 
-    @Override
-    public String toString() {
-        return "QuizSubmission{" +
-                "answers=" + answers +
-                '}';
-    }
 }

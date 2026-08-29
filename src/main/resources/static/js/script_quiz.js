@@ -10,64 +10,47 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
         /*
-         * Answer buttons
+         * ABCD / YN / TF buttons
          */
         answerButtons.forEach(button => {
 
             button.addEventListener("click", () => {
 
-                const questionContainer =
-                    button.closest(".question");
-
                 const isMultipleChoice =
-                    questionContainer.querySelector(".ABCD") !== null;
+                    question.querySelector(".ABCD") !== null;
 
 
-                /*
-                 * ABCD
-                 *
-                 * Multiple answers are allowed.
-                 *
-                 * Example:
-                 * A + C
-                 */
                 if (isMultipleChoice) {
 
+                    /*
+                     * ABCD allows multiple answers.
+                     *
+                     * Example:
+                     * A + C
+                     */
                     button.classList.toggle("selected");
 
-                }
+                } else {
 
-
-                /*
-                 * YN / TF
-                 *
-                 * Only one answer is allowed.
-                 *
-                 * Example:
-                 * YES
-                 */
-                else {
-
+                    /*
+                     * YN and TF allow only one answer.
+                     */
                     answerButtons.forEach(otherButton => {
-
                         otherButton.classList.remove("selected");
-
                     });
 
                     button.classList.add("selected");
-
                 }
 
 
-                updateSubmittedAnswers(questionContainer);
-
+                updateSubmittedAnswers(question);
             });
 
         });
 
 
         /*
-         * Open question
+         * OPEN question
          */
         const openInput =
             question.querySelector(".openInput");
@@ -75,16 +58,13 @@ document.addEventListener("DOMContentLoaded", () => {
         if (openInput) {
 
             openInput.addEventListener("input", () => {
-
                 updateSubmittedAnswers(question);
-
             });
-
         }
 
 
         /*
-         * Date question
+         * DATE question
          */
         const dayInput =
             question.querySelector(".dayInput");
@@ -112,7 +92,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 "input",
                 () => updateSubmittedAnswers(question)
             );
-
         }
 
     });
@@ -145,19 +124,15 @@ document.addEventListener("DOMContentLoaded", () => {
             }, 0);
 
         });
-
     }
 
 });
 
 
-/*
- * Update the hidden inputs for one question.
- */
 function updateSubmittedAnswers(question) {
 
     /*
-     * Remove previously generated answer inputs.
+     * Remove previously generated inputs.
      */
     question
         .querySelectorAll(".submittedAnswer")
@@ -165,7 +140,7 @@ function updateSubmittedAnswers(question) {
 
 
     /*
-     * Find the question ID input.
+     * Find question ID.
      *
      * Example:
      *
@@ -183,11 +158,7 @@ function updateSubmittedAnswers(question) {
 
 
     /*
-     * Convert:
-     *
-     * answers[0].questionId
-     *
-     * into:
+     * Create:
      *
      * answers[0].answers
      */
@@ -199,9 +170,9 @@ function updateSubmittedAnswers(question) {
 
 
     /*
-     * ==========================
-     * ABCD / YN / TF
-     * ==========================
+     * =================================
+     * BUTTON ANSWERS
+     * =================================
      */
 
     const selectedButtons =
@@ -219,22 +190,18 @@ function updateSubmittedAnswers(question) {
 
         input.name = answerName;
 
-        input.value =
-            button.dataset.answer;
+        input.value = button.dataset.answer;
 
-        input.classList.add(
-            "submittedAnswer"
-        );
+        input.classList.add("submittedAnswer");
 
         question.appendChild(input);
-
     });
 
 
     /*
-     * ==========================
-     * OPEN
-     * ==========================
+     * =================================
+     * OPEN ANSWER
+     * =================================
      */
 
     const openInput =
@@ -250,22 +217,18 @@ function updateSubmittedAnswers(question) {
 
         input.name = answerName;
 
-        input.value =
-            openInput.value;
+        input.value = openInput.value.trim();
 
-        input.classList.add(
-            "submittedAnswer"
-        );
+        input.classList.add("submittedAnswer");
 
         question.appendChild(input);
-
     }
 
 
     /*
-     * ==========================
-     * DATE
-     * ==========================
+     * =================================
+     * DATE ANSWER
+     * =================================
      */
 
     const dayInput =
@@ -285,14 +248,10 @@ function updateSubmittedAnswers(question) {
         const year = yearInput.value;
 
 
-        /*
-         * Only submit the date if
-         * all three fields are filled.
-         */
         if (day && month && year) {
 
             const date =
-                `${day}-${month}-${year}`;
+                `${day}/${month}/${year}`;
 
 
             const input =
@@ -304,14 +263,9 @@ function updateSubmittedAnswers(question) {
 
             input.value = date;
 
-            input.classList.add(
-                "submittedAnswer"
-            );
+            input.classList.add("submittedAnswer");
 
             question.appendChild(input);
-
         }
-
     }
-
 }

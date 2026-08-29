@@ -152,19 +152,19 @@ public class DataRepository {
         return mongoTemplate.find(query, Question.class, "question");
     }
 
-    public List<String> getQuestionAnswerById(String id) {
+    public Question getQuestionAnswerById(String id) {
         Query query = new Query(Criteria.where("_id").is(id));
 
-        return mongoTemplate.find(query, String.class, "question");
+        return mongoTemplate.findOne(query, Question.class, "question");
     }
 
-    public String getSetFromId(String id) {
+    public Set getSetFromId(String id) {
         Query query = new Query(Criteria.where("_id").is(id));
 
         query.fields()
                 .include("set");
 
-        return mongoTemplate.findOne(query, String.class, "question");
+        return mongoTemplate.findOne(query, Set.class, "question");
     }
 
     /**
