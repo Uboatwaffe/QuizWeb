@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import pl.quiz.webApplication.data.DataRepository;
 import pl.quiz.webApplication.objects.Question;
 import pl.quiz.webApplication.objects.Set;
+import pl.quiz.webApplication.objects.WrongQuestion;
 import pl.quiz.webApplication.security.AnswerSubmission;
 import pl.quiz.webApplication.security.QuizSubmission;
 
@@ -47,6 +48,9 @@ public class QuizController {
 
         int score = 0;
         Set set = null;
+        boolean correct = true;
+
+        List<WrongQuestion> wrongQuestions = new ArrayList<>();
 
         for (AnswerSubmission answer : submission.getAnswers()) {
 
@@ -74,17 +78,42 @@ public class QuizController {
             userAnswers.sort(String::compareTo);
             correctAnswers.sort(String::compareTo);
 
-            System.out.println("User: " + userAnswers);
-            System.out.println("DB: " + correctAnswers);
-
             if (userAnswers.equals(correctAnswers)) {
                 score += correctQuestion.getPoints();
+            } else {
+                correct = false;
+
+                System.out.println(userAnswers);
+
+
+                if (userAnswers.isEmpty()) {
+                    wrongQuestions.add(WrongQuestion.builder()
+                            .question(correctQuestion.getQuestion())
+                            .points(correctQuestion.getPoints())
+                            .userAnswer(" nothing")
+                            .correctAnswer("'" + correctQuestion.getAnswer() + "'")
+                            .build());
+                } else {
+                    wrongQuestions.add(WrongQuestion.builder()
+                            .question(correctQuestion.getQuestion())
+                            .points(correctQuestion.getPoints())
+                            .userAnswer(": " + userAnswers.toString()
+                                    .replace("[", "'").replace("]", "'"))
+                            .correctAnswer("'" + correctQuestion.getAnswer() + "'")
+                            .build());
+                }
             }
         }
 
         if (set == null) {
             return "redirect:/home";
         }
+
+        if (!correct) {
+            model.addAttribute("mistakes", true);
+        }
+
+        model.addAttribute("questions", wrongQuestions);
 
         model.addAttribute("username", authentication.getName());
         model.addAttribute("score", score);
