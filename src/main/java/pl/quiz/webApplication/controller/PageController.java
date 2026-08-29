@@ -1,6 +1,6 @@
 package pl.quiz.webApplication.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
@@ -14,10 +14,13 @@ import pl.quiz.webApplication.data.DataRepository;
  *
  */
 @Controller
+@RequiredArgsConstructor
 public class PageController {
 
-    @Autowired
-    DataRepository dataRepository;
+    /**
+     * This is autoinjected data repository field
+     */
+    private final DataRepository dataRepository;
 
     /**
      * Returns HTML page
@@ -31,6 +34,8 @@ public class PageController {
 
     /**
      * Returns HTML page
+     * @param authentication authentication object
+     * @param model model for Thymeleaf
      * @return home.html
      */
     @GetMapping("/home")

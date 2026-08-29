@@ -14,12 +14,25 @@ import pl.quiz.webApplication.security.UserSubmission;
 
 import java.util.List;
 
+/**
+ * This class is a controller for every admin endpoint
+ */
 @Controller
 @RequiredArgsConstructor
 public class AdminController {
 
+    /**
+     * This is autoinjected data repository field
+     */
     private final DataRepository dataRepository;
 
+    /**
+     * This method displays every user that can be deleted except users own
+     *
+     * @param model          model for Thymeleaf
+     * @param authentication authentication object
+     * @return delete_user.html
+     */
     @GetMapping("/delete_user")
     public String deleteUser(
             Model model,
@@ -40,6 +53,11 @@ public class AdminController {
         return "delete_user";
     }
 
+    /**
+     * This method deletes specified user
+     * @param id id of the user to be deleted
+     * @return reloads the page (delete_user.html)
+     */
     @PostMapping("/delete_user/{id}")
     public String deleteUser(
             @PathVariable("id") String id) {
@@ -49,7 +67,11 @@ public class AdminController {
         return "redirect:/delete_user";
     }
 
-
+    /**
+     * This method displays every set in the database
+     * @param model model for Thymeleaf
+     * @return delete_any_set.html
+     */
     @GetMapping("/delete_any_set")
     public String deleteAnySet(Model model) {
 
@@ -61,6 +83,13 @@ public class AdminController {
         return "delete_any_set";
     }
 
+    /**
+     * This method deletes specified set
+     *
+     * @param name name of the set to be deleted
+     * @return reloads the page (delete_any_set.html)
+     */
+    // TODO: dont delete set of different user of the same name
     @PostMapping("/delete_any_set/{name}")
     public String deleteAnySet(
             @PathVariable("name") String name) {
@@ -70,7 +99,11 @@ public class AdminController {
         return "redirect:/delete_any_set";
     }
 
-
+    /**
+     * This method displays every user in the database
+     * @param model model for Thymeleaf
+     * @return change_role.html
+     */
     @GetMapping("/change_role")
     public String changeRole(Model model) {
 
@@ -89,7 +122,12 @@ public class AdminController {
         return "change_role";
     }
 
-
+    /**
+     * This method changes the roles and/or username of users
+     * @param submission list of users to be updated
+     * @param model model for Thymeleaf
+     * @return reloads if something went wrong, if not then home.html
+     */
     @PostMapping("/change_role")
     public String changeRole(
             @ModelAttribute("userSubmission")

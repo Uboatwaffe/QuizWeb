@@ -40,6 +40,14 @@ public class QuizController {
         return "quiz";
     }
 
+    /**
+     * This method counts correct answers and remembers the ones which the user got wrong
+     *
+     * @param submission     quiz submission
+     * @param model          model for Thymeleaf
+     * @param authentication authentication object
+     * @return home.html if something went wrong, if not score.html
+     */
     @PostMapping("/submit_answers")
     public String submitAnswer(
             @ModelAttribute QuizSubmission submission,
@@ -82,8 +90,6 @@ public class QuizController {
                 score += correctQuestion.getPoints();
             } else {
                 correct = false;
-
-                System.out.println(userAnswers);
 
 
                 if (userAnswers.isEmpty()) {

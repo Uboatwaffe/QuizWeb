@@ -9,17 +9,29 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 
+/**
+ * This class is configuration for Spring Security
+ */
 @Configuration
 public class SecurityConfig {
 
+    /**
+     * This method returns password encoder
+     *
+     * @return Bcrypt password encoder
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * This method specifies filters
+     * @param http HttpSecurity object
+     * @return set up filter
+     */
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http)
-            throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
 
         http
                 .csrf(csrf -> csrf
