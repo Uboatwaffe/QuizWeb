@@ -6,6 +6,9 @@
     <title>WebQuiz</title>
 
     <link href="/css/style.css" rel="stylesheet">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+
 
 </head>
 
@@ -63,6 +66,7 @@
                 <input class="questionInput"
                        th:name="'questions[' + ${stat.index} + '].question'"
                        th:value="${question.question}"
+                       required
                        type="text">
 
 
@@ -213,6 +217,7 @@
                 <input class="openAnswer"
                        th:if="${question.type.name() == 'OPEN'}"
                        th:value="${question.answer}"
+                       required
                        type="text">
 
 
@@ -280,6 +285,8 @@
                 <input class="pointsInput"
                        th:name="'questions[' + ${stat.index} + '].points'"
                        th:value="${question.points}"
+                       min="0"
+                       required
                        type="number">
 
 
@@ -289,12 +296,12 @@
                 <!-- DELETE -->
 
                 <button class="deleteQuestion"
+                        th:data-id="${question.id}"
                         type="button">
 
                     Delete
 
                 </button>
-
 
             </div>
 

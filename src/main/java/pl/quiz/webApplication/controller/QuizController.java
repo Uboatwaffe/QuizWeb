@@ -1,6 +1,7 @@
 package pl.quiz.webApplication.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,6 +32,7 @@ public class QuizController {
      * @param model model for ThymeLeaf
      * @return quiz.html
      */
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/quiz/{name}")
     public String quiz(@PathVariable("name") String name, Model model, Authentication authentication) {
 
@@ -48,6 +50,7 @@ public class QuizController {
      * @param authentication authentication object
      * @return home.html if something went wrong, if not score.html
      */
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/submit_answers")
     public String submitAnswer(
             @ModelAttribute QuizSubmission submission,
@@ -142,6 +145,7 @@ public class QuizController {
      * @param authentication authentication object
      * @return score.html
      */
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/score")
     public String score(Model model, Authentication authentication) {
         model.addAttribute("username", authentication.getName());

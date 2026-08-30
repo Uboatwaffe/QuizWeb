@@ -2,14 +2,12 @@ package pl.quiz.webApplication.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import pl.quiz.webApplication.data.DataRepository;
 import pl.quiz.webApplication.enums.Type;
 import pl.quiz.webApplication.objects.Question;
@@ -34,6 +32,7 @@ public class SetController {
      * @param model model for Thymeleaf
      * @return new_set.html
      */
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/new_set")
     public String newSet(Model model) {
         model.addAttribute("set", new Set());
@@ -48,6 +47,7 @@ public class SetController {
      * @param model model for Thymeleaf to display any errors
      * @return reloads if something went wrong, if not then home.html
      */
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/new_set")
     public String createNewSet(
             @Valid @ModelAttribute("set") Set set,
@@ -95,6 +95,7 @@ public class SetController {
      * @param authentication authentication object
      * @return choose_set_to_delete.html
      */
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/choose_set_to_delete")
     public String chooseSetToDelete(
             Model model,
@@ -114,6 +115,7 @@ public class SetController {
      * @param authentication authentication object
      * @return reloads the page
      */
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/delete/{name}")
     public String deleteSet(
             @PathVariable("name") String name,
@@ -133,6 +135,7 @@ public class SetController {
      * @param authentication authentication object
      * @return choose_set_to_start.html
      */
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/choose_set_to_start")
     public String chooseSetToStart(
             Model model,
@@ -152,6 +155,7 @@ public class SetController {
      * @param authentication authentication object
      * @return choose_set_to_modify.html
      */
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/choose_set_to_modify")
     public String chooseSetToModify(
             Model model,
@@ -172,6 +176,7 @@ public class SetController {
      * @param authentication authentication object
      * @return modify_set.html
      */
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/modify/{name}")
     public String modify(
             @PathVariable("name") String name,
@@ -198,11 +203,14 @@ public class SetController {
      * @param authentication authentication object
      * @return reloads the page
      */
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/modify/{name}")
     public String updateSet(
             @PathVariable("name") String name,
             @ModelAttribute QuestionSubmission submission,
-            Authentication authentication) {
+            Authentication authentication,
+            Model model) {
+
 
         for (Question question : submission.getQuestions()) {
 
@@ -232,6 +240,25 @@ public class SetController {
             }
         }
 
-        return "redirect:/modify/" + name;
+        return "redirect:/home";
+    }
+
+    /**
+     * This method deletes a question
+     *
+     * @param id             id of the question to be deleted
+     * @param authentication authentication object
+     * @return response indicating whether deletion was successful
+     */
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping("/delete_question/{id}")
+    @ResponseBody
+    public boolean deleteQuestion(
+            @PathVariable("id") String id,
+            Authentication authentication) {
+
+        String name = dataRepository.getSetFromId(id).getName();
+
+        return dataRepository.deleteQuestion(id, authentication.getName());
     }
 }

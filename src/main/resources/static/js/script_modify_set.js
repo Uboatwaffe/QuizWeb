@@ -4,9 +4,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const addButton = document.getElementById("newQuestion");
     const form = document.getElementById("questionForm");
 
-    let questionIndex = container.querySelectorAll(".question").length;
+    let questionIndex =
+        container.querySelectorAll(".question").length;
+
 
     setupExistingQuestions();
+
+
+    /*
+     * ==========================
+     * ADD QUESTION
+     * ==========================
+     */
 
     addButton.addEventListener("click", () => {
         createNewQuestion();
@@ -21,7 +30,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function setupExistingQuestions() {
 
-        const questions = container.querySelectorAll(".question");
+        const questions =
+            container.querySelectorAll(".question");
 
         questions.forEach(question => {
 
@@ -33,13 +43,15 @@ document.addEventListener("DOMContentLoaded", () => {
              * DATE answer
              */
 
-            const type = question.querySelector(".typeSelect")?.value;
+            const type =
+                question.querySelector(".typeSelect")?.value;
 
             if (type === "DATE") {
                 loadDateAnswer(question);
             }
 
         });
+
     }
 
 
@@ -51,7 +63,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function setupTypeSelector(question) {
 
-        const select = question.querySelector(".typeSelect");
+        const select =
+            question.querySelector(".typeSelect");
 
         if (!select) {
             return;
@@ -65,6 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
         });
+
     }
 
 
@@ -82,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
         buttons.forEach(button => {
 
             /*
-             * Avoid adding the same listener twice
+             * Avoid adding the same listener twice.
              */
 
             if (button.dataset.listenerAttached === "true") {
@@ -90,6 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             button.dataset.listenerAttached = "true";
+
 
             button.addEventListener("click", () => {
 
@@ -101,7 +116,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
                 /*
-                 * ABCD allows multiple answers.
+                 * ==========================
+                 * ABCD
+                 * ==========================
+                 *
+                 * Multiple answers are allowed.
                  *
                  * Example:
                  *
@@ -116,7 +135,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
                 /*
-                 * Other types only allow one answer.
+                 * ==========================
+                 * TF / YN
+                 * ==========================
+                 *
+                 * Only one answer is allowed.
                  */
 
                 else {
@@ -138,7 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /*
      * ==========================
-     * DELETE
+     * DELETE QUESTION
      * ==========================
      */
 
@@ -157,11 +180,101 @@ document.addEventListener("DOMContentLoaded", () => {
 
         deleteButton.dataset.listenerAttached = "true";
 
-        deleteButton.addEventListener("click", () => {
 
-            question.remove();
+        deleteButton.addEventListener("click", async () => {
 
-            updateIndexes();
+            const id =
+                deleteButton.dataset.id;
+
+
+            /*
+             * ==========================
+             * NEW QUESTION
+             * ==========================
+             *
+             * It has not been saved yet,
+             * so there is nothing to delete
+             * from the database.
+             */
+
+            if (!id) {
+
+                question.remove();
+
+                updateIndexes();
+
+                return;
+            }
+
+
+            /*
+             * ==========================
+             * EXISTING QUESTION
+             * ==========================
+             */
+
+            const csrfToken =
+                document.querySelector(
+                    'meta[name="_csrf"]'
+                )?.content;
+
+            const csrfHeader =
+                document.querySelector(
+                    'meta[name="_csrf_header"]'
+                )?.content;
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `/delete_question/${id}`,
+                        {
+                            method: "POST",
+
+                            headers: {
+                                [csrfHeader]: csrfToken
+                            }
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        `Delete failed: ${response.status}`
+                    );
+
+                }
+
+
+                const deleted =
+                    await response.json();
+
+
+                if (deleted) {
+
+                    question.remove();
+
+                    updateIndexes();
+
+                } else {
+
+                    alert(
+                        "Could not delete the question."
+                    );
+
+                }
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "An error occurred while deleting the question."
+                );
+
+            }
 
         });
 
@@ -176,26 +289,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function createNewQuestion() {
 
-        const index = questionIndex;
+        const index =
+            questionIndex;
 
         questionIndex++;
 
 
-        const div = document.createElement("div");
+        const div =
+            document.createElement("div");
 
         div.className = "question";
 
 
         div.innerHTML = `
 
-<input type="hidden"
+<input
+type="hidden"
 name="questions[${index}].id"
-value="">
+value=""
+    >
 
-
-    <input type="hidden"
+    <input
+type="hidden"
 name="questions[${index}].set"
-value="${getSetName()}">
+value="${getSetName()}"
+    >
 
 
     <label>
@@ -204,10 +322,13 @@ value="${getSetName()}">
 
 <br>
 
-    <input type="text"
-           name="questions[${index}].question"
-           class="questionInput"
-           value="Insert new question here">
+    <input
+        type="text"
+        name="questions[${index}].question"
+        class="questionInput"
+        value="Insert new question here"
+        required
+    >
 
 
         <hr>
@@ -219,8 +340,10 @@ value="${getSetName()}">
 
             <br>
 
-                <select name="questions[${index}].type"
-                        class="typeSelect">
+                <select
+                    name="questions[${index}].type"
+                    class="typeSelect"
+                >
 
                     <option value="ABCD">
                         ABCD
@@ -267,20 +390,24 @@ value="${getSetName()}">
 
                             <br>
 
-                                <input type="number"
-                                       name="questions[${index}].points"
-                                       class="pointsInput"
-                                       value="0">
+                                <input
+                                    type="number"
+                                    name="questions[${index}].points"
+                                    class="pointsInput"
+                                    value="0"
+                                    min="0"
+                                    required
+                                >
 
 
                                     <hr>
 
 
-                                        <button type="button"
-                                                class="deleteQuestion">
-
+                                        <button
+                                            type="button"
+                                            class="deleteQuestion"
+                                        >
                                             Delete
-
                                         </button>
 
                                         `;
@@ -292,6 +419,10 @@ value="${getSetName()}">
         const select =
             div.querySelector(".typeSelect");
 
+
+        /*
+        * Default type = ABCD
+        */
 
         updateAnswerOptions(
             div,
@@ -320,16 +451,22 @@ value="${getSetName()}">
     * ==========================
     */
 
-    function updateAnswerOptions(question, type) {
+    function updateAnswerOptions(
+        question,
+        type
+    ) {
 
         const answerContainer =
             question.querySelector(".answerContainer");
+
 
         answerContainer.innerHTML = "";
 
 
         /*
+         * ==========================
          * ABCD
+         * ==========================
          */
 
         if (type === "ABCD") {
@@ -338,27 +475,35 @@ value="${getSetName()}">
 
                 <div class="answerButtons">
 
-                    <button type="button"
-                            class="answerButton"
-                            data-answer="A">
+                    <button
+                        type="button"
+                        class="answerButton"
+                        data-answer="A"
+                    >
                         A
                     </button>
 
-                    <button type="button"
-                            class="answerButton"
-                            data-answer="B">
+                    <button
+                        type="button"
+                        class="answerButton"
+                        data-answer="B"
+                    >
                         B
                     </button>
 
-                    <button type="button"
-                            class="answerButton"
-                            data-answer="C">
+                    <button
+                        type="button"
+                        class="answerButton"
+                        data-answer="C"
+                    >
                         C
                     </button>
 
-                    <button type="button"
-                            class="answerButton"
-                            data-answer="D">
+                    <button
+                        type="button"
+                        class="answerButton"
+                        data-answer="D"
+                    >
                         D
                     </button>
 
@@ -370,7 +515,9 @@ value="${getSetName()}">
 
 
         /*
+         * ==========================
          * TRUE / FALSE
+         * ==========================
          */
 
         else if (type === "TF") {
@@ -379,15 +526,19 @@ value="${getSetName()}">
 
                 <div class="answerButtons">
 
-                    <button type="button"
-                            class="answerButton"
-                            data-answer="TRUE">
+                    <button
+                        type="button"
+                        class="answerButton"
+                        data-answer="TRUE"
+                    >
                         True
                     </button>
 
-                    <button type="button"
-                            class="answerButton"
-                            data-answer="FALSE">
+                    <button
+                        type="button"
+                        class="answerButton"
+                        data-answer="FALSE"
+                    >
                         False
                     </button>
 
@@ -399,7 +550,9 @@ value="${getSetName()}">
 
 
         /*
+         * ==========================
          * YES / NO
+         * ==========================
          */
 
         else if (type === "YN") {
@@ -408,15 +561,19 @@ value="${getSetName()}">
 
                 <div class="answerButtons">
 
-                    <button type="button"
-                            class="answerButton"
-                            data-answer="YES">
+                    <button
+                        type="button"
+                        class="answerButton"
+                        data-answer="YES"
+                    >
                         Yes
                     </button>
 
-                    <button type="button"
-                            class="answerButton"
-                            data-answer="NO">
+                    <button
+                        type="button"
+                        class="answerButton"
+                        data-answer="NO"
+                    >
                         No
                     </button>
 
@@ -428,16 +585,21 @@ value="${getSetName()}">
 
 
         /*
+         * ==========================
          * OPEN
+         * ==========================
          */
 
         else if (type === "OPEN") {
 
             answerContainer.innerHTML = `
 
-                <input type="text"
-                       class="openAnswer"
-                       placeholder="Answer">
+                <input
+                    type="text"
+                    class="openAnswer"
+                    placeholder="Answer"
+                    required
+                >
 
             `;
 
@@ -445,7 +607,9 @@ value="${getSetName()}">
 
 
         /*
+         * ==========================
          * DATE
+         * ==========================
          */
 
         else if (type === "DATE") {
@@ -456,36 +620,48 @@ value="${getSetName()}">
 
                     <div class="dateInputs">
 
-                        <label>Day</label>
+                        <label>
+                            Day
+                        </label>
 
-                        <input type="number"
-                               class="dayInput"
-                               min="1"
-                               max="31">
-
-                    </div>
-
-
-                    <div class="dateInputs">
-
-                        <label>Month</label>
-
-                        <input type="number"
-                               class="monthInput"
-                               min="1"
-                               max="12">
+                        <input
+                            type="number"
+                            class="dayInput"
+                            min="1"
+                            max="31"
+                        >
 
                     </div>
 
 
                     <div class="dateInputs">
 
-                        <label>Year</label>
+                        <label>
+                            Month
+                        </label>
 
-                        <input type="number"
-                               class="yearInput"
-                               min="1"
-                               max="9999">
+                        <input
+                            type="number"
+                            class="monthInput"
+                            min="1"
+                            max="12"
+                        >
+
+                    </div>
+
+
+                    <div class="dateInputs">
+
+                        <label>
+                            Year
+                        </label>
+
+                        <input
+                            type="number"
+                            class="yearInput"
+                            min="1"
+                            max="9999"
+                        >
 
                     </div>
 
@@ -496,6 +672,11 @@ value="${getSetName()}">
         }
 
 
+        /*
+         * Attach button listeners to newly
+         * generated answer buttons.
+         */
+
         setupAnswerButtons(question);
 
     }
@@ -503,23 +684,29 @@ value="${getSetName()}">
 
     /*
     * ==========================
-    * LOAD DATE
+    * LOAD DATE ANSWER
     * ==========================
     */
 
     function loadDateAnswer(question) {
 
-        const date = question.dataset.answer;
+        const date =
+            question.dataset.answer;
+
 
         if (!date) {
             return;
         }
 
-        const parts = date.split("/");
+
+        const parts =
+            date.split("/");
+
 
         if (parts.length !== 3) {
             return;
         }
+
 
         const day =
             question.querySelector(".dayInput");
@@ -552,24 +739,179 @@ value="${getSetName()}">
     * ==========================
     */
 
-    form.addEventListener("submit", () => {
+    form.addEventListener("submit", (event) => {
 
         const questions =
             container.querySelectorAll(".question");
 
 
-        questions.forEach(question => {
+        /*
+         * ==========================
+         * VALIDATE ALL QUESTIONS
+         * ==========================
+         */
+
+        for (const question of questions) {
 
             const type =
                 question.querySelector(".typeSelect")?.value;
 
 
             /*
-             * Remove previous generated answer.
+             * ==========================
+             * ABCD / TF / YN
+             * ==========================
+             */
+
+            if (
+                type === "ABCD" ||
+                type === "TF" ||
+                type === "YN"
+            ) {
+
+                const selected =
+                    question.querySelectorAll(
+                        ".answerButton.selected"
+                    );
+
+
+                /*
+                 * At least one answer
+                 * must be selected.
+                 *
+                 * ABCD:
+                 * multiple answers allowed.
+                 *
+                 * TF / YN:
+                 * only one answer is possible.
+                 */
+
+                if (selected.length === 0) {
+
+                    event.preventDefault();
+
+
+                    alert(
+                        "Please select at least one answer for every question."
+                    );
+
+
+                    question.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center"
+                    });
+
+
+                    return;
+                }
+
+            }
+
+
+            /*
+             * ==========================
+             * OPEN
+             * ==========================
+             */
+
+            else if (type === "OPEN") {
+
+                const open =
+                    question.querySelector(".openAnswer");
+
+
+                if (
+                    !open ||
+                    !open.value.trim()
+                ) {
+
+                    event.preventDefault();
+
+
+                    alert(
+                        "Please provide an answer for every open question."
+                    );
+
+
+                    open?.focus();
+
+
+                    return;
+                }
+
+            }
+
+
+            /*
+             * ==========================
+             * DATE
+             * ==========================
+             */
+
+            else if (type === "DATE") {
+
+                const day =
+                    question.querySelector(
+                        ".dayInput"
+                    )?.value;
+
+                const month =
+                    question.querySelector(
+                        ".monthInput"
+                    )?.value;
+
+                const year =
+                    question.querySelector(
+                        ".yearInput"
+                    )?.value;
+
+
+                if (
+                    !day ||
+                    !month ||
+                    !year
+                ) {
+
+                    event.preventDefault();
+
+
+                    alert(
+                        "Please provide a complete date for every date question."
+                    );
+
+
+                    return;
+                }
+
+            }
+
+        }
+
+
+        /*
+         * ==========================
+         * GENERATE ANSWER INPUTS
+         * ==========================
+         */
+
+        questions.forEach(question => {
+
+            const type =
+                question.querySelector(
+                    ".typeSelect"
+                )?.value;
+
+
+            /*
+             * Remove previous generated
+             * answer input.
              */
 
             const old =
-                question.querySelector(".generatedAnswer");
+                question.querySelector(
+                    ".generatedAnswer"
+                );
+
 
             if (old) {
                 old.remove();
@@ -577,7 +919,9 @@ value="${getSetName()}">
 
 
             /*
+             * ==========================
              * ABCD / TF / YN
+             * ==========================
              */
 
             if (
@@ -605,11 +949,14 @@ value="${getSetName()}">
 
                 input.type = "hidden";
 
+
                 input.name =
                     findAnswerName(question);
 
+
                 input.value =
                     answers.join(",");
+
 
                 input.className =
                     "generatedAnswer";
@@ -621,13 +968,17 @@ value="${getSetName()}">
 
 
             /*
+             * ==========================
              * OPEN
+             * ==========================
              */
 
             else if (type === "OPEN") {
 
                 const open =
-                    question.querySelector(".openAnswer");
+                    question.querySelector(
+                        ".openAnswer"
+                    );
 
 
                 const input =
@@ -636,11 +987,14 @@ value="${getSetName()}">
 
                 input.type = "hidden";
 
+
                 input.name =
                     findAnswerName(question);
 
+
                 input.value =
                     open?.value ?? "";
+
 
                 input.className =
                     "generatedAnswer";
@@ -652,19 +1006,29 @@ value="${getSetName()}">
 
 
             /*
+             * ==========================
              * DATE
+             * ==========================
              */
 
             else if (type === "DATE") {
 
                 const day =
-                    question.querySelector(".dayInput")?.value ?? "";
+                    question.querySelector(
+                        ".dayInput"
+                    )?.value ?? "";
+
 
                 const month =
-                    question.querySelector(".monthInput")?.value ?? "";
+                    question.querySelector(
+                        ".monthInput"
+                    )?.value ?? "";
+
 
                 const year =
-                    question.querySelector(".yearInput")?.value ?? "";
+                    question.querySelector(
+                        ".yearInput"
+                    )?.value ?? "";
 
 
                 const input =
@@ -673,11 +1037,14 @@ value="${getSetName()}">
 
                 input.type = "hidden";
 
+
                 input.name =
                     findAnswerName(question);
 
+
                 input.value =
                     `${day}/${month}/${year}`;
+
 
                 input.className =
                     "generatedAnswer";
@@ -694,7 +1061,7 @@ value="${getSetName()}">
 
     /*
     * ==========================
-    * FIND ANSWER FIELD
+    * FIND ANSWER NAME
     * ==========================
     */
 
