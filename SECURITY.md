@@ -5,9 +5,10 @@
 Only the section with :white_check_mark: are secure
 
 | Version | Supported          |
-| ------- | ------------------ |
+|---------|--------------------|
 | v1.0    | :x:                |
-
+| v2.0    | :x:                |
+| v2.1    | :white_check_mark: |
 
 ## Reporting a Vulnerability
 
