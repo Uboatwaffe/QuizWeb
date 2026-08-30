@@ -19,15 +19,21 @@ import pl.quiz.webApplication.submissons.QuizSubmission;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is a controller responsible for handling quiz logic
+ */
 @Controller
 @RequiredArgsConstructor
 public class QuizController {
 
+    /**
+     * This field is automatically injected by Spring
+     */
     private final DataRepository dataRepository;
 
     /**
      * Returns HTML page
-     *
+     * @param authentication authentication object
      * @param name  name of the quiz to be run
      * @param model model for ThymeLeaf
      * @return quiz.html

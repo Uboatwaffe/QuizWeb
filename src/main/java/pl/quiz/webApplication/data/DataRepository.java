@@ -170,7 +170,6 @@ public class DataRepository {
 
     /**
      * This method returns question of specified id
-     *
      * @param id id of the question
      * @return question details
      */
@@ -197,6 +196,7 @@ public class DataRepository {
     /**
      * This method deletes question
      * @param id id of the question to be deleted
+     * @param username username of the current user
      * @return TRUE if successful, if not then FALSE
      */
     public boolean deleteQuestion(String id, String username) {

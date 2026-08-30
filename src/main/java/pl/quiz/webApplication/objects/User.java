@@ -17,18 +17,37 @@ import pl.quiz.webApplication.enums.Role;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
+
+    /**
+     * ID of user
+     */
     @Id
     private String id;
 
+    /**
+     * Users login
+     */
     @Field("username")
     private String login;
 
+    /**
+     * Users password
+     */
     @Field("password")
     private String password;
 
+    /**
+     * Users role
+     */
     @Field("role")
     private Role role;
 
+    /**
+     * Constructor without id
+     * @param login users login
+     * @param password users password
+     * @param role users role
+     */
     public User(String login, String password, Role role) {
         this.login = login;
         this.password = password;

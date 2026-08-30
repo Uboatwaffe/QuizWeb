@@ -208,8 +208,7 @@ public class SetController {
     public String updateSet(
             @PathVariable("name") String name,
             @ModelAttribute QuestionSubmission submission,
-            Authentication authentication,
-            Model model) {
+            Authentication authentication) {
 
 
         for (Question question : submission.getQuestions()) {
@@ -256,8 +255,6 @@ public class SetController {
     public boolean deleteQuestion(
             @PathVariable("id") String id,
             Authentication authentication) {
-
-        String name = dataRepository.getSetFromId(id).getName();
 
         return dataRepository.deleteQuestion(id, authentication.getName());
     }

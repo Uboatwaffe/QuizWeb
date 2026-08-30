@@ -87,7 +87,7 @@ public class AdminController {
 
     /**
      * This method deletes specified set
-     *
+     * @param owner owner of the set
      * @param name name of the set to be deleted
      * @return reloads the page (delete_any_set.html)
      */
@@ -105,6 +105,7 @@ public class AdminController {
     /**
      * This method displays every user in the database
      * @param model model for Thymeleaf
+     * @param authentication authentication object
      * @return change_role.html
      */
     @PreAuthorize("hasRole('ADMIN')")

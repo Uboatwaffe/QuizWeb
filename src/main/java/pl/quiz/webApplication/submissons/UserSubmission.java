@@ -7,6 +7,9 @@ import pl.quiz.webApplication.objects.User;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is a wrapper class for users
+ */
 @Getter
 @Setter
 public class UserSubmission {

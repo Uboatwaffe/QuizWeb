@@ -6,6 +6,9 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is a wrapper for user answers
+ */
 @Setter
 @Getter
 public class AnswerSubmission {
