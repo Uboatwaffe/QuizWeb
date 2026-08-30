@@ -7,5 +7,5 @@ package pl.quiz.webApplication.enums;
  * @version 0.1
  */
 public enum Role {
-    ADMIN, USER, GUEST
+    ADMIN, USER
 }

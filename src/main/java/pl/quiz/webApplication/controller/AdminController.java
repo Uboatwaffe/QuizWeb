@@ -111,14 +111,18 @@ public class AdminController {
      */
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/change_role")
-    public String changeRole(Model model) {
+    public String changeRole(Model model, Authentication authentication) {
 
         UserSubmission submission =
                 new UserSubmission();
 
-        submission.setUsers(
-                dataRepository.getAllUsers()
+        List<User> allUsers = dataRepository.getAllUsers();
+
+        allUsers.removeIf(user ->
+                user.getLogin().equals(authentication.getName())
         );
+
+        submission.setUsers(allUsers);
 
         model.addAttribute(
                 "userSubmission",
@@ -162,9 +166,6 @@ public class AdminController {
                 return "change_role";
             }
         }
-
-        //TODO: forbid the admin from changing himself
-
         return "redirect:/home";
     }
 }
