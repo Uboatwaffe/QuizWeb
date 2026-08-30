@@ -207,24 +207,10 @@ public class SetController {
     @PostMapping("/modify/{name}")
     public String updateSet(
             @PathVariable("name") String name,
-            @Valid @ModelAttribute QuestionSubmission submission,
-            BindingResult result,
+            @ModelAttribute QuestionSubmission submission,
             Authentication authentication,
             Model model) {
 
-        if (result.hasErrors()) {
-
-            model.addAttribute("set", new Set(name));
-
-            model.addAttribute(
-                    "questions",
-                    dataRepository.getQuestions(
-                            authentication.getName(),
-                            name
-                    )
-            );
-            return "modify_set";
-        }
 
         for (Question question : submission.getQuestions()) {
 
