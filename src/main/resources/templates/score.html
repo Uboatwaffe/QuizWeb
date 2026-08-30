@@ -1,35 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>WebQuiz</title>
-  <link href="/css/style.css" rel="stylesheet">
+    <title>WebQuiz</title>
+    <link href="/css/style.css" rel="stylesheet">
 </head>
 <body>
 
 <div>
 
-  <h1>
-    Hello
-    <span th:text="${user.login}"></span>
-  </h1>
+    <h1>
+        Hello
+        <span th:text="${username}"></span>
+    </h1>
 
 
-  <div class="container">
-    <h3>
-      You scored:
-      <span id="score"></span>
-      /
-      <span id="out"></span>
-    </h3>
+    <div class="container">
+        <h3>
+            You scored:
+            <span id="score" th:text="${score}"></span>
+            /
+            <span id="out" th:text="${maxPoints}"></span>
+        </h3>
 
-    <hr>
+        <hr>
 
-    <button onclick="window.location.href='/home'">Finish</button>
+        <div th:if="${mistakes}">
+            <h3>Questions you got wrong:</h3>
 
-  </div>
+            <div class="question" th:each="question : ${questions}">
+                <h3 th:text="${question.question}"></h3>
+                <h5 th:text="'Points: ' + ${question.points}"></h5>
+
+                <h4 th:text="'You answered' + ${question.userAnswer} + ', correct answer is: ' + ${question.correctAnswer}"></h4>
+
+            </div>
+        </div>
+
+        <button onclick="window.location.href='/home'">Finish</button>
+
+    </div>
 </div>
 
-<script src="/js/script_score.js"></script>
 
 </body>
 </html>

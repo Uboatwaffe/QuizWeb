@@ -13,7 +13,7 @@
     <div class="container">
 
         <form method="post"
-              th:action="@{/set/new_set}"
+              th:action="@{/new_set}"
               th:object="${set}">
 
             <label class="label">
@@ -26,6 +26,11 @@
                    type="text">
 
             <br>
+
+            <div class="text-danger"
+                 th:if="${error}"
+                 th:text="${error}">
+            </div>
 
             <div class="text-danger"
                  th:errors="*{name}"

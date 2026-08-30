@@ -9,12 +9,35 @@
 <div class="container">
     <h1>Available sets:</h1>
 
-    <div id="response">Loading...</div>
+    <div class="text-danger"
+         th:if="${error}"
+         th:text="${error}">
+    </div>
+
+    <div th:if="${sets.isEmpty()}">
+        <p class="no-sets">
+            No sets available.
+        </p>
+    </div>
+
+    <div class="item"
+         th:each="set : ${sets}">
+
+        <form method="get"
+              th:action="@{/modify/{name}(name=${set.name})}">
+
+            <button class="set-button"
+                    th:text="${set.name}"
+                    type="submit">
+            </button>
+
+        </form>
+
+    </div>
 
 
     <button id="returnBtn" onclick="window.location.href='/home'">Return</button>
 </div>
 
-<script src="/js/script_modify.js"></script>
 </body>
 </html>

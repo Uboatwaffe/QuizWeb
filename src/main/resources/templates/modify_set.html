@@ -1,31 +1,351 @@
 <!DOCTYPE html>
 <html lang="pl-PL">
+
 <head>
+
     <title>WebQuiz</title>
+
     <link href="/css/style.css" rel="stylesheet">
+
 </head>
+
 <body>
 
 <div class="container">
+
     <h1>Questions</h1>
+
     <h3>
         Set:
-        <span id="setName" th:text="${set.name}"></span>
+        <span id="setName"
+              th:text="${set.name}">
+        </span>
     </h3>
 
-    <div id="response">Loading...</div>
 
-    <div id="newDivQuestion"></div>
+    <form id="questionForm"
+          method="post"
+          th:action="@{'/modify/' + ${set.name}}">
 
-    <button id="newQuestion" onclick="newQuestion()">New question</button>
+
+        <div id="questionsContainer">
+
+
+            <!-- EXISTING QUESTIONS -->
+
+            <div class="question"
+                 th:attr="data-answer=${question.answer}"
+                 th:each="question, stat : ${questions}">
+
+
+                <!-- ID -->
+
+                <input th:name="'questions[' + ${stat.index} + '].id'"
+                       th:value="${question.id}"
+                       type="hidden">
+
+
+                <!-- SET -->
+
+                <input th:name="'questions[' + ${stat.index} + '].set'"
+                       th:value="${question.set}"
+                       type="hidden">
+
+
+                <!-- QUESTION -->
+
+                <label>
+                    Question:
+                </label>
+
+                <br>
+
+                <input class="questionInput"
+                       th:name="'questions[' + ${stat.index} + '].question'"
+                       th:value="${question.question}"
+                       type="text">
+
+
+                <hr>
+
+
+                <!-- TYPE -->
+
+                <label>
+                    Type:
+                </label>
+
+                <br>
+
+                <select class="typeSelect"
+                        th:name="'questions[' + ${stat.index} + '].type'">
+
+                    <option th:selected="${question.type.name() == 'ABCD'}"
+                            value="ABCD">
+                        ABCD
+                    </option>
+
+                    <option th:selected="${question.type.name() == 'TF'}"
+                            value="TF">
+                        True or False
+                    </option>
+
+                    <option th:selected="${question.type.name() == 'OPEN'}"
+                            value="OPEN">
+                        Open question
+                    </option>
+
+                    <option th:selected="${question.type.name() == 'DATE'}"
+                            value="DATE">
+                        Date question
+                    </option>
+
+                    <option th:selected="${question.type.name() == 'YN'}"
+                            value="YN">
+                        Yes or No
+                    </option>
+
+                </select>
+
+
+                <hr>
+
+
+                <!-- ANSWER -->
+
+                <label>
+                    Answer:
+                </label>
+
+                <br>
+
+
+                <!-- ABCD -->
+
+                <div class="answerButtons"
+                     th:if="${question.type.name() == 'ABCD'}">
+
+
+                    <button class="answerButton"
+                            data-answer="A"
+                            th:classappend="${question.answer != null and #strings.contains(question.answer, 'A')} ? ' selected' : ''"
+                            type="button">
+                        A
+                    </button>
+
+
+                    <button class="answerButton"
+                            data-answer="B"
+                            th:classappend="${question.answer != null and #strings.contains(question.answer, 'B')} ? ' selected' : ''"
+                            type="button">
+                        B
+                    </button>
+
+
+                    <button class="answerButton"
+                            data-answer="C"
+                            th:classappend="${question.answer != null and #strings.contains(question.answer, 'C')} ? ' selected' : ''"
+                            type="button">
+                        C
+                    </button>
+
+
+                    <button class="answerButton"
+                            data-answer="D"
+                            th:classappend="${question.answer != null and #strings.contains(question.answer, 'D')} ? ' selected' : ''"
+                            type="button">
+                        D
+                    </button>
+
+                </div>
+
+
+                <!-- TRUE / FALSE -->
+
+                <div class="answerButtons"
+                     th:if="${question.type.name() == 'TF'}">
+
+
+                    <button class="answerButton"
+                            data-answer="TRUE"
+                            th:classappend="${question.answer == 'TRUE'} ? ' selected' : ''"
+                            type="button">
+                        True
+                    </button>
+
+
+                    <button class="answerButton"
+                            data-answer="FALSE"
+                            th:classappend="${question.answer == 'FALSE'} ? ' selected' : ''"
+                            type="button">
+                        False
+                    </button>
+
+                </div>
+
+
+                <!-- YES / NO -->
+
+                <div class="answerButtons"
+                     th:if="${question.type.name() == 'YN'}">
+
+
+                    <button class="answerButton"
+                            data-answer="YES"
+                            th:classappend="${question.answer == 'YES'} ? ' selected' : ''"
+                            type="button">
+                        Yes
+                    </button>
+
+
+                    <button class="answerButton"
+                            data-answer="NO"
+                            th:classappend="${question.answer == 'NO'} ? ' selected' : ''"
+                            type="button">
+                        No
+                    </button>
+
+                </div>
+
+
+                <!-- OPEN -->
+
+                <input class="openAnswer"
+                       th:if="${question.type.name() == 'OPEN'}"
+                       th:value="${question.answer}"
+                       type="text">
+
+
+                <!-- DATE -->
+
+                <div class="dateContainer"
+                     th:if="${question.type.name() == 'DATE'}">
+
+
+                    <div class="dateInputs">
+
+                        <label>
+                            Day
+                        </label>
+
+                        <input class="dayInput"
+                               max="31"
+                               min="1"
+                               type="number">
+
+                    </div>
+
+
+                    <div class="dateInputs">
+
+                        <label>
+                            Month
+                        </label>
+
+                        <input class="monthInput"
+                               max="12"
+                               min="1"
+                               type="number">
+
+                    </div>
+
+
+                    <div class="dateInputs">
+
+                        <label>
+                            Year
+                        </label>
+
+                        <input class="yearInput"
+                               max="9999"
+                               min="1"
+                               type="number">
+
+                    </div>
+
+                </div>
+
+
+                <hr>
+
+
+                <!-- POINTS -->
+
+                <label>
+                    Points:
+                </label>
+
+                <br>
+
+                <input class="pointsInput"
+                       th:name="'questions[' + ${stat.index} + '].points'"
+                       th:value="${question.points}"
+                       type="number">
+
+
+                <hr>
+
+
+                <!-- DELETE -->
+
+                <button class="deleteQuestion"
+                        type="button">
+
+                    Delete
+
+                </button>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- ADD QUESTION -->
+
+        <button id="newQuestion"
+                type="button">
+
+            Add question
+
+        </button>
+
+
+        <br>
+        <br>
+
+
+        <!-- SUBMIT -->
+
+        <button id="submitButton"
+                type="submit">
+
+            Submit
+
+        </button>
+
+    </form>
+
 
     <hr>
 
-    <button id="returnButton" onclick="window.location.replace('/home')">Return</button>
-    <button id="submitButton" onclick="submitChanges()">Submit</button>
+
+    <!-- RETURN -->
+
+    <button id="returnButton"
+            onclick="window.location.replace('/home')"
+            type="button">
+
+        Return
+
+    </button>
 
 </div>
 
+
 <script src="/js/script_modify_set.js"></script>
+
 </body>
+
 </html>
+

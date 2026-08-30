@@ -1,6 +1,6 @@
 package pl.quiz.webApplication.data;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import pl.quiz.webApplication.enums.Role;
 import pl.quiz.webApplication.enums.Type;
 import pl.quiz.webApplication.objects.Question;
-import pl.quiz.webApplication.objects.SessionUser;
 import pl.quiz.webApplication.objects.Set;
 import pl.quiz.webApplication.objects.User;
 
@@ -24,19 +23,18 @@ import java.util.List;
  * @version 0.1
  */
 @Repository
+@RequiredArgsConstructor
 public class DataRepository {
 
     /**
-     * This field is automatically set up by Spring Boot
+     * This field is automatically injected by Spring
      */
-    @Autowired
-    MongoTemplate mongoTemplate;
+    private final MongoTemplate mongoTemplate;
 
     /**
-     * This field is automatically set up by Spring Boot
+     * This field is automatically injected by Spring
      */
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * This method checks whether user had given correct credentials
@@ -56,7 +54,9 @@ public class DataRepository {
      * @param role role (ADMIN or USER)
      * @return User of given details
      */
-    public User addUser(String login, String password, Role role){
+    public User addUser(String login,
+                        String password,
+                        Role role) {
 
         Query query = new Query(Criteria.where("username").is(login));
 
@@ -75,10 +75,18 @@ public class DataRepository {
      * @param collection collection in which it will be looked for
      * @param key key of searched value
      * @param value searched value
+     * @param key2 key of second searched value
+     * @param value2 second searched value
      * @param classInstance instance of class of result
      * @return TRUE if existed, if not then FALSE
      */
-    public boolean checkIfExists(String collection, String key, String value, String key2, String value2, @SuppressWarnings("rawtypes") Class classInstance) {
+    public boolean checkIfExists(String collection,
+                                 String key,
+                                 String value,
+                                 String key2,
+                                 String value2,
+                                 @SuppressWarnings("rawtypes") Class classInstance) {
+
         Query query = new Query(Criteria
                 .where(key).is(value)
                 .and(key2).is(value2));
@@ -97,7 +105,13 @@ public class DataRepository {
      * @param owner who is the owner of this question
      * @return Question.java
      */
-    public Question addQuestion(String question, Type type, String answer, int points, String set, String owner){
+    public Question addQuestion(String question,
+                                Type type,
+                                String answer,
+                                int points,
+                                String set,
+                                String owner) {
+
         return mongoTemplate.insert(new Question(question, type, answer, points, set, owner), "question");
     }
 
@@ -127,30 +141,56 @@ public class DataRepository {
 
     /**
      * This method deletes a set
-     * @param name name of the set to be deleted
+     * @param name  name of the set to be deleted
      * @param login login of the current user
-     * @return TRUE if successful, if not then FALSE
      */
-    public boolean deleteSet(String name, String login){
+    public void deleteSet(String name,
+                          String login) {
         Query query = new Query(Criteria
                 .where("set").is(name)
                 .and("owner").is(login));
 
-        return mongoTemplate.remove(query, "question").wasAcknowledged();
+        mongoTemplate.remove(query, "question").wasAcknowledged();
     }
 
     /**
      * This method returns list of all questions in specified set
-     * @param sessionUser current user details
+     * @param login current user login
      * @param set set of the questions
      * @return List of questions
      */
-    public List<Question> getQuestions(SessionUser sessionUser, String set){
+    public List<Question> getQuestions(String login, String set) {
         Query query = new Query(Criteria
                 .where("set").is(set)
-                .and("owner").is(sessionUser.getLogin()));
+                .and("owner").is(login));
 
         return mongoTemplate.find(query, Question.class, "question");
+    }
+
+    /**
+     * This method returns question of specified id
+     *
+     * @param id id of the question
+     * @return question details
+     */
+    public Question getQuestionById(String id) {
+        Query query = new Query(Criteria.where("_id").is(id));
+
+        return mongoTemplate.findOne(query, Question.class, "question");
+    }
+
+    /**
+     * This method returns set details based on questions id
+     * @param id id of the question
+     * @return set details
+     */
+    public Set getSetFromId(String id) {
+        Query query = new Query(Criteria.where("_id").is(id));
+
+        query.fields()
+                .include("set");
+
+        return mongoTemplate.findOne(query, Set.class, "question");
     }
 
     /**
@@ -167,9 +207,8 @@ public class DataRepository {
     /**
      * This method updates a question
      * @param question details of a question
-     * @return TRUE if successful, if not then FALSE
      */
-    public boolean updateQuestion(Question question){
+    public void updateQuestion(Question question){
         Query query = new Query(Criteria.where("_id").is(question.getId()));
 
         Update update = new Update();
@@ -178,46 +217,20 @@ public class DataRepository {
         update.set("points", question.getPoints());
         update.set("type", question.getType());
 
-        return mongoTemplate.updateFirst(query, update, "question").wasAcknowledged();
+        mongoTemplate.updateFirst(query, update, "question").wasAcknowledged();
 
-    }
-
-    /**
-     * This method cheks whether answer provided by user is correct
-     * @param id id of the question
-     * @param userAnswer answer provided
-     * @return number of points if answered correctly, if not then 0
-     */
-    public int checkAnswer(String id, String userAnswer){
-        Query query = new Query(Criteria.where("_id").is(id));
-
-        query.fields()
-                .include("points")
-                .include("answer");
-
-        Question question = mongoTemplate.findOne(query, Question.class, "question");
-
-        if (question == null) {
-            return 0;
-        }
-
-        if (question.getAnswer().equals(userAnswer)) {
-            return question.getPoints();
-        } else {
-            return 0;
-        }
     }
 
     /**
      * This method returns number of points that can be achieved when playing specified set
      * @param set specified set
-     * @param sessionUser current sessionUser
+     * @param username username of current user
      * @return number of points available to be collected
      */
-    public int allPointsInSet(Set set, SessionUser sessionUser){
+    public int allPointsInSet(Set set, String username) {
         Query query = new Query(Criteria
                 .where("set").is(set.getName())
-                .and("owner").is(sessionUser.getLogin()));
+                .and("owner").is(username));
 
         List<Question> questions = mongoTemplate.find(query, Question.class, "question");
 
@@ -232,7 +245,6 @@ public class DataRepository {
 
     /**
      * This method returns every user in database
-     *
      * @return List of user
      */
     public List<User> getAllUsers() {
@@ -242,12 +254,11 @@ public class DataRepository {
     /**
      * This method deletes user of specified id
      * @param id id of the user to be deleted
-     * @return TRUE if successful, if not then FALSE
      */
-    public boolean deleteUser(String id) {
+    public void deleteUser(String id) {
         Query query = new Query(Criteria.where("_id").is(id));
 
-        return mongoTemplate.remove(query, "user").wasAcknowledged();
+        mongoTemplate.remove(query, "user").wasAcknowledged();
     }
 
     /**
@@ -276,13 +287,12 @@ public class DataRepository {
     /**
      * This method deletes set without checking if the current user is the owner
      * @param name name of the set to be deleted
-     * @return TRUE if successful, if not then FALSE
      */
-    public boolean deleteSetNoAuth(String name) {
+    public void deleteSetNoAuth(String name) {
         Query query = new Query(Criteria
                 .where("set").is(name));
 
-        return mongoTemplate.remove(query, "question").wasAcknowledged();
+        mongoTemplate.remove(query, "question").wasAcknowledged();
     }
 
     /**

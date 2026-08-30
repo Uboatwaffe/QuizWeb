@@ -1,5 +1,6 @@
-package pl.quiz.webApplication.security;
+package pl.quiz.webApplication.config;
 
+import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -9,13 +10,10 @@ import pl.quiz.webApplication.data.DataRepository;
 import pl.quiz.webApplication.objects.User;
 
 @Service
+@RequiredArgsConstructor
 public class CustomUserDetailService implements UserDetailsService {
 
     private final DataRepository dataRepository;
-
-    public CustomUserDetailService(DataRepository dataRepository) {
-        this.dataRepository = dataRepository;
-    }
 
     @Override
     public UserDetails loadUserByUsername(@NonNull String username) throws UsernameNotFoundException {

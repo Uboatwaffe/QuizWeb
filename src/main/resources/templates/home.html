@@ -15,7 +15,9 @@
 
     <h3>
         Your current role is:
-        <span th:text="${role}"></span>
+        <span th:if="${role == 'ROLE_USER'}">User</span>
+        <span th:if="${role == 'ROLE_ADMIN'}">Admin</span>
+
     </h3>
 
     <div class="container">
@@ -60,8 +62,6 @@
         </form>
     </div>
 </div>
-
-<script src="/js/script.js"></script>
 
 </body>
 </html>
