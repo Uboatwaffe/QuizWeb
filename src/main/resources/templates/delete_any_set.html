@@ -29,11 +29,18 @@
                    th:value="${_csrf.token}"
                    type="hidden">
 
-            <button class="set-button"
-                    th:text="${set.name}"
-                    type="submit">
-                Set name
+            <input name="owner"
+                   th:value="${set.owner}"
+                   type="hidden">
+
+
+            <h4 th:text="'Owner: ' + ${set.owner}"></h4>
+            <h4 th:text="'Name: ' + ${set.name}"></h4>
+
+            <button type="submit">
+                Delete
             </button>
+
 
         </form>
 

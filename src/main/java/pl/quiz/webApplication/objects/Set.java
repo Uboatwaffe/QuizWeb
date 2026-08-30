@@ -21,4 +21,11 @@ public class Set {
     @NotBlank(message = "Set name cannot be blank")
     @Size(max = 20, message = "Set name must be 20 characters or shorter")
     private String name;
+
+    @Field("owner")
+    private String owner;
+
+    public Set(String name) {
+        this.name = name;
+    }
 }

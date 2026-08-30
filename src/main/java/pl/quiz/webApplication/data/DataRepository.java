@@ -124,7 +124,8 @@ public class DataRepository {
         Query query = new Query(Criteria.where("owner").is(login));
 
         query.fields()
-                .include("set");
+                .include("set")
+                .include("owner");
 
         List<Set> sets = mongoTemplate.find(query, Set.class, "question");
 
@@ -272,7 +273,8 @@ public class DataRepository {
         Query query = new Query();
 
         query.fields()
-                .include("set");
+                .include("set")
+                .include("owner");
 
         List<Set> sets = mongoTemplate.find(query, Set.class, "question");
 
@@ -289,11 +291,12 @@ public class DataRepository {
 
     /**
      * This method deletes set without checking if the current user is the owner
-     * @param name name of the set to be deleted
+     * @param set details of the set to be deleted
      */
-    public void deleteSetNoAuth(String name) {
+    public void deleteSetNoAuth(Set set) {
         Query query = new Query(Criteria
-                .where("set").is(name));
+                .where("set").is(set.getName())
+                .and("owner").is(set.getOwner()));
 
         mongoTemplate.remove(query, "question").wasAcknowledged();
     }

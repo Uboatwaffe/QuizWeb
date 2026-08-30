@@ -5,11 +5,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import pl.quiz.webApplication.data.DataRepository;
+import pl.quiz.webApplication.objects.Set;
 import pl.quiz.webApplication.objects.User;
 import pl.quiz.webApplication.submissons.UserSubmission;
 
@@ -94,12 +92,12 @@ public class AdminController {
      * @return reloads the page (delete_any_set.html)
      */
     @PreAuthorize("hasRole('ADMIN')")
-    // TODO: dont delete set of different user of the same name
     @PostMapping("/delete_any_set/{name}")
     public String deleteAnySet(
-            @PathVariable("name") String name) {
+            @PathVariable String name,
+            @RequestParam String owner) {
 
-        dataRepository.deleteSetNoAuth(name);
+        dataRepository.deleteSetNoAuth(new Set(name, owner));
 
         return "redirect:/delete_any_set";
     }
