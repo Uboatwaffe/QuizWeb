@@ -1,8 +1,10 @@
 package pl.quiz.webApplication.objects;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import pl.quiz.webApplication.enums.Type;
 
 /**
@@ -15,12 +17,19 @@ import pl.quiz.webApplication.enums.Type;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Question {
+    @NonNull
     private String id;
+    @NotBlank(message = "Question cannot be blank")
     private String question;
+    @NonNull
     private Type type;
+    @NotBlank(message = "Question must have an answer")
     private String answer;
+    @NotBlank(message = "This field can't be empty")
     private int points;
+    @NotBlank(message = "This question must be assigned to some set")
     private String set;
+    @NonNull
     private String owner;
 
 
