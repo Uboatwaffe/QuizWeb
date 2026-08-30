@@ -53,3 +53,7 @@
 * Hardware: AMD Ryzen 5 AI 340, 16GB RAM
 * Toolchain: IntelliJ, MongoDB, Docker
 * SDK: Java 26
+
+# !Project finished!
+
+#### Started on ``21th of July 2026`` finished on ``30th of August 2026``
