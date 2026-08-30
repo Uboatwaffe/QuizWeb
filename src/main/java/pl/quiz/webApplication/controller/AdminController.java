@@ -1,6 +1,7 @@
 package pl.quiz.webApplication.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,6 +34,7 @@ public class AdminController {
      * @param authentication authentication object
      * @return delete_user.html
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/delete_user")
     public String deleteUser(
             Model model,
@@ -58,6 +60,7 @@ public class AdminController {
      * @param id id of the user to be deleted
      * @return reloads the page (delete_user.html)
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/delete_user/{id}")
     public String deleteUser(
             @PathVariable("id") String id) {
@@ -72,6 +75,7 @@ public class AdminController {
      * @param model model for Thymeleaf
      * @return delete_any_set.html
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/delete_any_set")
     public String deleteAnySet(Model model) {
 
@@ -89,6 +93,7 @@ public class AdminController {
      * @param name name of the set to be deleted
      * @return reloads the page (delete_any_set.html)
      */
+    @PreAuthorize("hasRole('ADMIN')")
     // TODO: dont delete set of different user of the same name
     @PostMapping("/delete_any_set/{name}")
     public String deleteAnySet(
@@ -104,6 +109,7 @@ public class AdminController {
      * @param model model for Thymeleaf
      * @return change_role.html
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/change_role")
     public String changeRole(Model model) {
 
@@ -128,6 +134,7 @@ public class AdminController {
      * @param model model for Thymeleaf
      * @return reloads if something went wrong, if not then home.html
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/change_role")
     public String changeRole(
             @ModelAttribute("userSubmission")

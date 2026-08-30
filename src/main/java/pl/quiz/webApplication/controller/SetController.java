@@ -2,6 +2,7 @@ package pl.quiz.webApplication.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,6 +35,7 @@ public class SetController {
      * @param model model for Thymeleaf
      * @return new_set.html
      */
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/new_set")
     public String newSet(Model model) {
         model.addAttribute("set", new Set());
@@ -48,6 +50,7 @@ public class SetController {
      * @param model model for Thymeleaf to display any errors
      * @return reloads if something went wrong, if not then home.html
      */
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/new_set")
     public String createNewSet(
             @Valid @ModelAttribute("set") Set set,
@@ -95,6 +98,7 @@ public class SetController {
      * @param authentication authentication object
      * @return choose_set_to_delete.html
      */
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/choose_set_to_delete")
     public String chooseSetToDelete(
             Model model,
@@ -114,6 +118,7 @@ public class SetController {
      * @param authentication authentication object
      * @return reloads the page
      */
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/delete/{name}")
     public String deleteSet(
             @PathVariable("name") String name,
@@ -133,6 +138,7 @@ public class SetController {
      * @param authentication authentication object
      * @return choose_set_to_start.html
      */
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/choose_set_to_start")
     public String chooseSetToStart(
             Model model,
@@ -152,6 +158,7 @@ public class SetController {
      * @param authentication authentication object
      * @return choose_set_to_modify.html
      */
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/choose_set_to_modify")
     public String chooseSetToModify(
             Model model,
@@ -172,6 +179,7 @@ public class SetController {
      * @param authentication authentication object
      * @return modify_set.html
      */
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/modify/{name}")
     public String modify(
             @PathVariable("name") String name,
@@ -198,6 +206,7 @@ public class SetController {
      * @param authentication authentication object
      * @return reloads the page
      */
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/modify/{name}")
     public String updateSet(
             @PathVariable("name") String name,
