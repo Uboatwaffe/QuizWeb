@@ -1,39 +1,39 @@
 package pl.quiz.webApplication.objects;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import pl.quiz.webApplication.enums.Type;
 
-/**
- * This class represents details of question
- * <p>Created on 02.08.2026</p>
- * @author Maciej
- * @version 0.1
- */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Question {
-    @NonNull
+
     private String id;
+
     @NotBlank(message = "Question cannot be blank")
     private String question;
-    @NonNull
+
+    @NotNull(message = "Question type is required")
     private Type type;
+
     @NotBlank(message = "Question must have an answer")
     private String answer;
-    @NotBlank(message = "This field can't be empty")
+
+    @PositiveOrZero(message = "Points cannot be negative")
     private int points;
+
     @NotBlank(message = "This question must be assigned to some set")
     private String set;
-    @NonNull
+
+    @NotBlank(message = "Owner is required")
     private String owner;
 
-
-    public Question(String question, Type type, String answer, int points, String set, String owner){
+    public Question(String question, Type type, String answer, int points, String set, String owner) {
         this.question = question;
         this.type = type;
         this.answer = answer;
