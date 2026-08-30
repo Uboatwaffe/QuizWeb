@@ -12,8 +12,8 @@ import pl.quiz.webApplication.data.DataRepository;
 import pl.quiz.webApplication.objects.Question;
 import pl.quiz.webApplication.objects.Set;
 import pl.quiz.webApplication.objects.WrongQuestion;
-import pl.quiz.webApplication.security.AnswerSubmission;
-import pl.quiz.webApplication.security.QuizSubmission;
+import pl.quiz.webApplication.submissons.AnswerSubmission;
+import pl.quiz.webApplication.submissons.QuizSubmission;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +68,7 @@ public class QuizController {
                     new ArrayList<>(answer.getAnswers());
 
             Question correctQuestion =
-                    dataRepository.getQuestionAnswerById(
+                    dataRepository.getQuestionById(
                             answer.getQuestionId()
                     );
 

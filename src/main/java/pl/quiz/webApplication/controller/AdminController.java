@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import pl.quiz.webApplication.data.DataRepository;
 import pl.quiz.webApplication.objects.User;
-import pl.quiz.webApplication.security.UserSubmission;
+import pl.quiz.webApplication.submissons.UserSubmission;
 
 import java.util.List;
 

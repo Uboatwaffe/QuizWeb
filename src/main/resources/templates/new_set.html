@@ -28,6 +28,11 @@
             <br>
 
             <div class="text-danger"
+                 th:if="${error}"
+                 th:text="${error}">
+            </div>
+
+            <div class="text-danger"
                  th:errors="*{name}"
                  th:if="${#fields.hasErrors('name')}">
             </div>

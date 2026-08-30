@@ -1,4 +1,4 @@
-package pl.quiz.webApplication.security;
+package pl.quiz.webApplication.submissons;
 
 import lombok.Getter;
 import lombok.Setter;
