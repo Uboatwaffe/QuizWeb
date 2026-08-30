@@ -7,10 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import pl.quiz.webApplication.data.DataRepository;
 import pl.quiz.webApplication.enums.Type;
 import pl.quiz.webApplication.objects.Question;
@@ -241,6 +238,25 @@ public class SetController {
             }
         }
 
-        return "redirect:/modify/" + name;
+        return "redirect:/home";
+    }
+
+    /**
+     * This method deletes a question
+     *
+     * @param id             id of the question to be deleted
+     * @param authentication authentication object
+     * @return response indicating whether deletion was successful
+     */
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping("/delete_question/{id}")
+    @ResponseBody
+    public boolean deleteQuestion(
+            @PathVariable("id") String id,
+            Authentication authentication) {
+
+        String name = dataRepository.getSetFromId(id).getName();
+
+        return dataRepository.deleteQuestion(id, authentication.getName());
     }
 }

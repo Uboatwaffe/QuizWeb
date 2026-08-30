@@ -198,8 +198,11 @@ public class DataRepository {
      * @param id id of the question to be deleted
      * @return TRUE if successful, if not then FALSE
      */
-    public boolean deleteQuestion(String id){
-        Query query = new Query(Criteria.where("_id").is(id));
+    public boolean deleteQuestion(String id, String username) {
+        Query query = new Query(Criteria
+                .where("_id").is(id)
+                .and("owner").is(username));
+
 
         return mongoTemplate.remove(query, "question").wasAcknowledged();
     }

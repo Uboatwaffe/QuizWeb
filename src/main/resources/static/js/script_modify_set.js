@@ -766,3 +766,77 @@ value="${getSetName()}">
 
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+
+    document.querySelectorAll(".deleteQuestion").forEach(button => {
+
+        button.addEventListener("click", async () => {
+
+            const question = button.closest(".question");
+            const id = button.dataset.id;
+
+            // New question that has not been saved yet
+            if (!id) {
+                question.remove();
+                updateQuestionIndexes();
+                return;
+            }
+
+            const csrfToken = document.querySelector(
+                'meta[name="_csrf"]'
+            ).content;
+
+            const csrfHeader = document.querySelector(
+                'meta[name="_csrf_header"]'
+            ).content;
+
+            try {
+
+                const response = await fetch(`/delete_question/${id}`, {
+                    method: "POST",
+                    headers: {
+                        [csrfHeader]: csrfToken
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(
+                        `Delete failed: ${response.status}`
+                    );
+                }
+
+                const deleted = await response.json();
+
+                if (deleted) {
+                    question.remove();
+                    updateQuestionIndexes();
+                } else {
+                    alert("Could not delete the question.");
+                }
+
+            } catch (error) {
+
+                console.error(error);
+                alert("An error occurred while deleting the question.");
+
+            }
+        });
+    });
+});
+
+
+function updateQuestionIndexes() {
+
+    document.querySelectorAll(".question").forEach((question, index) => {
+
+        question.querySelectorAll("[name]").forEach(input => {
+
+            input.name = input.name.replace(
+                /questions\[\d+\]/,
+                `questions[${index}]`
+            );
+
+        });
+
+    });
+}
